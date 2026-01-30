@@ -18,6 +18,8 @@ import { ImagePreview } from './components/image/ImagePreview';
 // 视频组件
 import { VideoPanel } from './components/video/VideoPanel';
 import { VideoPlayer } from './components/video/VideoPlayer';
+import { VideoGallery } from './components/video/VideoGallery';
+import { VideoPlayerModal } from './components/video/VideoPlayerModal';
 
 // 弹窗组件
 import { PromptAssistModal } from './components/modal/PromptAssistModal';
@@ -33,6 +35,7 @@ import {
   getVideoStatus,
   getImageUrl,
   getVideoUrl,
+  extendVideo,
 } from './services/api';
 
 /**
@@ -72,11 +75,17 @@ export default function App() {
   const [vidRatio, setVidRatio] = useState('16:9');
   const [vidFirstFrame, setVidFirstFrame] = useState(null);
   const [vidLastFrame, setVidLastFrame] = useState(null);
-  const [isGeneratingVid, setIsGeneratingVid] = useState(false);
-  const [generatedVideo, setGeneratedVideo] = useState(null);
-  const [videoProgress, setVideoProgress] = useState(0);
-  const [videoStatusMsg, setVideoStatusMsg] = useState('');
-  const [currentJobId, setCurrentJobId] = useState(null);
+
+  // 视频任务列表（类似 imageJobs）
+  const [videoJobs, setVideoJobs] = useState([]);
+  // 格式: [{jobId, status, progress, prompt, params, firstFrame, isExtension}]
+
+  // 已生成的视频列表
+  const [generatedVideos, setGeneratedVideos] = useState([]);
+  // 格式: [{id, url, filename, resolution, ratio, prompt, videoId, canExtend}]
+
+  // 当前播放的视频（用于放大播放）
+  const [playingVideo, setPlayingVideo] = useState(null);
 
   // ==================== 提示词优化弹窗状态 ====================
 
@@ -85,7 +94,7 @@ export default function App() {
   // ==================== 副作用 ====================
   // 轮询定时器缓存，用于清理避免内存泄漏
   const imagePollTimeouts = useRef(new Map());
-  const videoPollTimeout = useRef(null);
+  const videoPollTimeouts = useRef(new Map()); // 改为 Map 支持多任务
 
   /**
    * 清理所有轮询定时器，避免组件卸载后继续运行
@@ -97,10 +106,11 @@ export default function App() {
       });
       imagePollTimeouts.current.clear();
 
-      if (videoPollTimeout.current) {
-        clearTimeout(videoPollTimeout.current);
-        videoPollTimeout.current = null;
-      }
+      // 清理所有视频轮询定时器
+      videoPollTimeouts.current.forEach((timeoutId) => {
+        clearTimeout(timeoutId);
+      });
+      videoPollTimeouts.current.clear();
     };
   }, []);
 
@@ -167,10 +177,21 @@ export default function App() {
    * 轮询图像生成状态
    */
   const pollImageStatus = useCallback(async (jobId) => {
-    const maxAttempts = 60; // 最多轮询60次(约3分钟)
-    let attempts = 0;
+    const maxDurationMs = 10 * 60 * 1000; // 最长轮询 10 分钟
+    const startTime = Date.now();
 
     const poll = async () => {
+      // 超时保护
+      if (Date.now() - startTime > maxDurationMs) {
+        alert('图像生成超时，请稍后查看');
+        setImageJobs(prev => prev.filter(job => job.jobId !== jobId));
+        if (imagePollTimeouts.current.has(jobId)) {
+          clearTimeout(imagePollTimeouts.current.get(jobId));
+          imagePollTimeouts.current.delete(jobId);
+        }
+        return;
+      }
+
       try {
         const status = await getImageStatus(jobId);
 
@@ -183,19 +204,25 @@ export default function App() {
 
         if (status.status === 'completed') {
           // 生成完成,添加图像到画廊
-          // 使用后端返回的prompt和aspect_ratio字段
-          const newImages = status.images.map((filename, i) => ({
-            id: `${Date.now()}-${i}`,
-            url: getImageUrl(filename),
-            filename,
-            ratio: status.aspect_ratio || '3:2',
-            prompt: status.prompt || '',
-          }));
-          setGeneratedImages(prev => [...newImages, ...prev]);
+          // 检查是否有图像生成
+          if (status.images && status.images.length > 0) {
+            // 使用后端返回的prompt和aspect_ratio字段
+            const newImages = status.images.map((filename, i) => ({
+              id: `${Date.now()}-${i}`,
+              url: getImageUrl(filename),
+              filename,
+              ratio: status.aspect_ratio || '3:2',
+              prompt: status.prompt || '',
+            }));
+            setGeneratedImages(prev => [...newImages, ...prev]);
 
-          // 保存session_id
-          if (status.session_id) {
-            setImgSessionId(status.session_id);
+            // 保存session_id
+            if (status.session_id) {
+              setImgSessionId(status.session_id);
+            }
+          } else {
+            // 没有生成任何图像，显示错误
+            alert('图像生成失败：未生成任何图像');
           }
 
           // 移除任务
@@ -214,32 +241,16 @@ export default function App() {
             imagePollTimeouts.current.delete(jobId);
           }
 
-        } else if (attempts < maxAttempts) {
+        } else {
           // 继续轮询
-          attempts++;
           const timeoutId = window.setTimeout(poll, 3000); // 3秒后再次查询
           imagePollTimeouts.current.set(jobId, timeoutId);
-        } else {
-          // 超时
-          alert('图像生成超时,请稍后查看');
-          setImageJobs(prev => prev.filter(job => job.jobId !== jobId));
-          if (imagePollTimeouts.current.has(jobId)) {
-            clearTimeout(imagePollTimeouts.current.get(jobId));
-            imagePollTimeouts.current.delete(jobId);
-          }
         }
       } catch (error) {
         console.error('查询图像状态失败:', error);
-        if (attempts < maxAttempts) {
-          attempts++;
-          const timeoutId = window.setTimeout(poll, 3000);
-          imagePollTimeouts.current.set(jobId, timeoutId);
-        } else {
-          if (imagePollTimeouts.current.has(jobId)) {
-            clearTimeout(imagePollTimeouts.current.get(jobId));
-            imagePollTimeouts.current.delete(jobId);
-          }
-        }
+        // 继续尝试
+        const timeoutId = window.setTimeout(poll, 3000);
+        imagePollTimeouts.current.set(jobId, timeoutId);
       }
     };
 
@@ -254,16 +265,6 @@ export default function App() {
   const handleGenerateVideo = useCallback(async () => {
     if (videoMode === 'text2vid' && !vidPrompt) return;
 
-    setIsGeneratingVid(true);
-    setGeneratedVideo(null);
-    setVideoProgress(0);
-    setVideoStatusMsg('正在初始化...');
-    // 清理可能存在的历史轮询，避免并发轮询
-    if (videoPollTimeout.current) {
-      clearTimeout(videoPollTimeout.current);
-      videoPollTimeout.current = null;
-    }
-
     try {
       const result = await generateVideo({
         prompt: vidPrompt,
@@ -275,14 +276,24 @@ export default function App() {
       });
 
       if (result.success && result.job_id) {
-        setCurrentJobId(result.job_id);
-        // 开始轮询状态
+        // 添加到任务列表
+        const newJob = {
+          jobId: result.job_id,
+          status: 'pending',
+          progress: 0,
+          prompt: vidPrompt,
+          params: { mode: videoMode, ratio: vidRatio, resolution: vidRes },
+          firstFrame: vidFirstFrame?.url, // 用于缩略图
+          isExtension: false,
+        };
+        setVideoJobs(prev => [...prev, newJob]);
+
+        // 开始轮询
         pollVideoStatus(result.job_id);
       }
     } catch (error) {
-      console.error('视频生成失败:', error);
-      alert(`生成失败: ${error.message}`);
-      setIsGeneratingVid(false);
+      console.error('启动视频生成失败:', error);
+      alert(`启动失败: ${error.message}`);
     }
   }, [vidPrompt, videoMode, vidRatio, vidRes, vidFirstFrame, vidLastFrame]);
 
@@ -296,12 +307,11 @@ export default function App() {
     const poll = async () => {
       // 超时保护，避免无限轮询
       if (Date.now() - startTime > maxDurationMs) {
-        setVideoStatusMsg('视频生成超时，请稍后重试');
-        setIsGeneratingVid(false);
-        setCurrentJobId(null);
-        if (videoPollTimeout.current) {
-          clearTimeout(videoPollTimeout.current);
-          videoPollTimeout.current = null;
+        setVideoJobs(prev => prev.filter(job => job.jobId !== jobId));
+        alert('视频生成超时，请稍后重试');
+        if (videoPollTimeouts.current.has(jobId)) {
+          clearTimeout(videoPollTimeouts.current.get(jobId));
+          videoPollTimeouts.current.delete(jobId);
         }
         return;
       }
@@ -309,46 +319,137 @@ export default function App() {
       try {
         const status = await getVideoStatus(jobId);
 
-        setVideoProgress(status.progress);
-        setVideoStatusMsg(status.message || '处理中...');
+        // 更新任务状态
+        setVideoJobs(prev => prev.map(job =>
+          job.jobId === jobId
+            ? { ...job, status: status.status, progress: status.progress }
+            : job
+        ));
 
         if (status.status === 'completed' && status.video_url) {
-          // 生成完成
-          setGeneratedVideo({
-            id: jobId,
-            url: status.video_url,
-            resolution: vidRes,
-            ratio: vidRatio,
-            prompt: vidPrompt,
-          });
-          setIsGeneratingVid(false);
-          setCurrentJobId(null);
-          if (videoPollTimeout.current) {
-            clearTimeout(videoPollTimeout.current);
-            videoPollTimeout.current = null;
+          // 提取文件名
+          const filename = status.video_url.split('/').pop();
+
+          // 获取任务信息
+          const job = videoJobs.find(j => j.jobId === jobId);
+          if (!job) {
+            // 如果找不到任务，从状态中获取信息
+            const newVideo = {
+              id: jobId,
+              url: status.video_url,
+              filename: filename,
+              resolution: '720p', // 默认值
+              ratio: '16:9', // 默认值
+              prompt: '',
+              videoId: jobId, // 用于延长
+              canExtend: true,
+            };
+            setGeneratedVideos(prev => [newVideo, ...prev]);
+          } else {
+            // 添加到视频列表
+            const newVideo = {
+              id: jobId,
+              url: status.video_url,
+              filename: filename,
+              resolution: job.params.resolution,
+              ratio: job.params.ratio,
+              prompt: job.prompt,
+              videoId: jobId, // 用于延长
+              canExtend: job.params.resolution === '720p',
+            };
+            setGeneratedVideos(prev => [newVideo, ...prev]);
+          }
+
+          // 移除任务
+          setVideoJobs(prev => prev.filter(j => j.jobId !== jobId));
+
+          // 清理轮询
+          if (videoPollTimeouts.current.has(jobId)) {
+            clearTimeout(videoPollTimeouts.current.get(jobId));
+            videoPollTimeouts.current.delete(jobId);
           }
         } else if (status.status === 'failed') {
-          // 生成失败
           alert(`视频生成失败: ${status.message}`);
-          setIsGeneratingVid(false);
-          setCurrentJobId(null);
-          if (videoPollTimeout.current) {
-            clearTimeout(videoPollTimeout.current);
-            videoPollTimeout.current = null;
+          setVideoJobs(prev => prev.filter(j => j.jobId !== jobId));
+          if (videoPollTimeouts.current.has(jobId)) {
+            clearTimeout(videoPollTimeouts.current.get(jobId));
+            videoPollTimeouts.current.delete(jobId);
           }
         } else {
           // 继续轮询
-          videoPollTimeout.current = window.setTimeout(poll, 5000);
+          const timeoutId = window.setTimeout(poll, 5000);
+          videoPollTimeouts.current.set(jobId, timeoutId);
         }
       } catch (error) {
         console.error('查询状态失败:', error);
         // 继续尝试
-        videoPollTimeout.current = window.setTimeout(poll, 5000);
+        const timeoutId = window.setTimeout(poll, 5000);
+        videoPollTimeouts.current.set(jobId, timeoutId);
       }
     };
 
     poll();
-  }, [vidRes, vidRatio, vidPrompt]);
+  }, [videoJobs]);
+
+  /**
+   * 处理视频延长
+   */
+  const handleExtendVideo = useCallback(async (video, extendPrompt) => {
+    if (!video.videoId) {
+      alert('该视频不支持延长');
+      return;
+    }
+
+    if (video.resolution !== '720p') {
+      alert('仅支持 720p 视频延长');
+      return;
+    }
+
+    if (!extendPrompt || !extendPrompt.trim()) {
+      alert('请输入延长描述');
+      return;
+    }
+
+    try {
+      const result = await extendVideo(video.videoId, extendPrompt);
+
+      if (result.success && result.job_id) {
+        // 添加到任务列表
+        const newJob = {
+          jobId: result.job_id,
+          status: 'pending',
+          progress: 0,
+          prompt: `延长: ${extendPrompt}`,
+          params: {
+            mode: 'extend',
+            ratio: video.ratio,
+            resolution: video.resolution
+          },
+          firstFrame: video.url, // 使用原视频作为缩略图
+          isExtension: true,
+        };
+        setVideoJobs(prev => [...prev, newJob]);
+
+        // 开始轮询
+        pollVideoStatus(result.job_id);
+      }
+    } catch (error) {
+      console.error('启动视频延长失败:', error);
+      alert(`延长失败: ${error.message}`);
+    }
+  }, [pollVideoStatus]);
+
+  /**
+   * 处理视频下载
+   */
+  const handleDownloadVideo = useCallback((video) => {
+    const link = document.createElement('a');
+    link.href = video.url;
+    link.download = video.filename || 'video.mp4';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }, []);
 
   // ==================== 图片转视频 ====================
 
@@ -419,6 +520,16 @@ export default function App() {
         />
       )}
 
+      {/* 视频播放弹窗 */}
+      {playingVideo && (
+        <VideoPlayerModal
+          video={playingVideo}
+          onClose={() => setPlayingVideo(null)}
+          onExtend={handleExtendVideo}
+          onDownload={handleDownloadVideo}
+        />
+      )}
+
       <div className="flex h-full bg-slate-50 dark:bg-black text-slate-900 dark:text-zinc-200 font-sans overflow-hidden antialiased selection:bg-blue-100 dark:selection:bg-zinc-800">
         {/* 侧边栏 */}
         <Sidebar
@@ -471,7 +582,7 @@ export default function App() {
                   onFirstFrameChange={setVidFirstFrame}
                   lastFrame={vidLastFrame}
                   onLastFrameChange={setVidLastFrame}
-                  isGenerating={isGeneratingVid}
+                  isGenerating={videoJobs.length > 0}
                   onGenerate={handleGenerateVideo}
                   onOpenAssist={() => setIsAssistOpen(true)}
                 />
@@ -487,11 +598,12 @@ export default function App() {
                   onPreview={setPreviewImage}
                 />
               ) : (
-                <VideoPlayer
-                  video={generatedVideo}
-                  isLoading={isGeneratingVid}
-                  progress={videoProgress}
-                  statusMessage={videoStatusMsg}
+                <VideoGallery
+                  videos={generatedVideos}
+                  videoJobs={videoJobs}
+                  onPlay={setPlayingVideo}
+                  onExtend={handleExtendVideo}
+                  onDownload={handleDownloadVideo}
                 />
               )}
             </div>

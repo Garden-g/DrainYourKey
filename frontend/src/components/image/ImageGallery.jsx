@@ -7,6 +7,7 @@
 import React from 'react';
 import { Loader2, Image as ImageIcon } from 'lucide-react';
 import { ImageCard } from './ImageCard';
+import { ImageJobCard } from './ImageJobCard';
 
 /**
  * ImageGallery 组件
@@ -52,23 +53,12 @@ export function ImageGallery({ images, isLoading, imageJobs, onMakeVideo, onPrev
 
       {/* 显示正在生成的任务 */}
       {imageJobs && imageJobs.length > 0 && (
-        <div className="mb-6 space-y-3">
-          {imageJobs.map(job => (
-            <div key={job.jobId} className="bg-slate-50 dark:bg-zinc-800/50 rounded-xl p-4 border border-slate-200 dark:border-zinc-700">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-slate-700 dark:text-zinc-300 font-medium">
-                  正在生成: {job.prompt.substring(0, 50)}{job.prompt.length > 50 ? '...' : ''}
-                </span>
-                <span className="text-sm text-blue-600 dark:text-blue-400 font-bold">{job.progress}%</span>
-              </div>
-              <div className="w-full bg-slate-200 dark:bg-zinc-700 rounded-full h-2">
-                <div
-                  className="bg-blue-600 dark:bg-blue-500 h-2 rounded-full transition-all duration-300"
-                  style={{ width: `${job.progress}%` }}
-                />
-              </div>
-            </div>
-          ))}
+        <div className="mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {imageJobs.map(job => (
+              <ImageJobCard key={job.jobId} job={job} />
+            ))}
+          </div>
         </div>
       )}
 
