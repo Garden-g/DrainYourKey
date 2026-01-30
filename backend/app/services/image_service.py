@@ -258,14 +258,17 @@ class ImageService:
             # 创建多轮对话会话
             client = self._ensure_client()
             # 创建会话属于阻塞调用，使用线程池避免阻塞事件循环
-            chat = await asyncio.wait_for(
-                asyncio.to_thread(
-                    client.chats.create,
-                    model=Config.IMAGE_MODEL,
-                    config=types.GenerateContentConfig(**config_dict)
-                ),
-                timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-            )
+            try:
+                chat = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        client.chats.create,
+                        model=Config.IMAGE_MODEL,
+                        config=types.GenerateContentConfig(**config_dict)
+                    ),
+                    timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                )
+            except asyncio.TimeoutError:
+                raise TimeoutError("图像生成初始化超时")
 
             # 存储会话
             self._sessions[session_id] = chat
@@ -281,16 +284,22 @@ class ImageService:
                 # 发送请求
                 if i == 0:
                     # 发送请求为阻塞调用，需放线程执行并设置超时
-                    response = await asyncio.wait_for(
-                        asyncio.to_thread(chat.send_message, contents),
-                        timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-                    )
+                    try:
+                        response = await asyncio.wait_for(
+                            asyncio.to_thread(chat.send_message, contents),
+                            timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                        )
+                    except asyncio.TimeoutError:
+                        raise TimeoutError("图像生成超时")
                 else:
                     # 后续图像使用相同提示词
-                    response = await asyncio.wait_for(
-                        asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {prompt}"),
-                        timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-                    )
+                    try:
+                        response = await asyncio.wait_for(
+                            asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {prompt}"),
+                            timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                        )
+                    except asyncio.TimeoutError:
+                        raise TimeoutError("图像生成超时")
 
                 # 处理响应
                 for part in response.parts:
@@ -338,7 +347,7 @@ class ImageService:
         except Exception as e:
             # 生成失败
             job.status = JobStatus.FAILED
-            job.error_message = str(e)
+            job.error_message = str(e) or "图像生成失败"
             logger.error(f"图像生成失败: job_id={job_id}, error={e}")
 
     def get_job_status(self, job_id: str) -> Optional[ImageJob]:
@@ -414,14 +423,17 @@ class ImageService:
 
         # 创建多轮对话会话
         client = self._ensure_client()
-        chat = await asyncio.wait_for(
-            asyncio.to_thread(
-                client.chats.create,
-                model=Config.IMAGE_MODEL,
-                config=types.GenerateContentConfig(**config_dict)
-            ),
-            timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-        )
+        try:
+            chat = await asyncio.wait_for(
+                asyncio.to_thread(
+                    client.chats.create,
+                    model=Config.IMAGE_MODEL,
+                    config=types.GenerateContentConfig(**config_dict)
+                ),
+                timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+            )
+        except asyncio.TimeoutError:
+            raise TimeoutError("图像生成初始化超时")
 
         # 存储会话
         self._sessions[session_id] = chat
@@ -433,16 +445,22 @@ class ImageService:
 
             # 发送请求
             if i == 0:
-                response = await asyncio.wait_for(
-                    asyncio.to_thread(chat.send_message, contents),
-                    timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-                )
+                try:
+                    response = await asyncio.wait_for(
+                        asyncio.to_thread(chat.send_message, contents),
+                        timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                    )
+                except asyncio.TimeoutError:
+                    raise TimeoutError("图像生成超时")
             else:
                 # 后续图像使用相同提示词
-                response = await asyncio.wait_for(
-                    asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {prompt}"),
-                    timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-                )
+                try:
+                    response = await asyncio.wait_for(
+                        asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {prompt}"),
+                        timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                    )
+                except asyncio.TimeoutError:
+                    raise TimeoutError("图像生成超时")
 
             # 处理响应
             for part in response.parts:
@@ -515,19 +533,22 @@ class ImageService:
         generated_files: List[str] = []
 
         # 发送编辑请求
-        response = await asyncio.wait_for(
-            asyncio.to_thread(
-                chat.send_message,
-                prompt,
-                config=types.GenerateContentConfig(
-                    image_config=types.ImageConfig(
-                        aspect_ratio=aspect_ratio,
-                        image_size=resolution
+        try:
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    chat.send_message,
+                    prompt,
+                    config=types.GenerateContentConfig(
+                        image_config=types.ImageConfig(
+                            aspect_ratio=aspect_ratio,
+                            image_size=resolution
+                        )
                     )
-                )
-            ),
-            timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-        )
+                ),
+                timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+            )
+        except asyncio.TimeoutError:
+            raise TimeoutError("图像编辑超时")
 
         # 处理响应
         for part in response.parts:

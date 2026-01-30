@@ -72,7 +72,8 @@ class Config:
     JOB_TTL_HOURS: int = int(os.getenv("JOB_TTL_HOURS", "24"))
     SESSION_TTL_HOURS: int = int(os.getenv("SESSION_TTL_HOURS", "24"))
     PROCESSING_JOB_MAX_SECONDS: int = int(os.getenv("PROCESSING_JOB_MAX_SECONDS", "1800"))
-    GENAI_IMAGE_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_IMAGE_TIMEOUT_SECONDS", "120"))
+    # 图像生成可能耗时较长，默认放宽到 5 分钟
+    GENAI_IMAGE_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_IMAGE_TIMEOUT_SECONDS", "300"))
     GENAI_PROMPT_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_PROMPT_TIMEOUT_SECONDS", "60"))
     GENAI_VIDEO_API_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_VIDEO_API_TIMEOUT_SECONDS", "120"))
     GENAI_VIDEO_POLL_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_VIDEO_POLL_TIMEOUT_SECONDS", "1800"))
