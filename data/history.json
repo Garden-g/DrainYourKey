@@ -1,0 +1,122 @@
+{
+  "items": [
+    {
+      "id": "52cef2f5-bebb-4b3f-975e-2f0e4fa90964",
+      "type": "video",
+      "prompt": "",
+      "filename": "video_20260130_132544_710494.mp4",
+      "created_at": "2026-01-30T13:25:44.713494",
+      "params": {
+        "job_id": "0ac734e4-d966-4610-84e2-571458c87a6b"
+      }
+    },
+    {
+      "id": "90c26e81-b49f-4300-8db0-44de55a872c8",
+      "type": "image",
+      "prompt": "让小猫的宇航服变成彩色",
+      "filename": "image_20260130_132108_382881.png",
+      "created_at": "2026-01-30T13:21:08.387890",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "use_google_search": false
+      }
+    },
+    {
+      "id": "a124a5dc-a51d-4c7d-9df6-5b60656f3387",
+      "type": "image",
+      "prompt": "Create an 4K ultra high-information-density Chinese food anatomy infographic poster.\n\nTHEME:\n“潮汕牛肉火锅各部位对应牛的真实位置图”\n\nLANGUAGE:\nAll visible text MUST be Simplified Chinese only.\nNo English, no letters, no numbers in English format.\n\nSTYLE:\nTraditional food illustration + butcher shop anatomy chart.\nRealistic, grounded, market-style, culinary education poster.\nNO tech style, NO cyberpunk, NO futuristic elements, NO neon glow.\n\nCOLOR PALETTE:\nWarm, rich, food-oriented colors:\nbeef red, dark maroon, warm brown, beige, off-white, muted green.\nNatural contrast, similar to butcher charts or traditional food posters.\nAvoid blue-purple sci-fi tones.\n\nMAIN VISUAL:\nA large, realistic side-view illustration of a whole cow.\nClear anatomical segmentation with hand-drawn style outlines.\nEach meat section filled with slightly different red tones.\n\nCUT LABELING (very dense, Chinese only):\nEach cut includes:\n• 大号中文部位名\n• 小字位置说明\n• 口感关键词\n• 细线指向真实牛体位置\n\nCuts to include (exact Chinese text):\n雪花（脖仁）\n吊龙\n吊龙伴\n匙仁（匙皮）\n匙柄\n胸口朥\n嫩肉\n肥胼\n三花趾（三花腱）\n五花趾（五花腱）\n\nLOCATION TEXT (small Chinese annotations near each):\n“肩背脊前端”\n“牛脊长条肌肉”\n“吊龙两侧”\n“肩胛内层”\n“前腿连接肩胛”\n“前胸脂肪层”\n“臀部上方”\n“腹部夹层”\n“前腿肌腱”\n“后腿内侧肌腱”\n\nSURROUNDING INFORMATION BLOCKS (very dense):\n•「从脖到脚部位顺序图」\n•「脊背 / 肩胛 / 胸腹 / 腿腱 / 后臀 分区说明」\n•「潮汕火锅常见涮法提示（3秒 / 5秒 / 7秒）」\n•「口感标签云：嫩、脆、弹、油香、筋感、爽口、耐嚼」\n\nLAYOUT:\nTraditional poster composition.\nCow centered, information densely packed around.\nMany small Chinese text blocks, arrows, notes, side labels.\nAlmost no empty space, like an old-school culinary teaching chart.\n\nTYPOGRAPHY:\nSerious, readable Chinese print-style fonts.\nLooks like something you'd see on a restaurant wall or in a food textbook.\nNo playful fonts, no handwriting.\n\nOVERALL FEELING:\nHeavy, grounded, appetizing, authoritative.\nFeels like a 潮汕老师傅 + 屠夫 + 老饕 联合出的图。",
+      "filename": "image_20260130_131735_525479.png",
+      "created_at": "2026-01-30T13:17:35.528480",
+      "params": {
+        "aspect_ratio": "21:9",
+        "resolution": "4K",
+        "use_google_search": false
+      }
+    },
+    {
+      "id": "29fc3e27-e367-4003-afa7-a24eb61b2ae2",
+      "type": "image",
+      "prompt": "A hyper-realistic, close-up shot of an adorable baby hippopotamus walking confidently down the center of an empty asphalt road. The little hippo has glistening, textured grey skin with subtle pink undertones around its eyes and ears, and a cute, round belly. The road is slightly weathered with visible white lane markings. The background features a soft-focus urban or suburban setting with blurry trees and streetlights, bathed in the warm, golden light of a late afternoon sunset, creating long shadows and a magical, cinematic atmosphere. High resolution, 8k, photorealistic, National Geographic style photography, sharp focus on the hippo.",
+      "filename": "image_20260130_131420_438971.png",
+      "created_at": "2026-01-30T13:14:20.449818",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "use_google_search": false
+      }
+    },
+    {
+      "id": "c056da8c-ff5e-4787-89f2-aee184e56474",
+      "type": "image",
+      "prompt": "A hyper-realistic, close-up shot of an adorable baby hippopotamus walking confidently down the center of an empty asphalt road. The little hippo has glistening, textured grey skin with subtle pink undertones around its eyes and ears, and a cute, round belly. The road is slightly weathered with visible white lane markings. The background features a soft-focus urban or suburban setting with blurry trees and streetlights, bathed in the warm, golden light of a late afternoon sunset, creating long shadows and a magical, cinematic atmosphere. High resolution, 8k, photorealistic, National Geographic style photography, sharp focus on the hippo.",
+      "filename": "image_20260130_131342_239861.png",
+      "created_at": "2026-01-30T13:14:20.447815",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "use_google_search": false
+      }
+    },
+    {
+      "id": "8d479a1c-b5aa-46c8-b701-6c74812eef95",
+      "type": "image",
+      "prompt": "A hyper-realistic, close-up shot of an adorable baby hippopotamus walking confidently down the center of an empty asphalt road. The little hippo has glistening, textured grey skin with subtle pink undertones around its eyes and ears, and a cute, round belly. The road is slightly weathered with visible white lane markings. The background features a soft-focus urban or suburban setting with blurry trees and streetlights, bathed in the warm, golden light of a late afternoon sunset, creating long shadows and a magical, cinematic atmosphere. High resolution, 8k, photorealistic, National Geographic style photography, sharp focus on the hippo.",
+      "filename": "image_20260130_131305_906747.png",
+      "created_at": "2026-01-30T13:14:20.444844",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "use_google_search": false
+      }
+    },
+    {
+      "id": "81143630-9541-4f8e-a7fb-ccfce3e335e1",
+      "type": "image",
+      "prompt": "A hyper-realistic, close-up shot of an adorable baby hippopotamus walking confidently down the center of an empty asphalt road. The little hippo has glistening, textured grey skin with subtle pink undertones around its eyes and ears, and a cute, round belly. The road is slightly weathered with visible white lane markings. The background features a soft-focus urban or suburban setting with blurry trees and streetlights, bathed in the warm, golden light of a late afternoon sunset, creating long shadows and a magical, cinematic atmosphere. High resolution, 8k, photorealistic, National Geographic style photography, sharp focus on the hippo.",
+      "filename": "image_20260130_131232_858376.png",
+      "created_at": "2026-01-30T13:14:20.442546",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "use_google_search": false
+      }
+    },
+    {
+      "id": "c367d110-9183-465d-b7b5-77e7c5cc9fac",
+      "type": "image",
+      "prompt": "A hyper-realistic, close-up shot of an adorable baby hippopotamus walking confidently down the center of an empty asphalt road. The little hippo has glistening, textured grey skin with subtle pink undertones around its eyes and ears, and a cute, round belly. The road is slightly weathered with visible white lane markings. The background features a soft-focus urban or suburban setting with blurry trees and streetlights, bathed in the warm, golden light of a late afternoon sunset, creating long shadows and a magical, cinematic atmosphere. High resolution, 8k, photorealistic, National Geographic style photography, sharp focus on the hippo.",
+      "filename": "image_20260130_131209_476555.png",
+      "created_at": "2026-01-30T13:14:20.439971",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "use_google_search": false
+      }
+    },
+    {
+      "id": "02102d00-805f-4b08-9107-26a2b4ef4ad7",
+      "type": "image",
+      "prompt": "A hyper-realistic, cinematic portrait of an adorable fluffy cat astronaut floating in the vast darkness of deep space. The cat is wearing a highly detailed, futuristic white space suit with metallic gold accents and a clear, bubble-shaped helmet reflecting a vibrant nebula and distant stars. The cat's eyes are wide with wonder, heterochromatic blue and green, capturing the starlight. The background is a breathtaking cosmic scene with swirling purple and pink galaxy clouds, twinkling star clusters, and a distant blue planet. The lighting is dramatic, with a soft rim light highlighting the fur texture and the sleek surface of the suit. 8k resolution, Unreal Engine 5 render style, sharp focus, magical atmosphere, intricate details.",
+      "filename": "image_20260130_130715_333398.png",
+      "created_at": "2026-01-30T13:07:15.338396",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "use_google_search": false
+      }
+    },
+    {
+      "id": "ec9dcbf6-279f-4e58-9be4-0b125e310899",
+      "type": "image",
+      "prompt": "A hyper-realistic, cinematic portrait of an adorable fluffy cat astronaut floating in the vast darkness of deep space. The cat is wearing a highly detailed, futuristic white space suit with metallic gold accents and a clear, bubble-shaped helmet reflecting a vibrant nebula and distant stars. The cat's eyes are wide with wonder, heterochromatic blue and green, capturing the starlight. The background is a breathtaking cosmic scene with swirling purple and pink galaxy clouds, twinkling star clusters, and a distant blue planet. The lighting is dramatic, with a soft rim light highlighting the fur texture and the sleek surface of the suit. 8k resolution, Unreal Engine 5 render style, sharp focus, magical atmosphere, intricate details.",
+      "filename": "image_20260130_130626_933436.png",
+      "created_at": "2026-01-30T13:06:26.935436",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "use_google_search": false
+      }
+    }
+  ]
+}

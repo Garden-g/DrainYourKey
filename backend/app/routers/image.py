@@ -1,0 +1,256 @@
+"""
+图像生成 API 路由模块
+
+提供图像生成、编辑和提示词优化的 API 端点
+"""
+
+from fastapi import APIRouter, HTTPException
+from fastapi.responses import FileResponse
+from pathlib import Path
+
+from ..config import Config, logger
+from ..models import (
+    ImageGenerateRequest,
+    ImageEditRequest,
+    EnhancePromptRequest,
+    ImageResponse,
+    ImageStatusResponse,
+    PromptResponse,
+    ErrorResponse,
+)
+from ..services import image_service, prompt_service, history_service
+
+# 创建路由器
+router = APIRouter(prefix="/api/image", tags=["图像"])
+
+
+@router.post(
+    "/generate",
+    response_model=ImageResponse,
+    responses={500: {"model": ErrorResponse}},
+    summary="生成图像",
+    description="根据文本描述生成图像(异步),立即返回job_id"
+)
+async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
+    """
+    生成图像 API (异步)
+
+    立即返回job_id,客户端通过/status/{job_id}查询进度
+
+    Args:
+        request: 图像生成请求,包含:
+            - prompt: 图像描述
+            - aspect_ratio: 宽高比
+            - resolution: 分辨率 (1K/2K/4K)
+            - count: 生成数量 (1-10)
+            - use_google_search: 是否使用 Google 搜索
+            - reference_image: 参考图 base64 (可选)
+
+    Returns:
+        ImageResponse: 包含job_id
+    """
+    try:
+        logger.info(f"收到图像生成请求: prompt={request.prompt[:50]}...")
+
+        # 调用图像服务启动后台任务
+        job_id = await image_service.generate_images(
+            prompt=request.prompt,
+            aspect_ratio=request.aspect_ratio,
+            resolution=request.resolution,
+            count=request.count,
+            use_google_search=request.use_google_search,
+            reference_image=request.reference_image
+        )
+
+        return ImageResponse(
+            success=True,
+            job_id=job_id,
+            message="图像生成任务已启动"
+        )
+
+    except Exception as e:
+        logger.error(f"启动图像生成任务失败: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get(
+    "/status/{job_id}",
+    response_model=ImageStatusResponse,
+    responses={404: {"model": ErrorResponse}},
+    summary="查询图像生成状态",
+    description="查询图像生成任务的状态和进度"
+)
+async def get_image_status(job_id: str) -> ImageStatusResponse:
+    """
+    查询图像生成任务状态 API
+
+    Args:
+        job_id: 任务ID
+
+    Returns:
+        ImageStatusResponse: 任务状态信息
+    """
+    job = image_service.get_job_status(job_id)
+
+    if not job:
+        raise HTTPException(status_code=404, detail="任务不存在")
+
+    return ImageStatusResponse(
+        job_id=job.job_id,
+        status=job.status.value,
+        progress=job.progress,
+        images=job.images,
+        session_id=job.session_id,
+        message=job.error_message if job.status.value == "failed" else None,
+        prompt=job.prompt,
+        aspect_ratio=job.aspect_ratio
+    )
+
+
+@router.post(
+    "/edit",
+    response_model=ImageResponse,
+    responses={500: {"model": ErrorResponse}},
+    summary="编辑图像",
+    description="在多轮对话中编辑图像"
+)
+async def edit_image(request: ImageEditRequest) -> ImageResponse:
+    """
+    编辑图像 API (多轮对话)
+
+    Args:
+        request: 图像编辑请求，包含:
+            - session_id: 会话 ID
+            - prompt: 编辑指令
+            - aspect_ratio: 宽高比
+            - resolution: 分辨率
+
+    Returns:
+        ImageResponse: 包含编辑后的图像文件名列表
+    """
+    try:
+        logger.info(f"收到图像编辑请求: session_id={request.session_id}")
+
+        # 调用图像服务编辑图像
+        images = await image_service.edit_image(
+            session_id=request.session_id,
+            prompt=request.prompt,
+            aspect_ratio=request.aspect_ratio,
+            resolution=request.resolution
+        )
+
+        # 保存历史记录
+        for filename in images:
+            await history_service.add_record(
+                record_type="image",
+                prompt=request.prompt,
+                filename=filename,
+                params={
+                    "aspect_ratio": request.aspect_ratio,
+                    "resolution": request.resolution,
+                    "is_edit": True,
+                    "session_id": request.session_id
+                }
+            )
+
+        return ImageResponse(
+            success=True,
+            images=images,
+            session_id=request.session_id,
+            message=f"成功编辑生成 {len(images)} 张图像"
+        )
+
+    except ValueError as e:
+        logger.warning(f"图像编辑请求无效: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"图像编辑失败: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post(
+    "/enhance-prompt",
+    response_model=PromptResponse,
+    responses={500: {"model": ErrorResponse}},
+    summary="优化提示词",
+    description="使用 AI 优化图像生成提示词"
+)
+async def enhance_prompt(request: EnhancePromptRequest) -> PromptResponse:
+    """
+    优化提示词 API
+
+    Args:
+        request: 提示词优化请求，包含:
+            - prompt: 原始提示词
+            - target_type: 目标类型 (image/video)
+
+    Returns:
+        PromptResponse: 包含优化后的提示词
+    """
+    try:
+        logger.info(f"收到提示词优化请求: {request.prompt[:50]}...")
+
+        # 调用提示词服务
+        enhanced = await prompt_service.enhance_prompt(
+            prompt=request.prompt,
+            target_type=request.target_type
+        )
+
+        return PromptResponse(
+            success=True,
+            enhanced_prompt=enhanced
+        )
+
+    except Exception as e:
+        logger.error(f"提示词优化失败: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get(
+    "/{filename}",
+    summary="获取图像",
+    description="获取生成的图像文件"
+)
+async def get_image(filename: str) -> FileResponse:
+    """
+    获取图像文件 API
+
+    Args:
+        filename: 图像文件名
+
+    Returns:
+        FileResponse: 图像文件
+    """
+    file_path = Config.IMAGES_DIR / filename
+
+    if not file_path.exists():
+        raise HTTPException(status_code=404, detail="图像不存在")
+
+    return FileResponse(
+        path=file_path,
+        media_type="image/png",
+        filename=filename
+    )
+
+
+@router.delete(
+    "/session/{session_id}",
+    summary="关闭会话",
+    description="关闭多轮对话会话"
+)
+async def close_session(session_id: str) -> dict:
+    """
+    关闭会话 API
+
+    Args:
+        session_id: 会话 ID
+
+    Returns:
+        dict: 操作结果
+    """
+    success = image_service.close_session(session_id)
+
+    if success:
+        return {"success": True, "message": "会话已关闭"}
+    else:
+        raise HTTPException(status_code=404, detail="会话不存在")

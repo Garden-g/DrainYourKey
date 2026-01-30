@@ -1,0 +1,32 @@
+# Gen_PhotoNVideo 后端项目配置
+# 使用 uv 作为包管理器
+
+[project]
+name = "gen-photo-n-video"
+version = "0.1.0"
+description = "基于 Google Gemini API 的图像和视频生成工具"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "google-genai>=1.0.0",
+    "python-multipart>=0.0.12",
+    "pillow>=10.4.0",
+    "python-dotenv>=1.0.1",
+    "aiofiles>=24.1.0",
+    "pydantic>=2.9.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]
+
+[tool.uv]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+]
