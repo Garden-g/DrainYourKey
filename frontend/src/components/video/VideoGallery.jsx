@@ -28,7 +28,7 @@ export function VideoGallery({ videos = [], videoJobs = [], onPlay, onExtend, on
   const hasContent = videos.length > 0 || videoJobs.length > 0;
 
   return (
-    <div className="flex-1 min-w-0">
+    <div className="flex-1 min-w-0 overflow-y-auto scrollbar-hide bg-white dark:bg-zinc-900/50 rounded-2xl border border-slate-200 dark:border-zinc-800 p-8 min-h-[600px] shadow-sm">
       {/* 空状态 */}
       {!hasContent && (
         <div className="h-full flex flex-col items-center justify-center text-slate-400 dark:text-zinc-600">

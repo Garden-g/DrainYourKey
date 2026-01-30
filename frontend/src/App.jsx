@@ -73,6 +73,7 @@ export default function App() {
   const [vidPrompt, setVidPrompt] = useState('');
   const [vidRes, setVidRes] = useState('720p');
   const [vidRatio, setVidRatio] = useState('16:9');
+  const [vidDuration, setVidDuration] = useState('8'); // 视频秒数，默认 8 秒
   const [vidFirstFrame, setVidFirstFrame] = useState(null);
   const [vidLastFrame, setVidLastFrame] = useState(null);
 
@@ -122,6 +123,16 @@ export default function App() {
       setImgRatio('auto');
     }
   }, [imgReference]);
+
+  /**
+   * 当视频分辨率变化时，自动调整秒数
+   * 1080p 和 4k 仅支持 8 秒
+   */
+  useEffect(() => {
+    if (vidRes !== '720p') {
+      setVidDuration('8');
+    }
+  }, [vidRes]);
 
   // ==================== 图像生成处理 ====================
 
@@ -175,10 +186,13 @@ export default function App() {
 
   /**
    * 轮询图像生成状态
+   * 支持增量显示：每生成一张图片就立即显示在画廊中
    */
   const pollImageStatus = useCallback(async (jobId) => {
     const maxDurationMs = 10 * 60 * 1000; // 最长轮询 10 分钟
     const startTime = Date.now();
+    // 记录已添加到画廊的图片数量，用于增量显示
+    let lastImageCount = 0;
 
     const poll = async () => {
       // 超时保护
@@ -202,30 +216,29 @@ export default function App() {
             : job
         ));
 
-        if (status.status === 'completed') {
-          // 生成完成,添加图像到画廊
-          // 检查是否有图像生成
-          if (status.images && status.images.length > 0) {
-            // 使用后端返回的prompt和aspect_ratio字段
-            const newImages = status.images.map((filename, i) => ({
-              id: `${Date.now()}-${i}`,
+        // 增量添加新生成的图片到画廊（不等任务完成）
+        if (status.images && status.images.length > lastImageCount) {
+          const newImages = status.images
+            .slice(lastImageCount)  // 只取新增的图片
+            .map((filename, i) => ({
+              id: `${jobId}-${lastImageCount + i}`,
               url: getImageUrl(filename),
               filename,
               ratio: status.aspect_ratio || '3:2',
               prompt: status.prompt || '',
             }));
-            setGeneratedImages(prev => [...newImages, ...prev]);
 
-            // 保存session_id
-            if (status.session_id) {
-              setImgSessionId(status.session_id);
-            }
-          } else {
-            // 没有生成任何图像，显示错误
-            alert('图像生成失败：未生成任何图像');
+          setGeneratedImages(prev => [...newImages, ...prev]);
+          lastImageCount = status.images.length;
+
+          // 保存session_id（如果有）
+          if (status.session_id) {
+            setImgSessionId(status.session_id);
           }
+        }
 
-          // 移除任务
+        if (status.status === 'completed') {
+          // 生成完成，移除任务卡片
           setImageJobs(prev => prev.filter(job => job.jobId !== jobId));
           // 清理该任务的轮询定时器
           if (imagePollTimeouts.current.has(jobId)) {
@@ -271,6 +284,7 @@ export default function App() {
         mode: videoMode,
         aspect_ratio: vidRatio,
         resolution: vidRes,
+        duration_seconds: vidDuration,
         first_frame: vidFirstFrame?.base64,
         last_frame: vidLastFrame?.base64,
       });
@@ -282,7 +296,7 @@ export default function App() {
           status: 'pending',
           progress: 0,
           prompt: vidPrompt,
-          params: { mode: videoMode, ratio: vidRatio, resolution: vidRes },
+          params: { mode: videoMode, ratio: vidRatio, resolution: vidRes, duration: vidDuration },
           firstFrame: vidFirstFrame?.url, // 用于缩略图
           isExtension: false,
         };
@@ -295,7 +309,7 @@ export default function App() {
       console.error('启动视频生成失败:', error);
       alert(`启动失败: ${error.message}`);
     }
-  }, [vidPrompt, videoMode, vidRatio, vidRes, vidFirstFrame, vidLastFrame]);
+  }, [vidPrompt, videoMode, vidRatio, vidRes, vidDuration, vidFirstFrame, vidLastFrame]);
 
   /**
    * 轮询视频生成状态
@@ -546,8 +560,8 @@ export default function App() {
           {/* 头部 */}
           <Header activeTab={activeTab} />
 
-          {/* 内容区 */}
-          <div className="flex-1 overflow-y-auto p-4 lg:p-8 scrollbar-hide">
+          {/* 内容区 - 移除整体滚动，让画廊独立滚动 */}
+          <div className="flex-1 overflow-hidden p-4 lg:p-8">
             <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row gap-8 h-full">
               {/* 左侧控制面板 */}
               {activeTab === 'image' ? (
@@ -578,11 +592,13 @@ export default function App() {
                   onAspectRatioChange={setVidRatio}
                   resolution={vidRes}
                   onResolutionChange={setVidRes}
+                  duration={vidDuration}
+                  onDurationChange={setVidDuration}
                   firstFrame={vidFirstFrame}
                   onFirstFrameChange={setVidFirstFrame}
                   lastFrame={vidLastFrame}
                   onLastFrameChange={setVidLastFrame}
-                  isGenerating={videoJobs.length > 0}
+                  isGenerating={false}
                   onGenerate={handleGenerateVideo}
                   onOpenAssist={() => setIsAssistOpen(true)}
                 />

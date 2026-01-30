@@ -27,6 +27,7 @@ export function ImageGallery({ images, isLoading, imageJobs, onMakeVideo, onPrev
         rounded-2xl border border-slate-200 dark:border-zinc-800
         p-8 min-h-[600px]
         flex flex-col relative shadow-sm
+        overflow-y-auto scrollbar-hide
       "
     >
       {/* 空状态 */}

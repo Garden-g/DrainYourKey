@@ -328,8 +328,12 @@ class ImageService:
             self._session_timestamps[session_id] = time.time()
 
             job.progress = 20
+            # 初始化 images 列表，用于实时更新（前端轮询时可以看到已生成的图片）
+            job.images = []
 
             # 生成指定数量的图像
+            # 注意：由于 Gemini API 使用同一个 chat 会话，不支持真正的并发
+            # 但我们确保每生成一张就立即更新 job.images，让前端可以实时显示
             for i in range(count):
                 logger.debug(f"生成第 {i + 1}/{count} 张图像")
 
@@ -365,11 +369,13 @@ class ImageService:
                         # 图像保存属于磁盘 IO，放线程执行避免阻塞
                         await asyncio.to_thread(image.save, str(file_path))
 
+                        # 立即添加到 job.images，让前端可以实时显示
+                        job.images.append(filename)
                         generated_files.append(filename)
-                        logger.info(f"图像已保存: {filename}")
+                        logger.info(f"图像已保存: {filename} (已完成 {len(job.images)}/{count})")
 
-                # 更新进度
-                job.progress = 20 + int((i + 1) / count * 70)
+                # 更新进度（基于已生成的图片数量）
+                job.progress = 20 + int(len(job.images) / count * 70)
 
             # 检查是否生成了图像
             if not generated_files:
@@ -379,11 +385,10 @@ class ImageService:
                 logger.error(error_msg)
                 raise Exception(error_msg)
 
-            # 生成完成
-            job.images = generated_files
+            # 生成完成（job.images 已经在循环中实时更新了）
             job.status = JobStatus.COMPLETED
             job.progress = 100
-            logger.info(f"图像生成完成: job_id={job_id}, 共 {len(generated_files)} 张")
+            logger.info(f"图像生成完成: job_id={job_id}, 共 {len(job.images)} 张")
 
             # 保存历史记录 (生成完成后一次性写入)
             try:
