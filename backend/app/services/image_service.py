@@ -115,6 +115,48 @@ class ImageService:
             logger.info("Gemini 客户端已初始化")
         return self.client
 
+    def _optimize_prompt_for_google_search(self, prompt: str) -> tuple[str, bool]:
+        """
+        优化提示词以适配谷歌搜索图像生成
+
+        当用户启用谷歌搜索时，如果提示词不明确要求生成图像，
+        API 可能只返回文本而不是图像。此方法自动检测并优化提示词。
+
+        Args:
+            prompt: 原始提示词
+
+        Returns:
+            tuple[str, bool]: (优化后的提示词, 是否进行了优化)
+        """
+        # 检测是否已经包含图像生成关键词
+        image_keywords = [
+            # 中文关键词
+            "生成", "创建", "制作", "绘制", "画", "可视化", "图表", "信息图",
+            "图片", "图像", "照片", "插图", "海报", "设计",
+            # 英文关键词
+            "generate", "create", "make", "draw", "paint", "visualize", "chart",
+            "infographic", "image", "picture", "photo", "illustration", "poster", "design"
+        ]
+
+        prompt_lower = prompt.lower()
+        has_keyword = any(keyword in prompt_lower for keyword in image_keywords)
+
+        if has_keyword:
+            # 提示词已经明确要求生成图像，无需优化
+            return prompt, False
+
+        # 检测提示词语言（简单判断：是否包含中文字符）
+        has_chinese = any('\u4e00' <= char <= '\u9fff' for char in prompt)
+
+        if has_chinese:
+            # 中文提示词
+            optimized = f"生成一张关于以下内容的信息图表：{prompt}"
+        else:
+            # 英文提示词
+            optimized = f"Generate an infographic about: {prompt}"
+
+        return optimized, True
+
     def _cleanup_expired(self) -> None:
         """
         清理过期任务和会话，避免内存膨胀
@@ -231,8 +273,18 @@ class ImageService:
             generated_files: List[str] = []
             session_id = str(uuid.uuid4())
 
+            # 如果使用谷歌搜索，优化提示词
+            actual_prompt = prompt
+            if use_google_search:
+                optimized_prompt, was_optimized = self._optimize_prompt_for_google_search(prompt)
+                if was_optimized:
+                    logger.info(f"谷歌搜索提示词优化: '{prompt}' -> '{optimized_prompt}'")
+                    actual_prompt = optimized_prompt
+                else:
+                    logger.debug(f"提示词已包含图像生成关键词，无需优化: '{prompt}'")
+
             # 构建请求内容
-            contents = [prompt]
+            contents = [actual_prompt]
 
             # 如果有参考图像,添加到内容中
             if reference_image:
@@ -295,7 +347,7 @@ class ImageService:
                     # 后续图像使用相同提示词
                     try:
                         response = await asyncio.wait_for(
-                            asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {prompt}"),
+                            asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {actual_prompt}"),
                             timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
                         )
                     except asyncio.TimeoutError:
@@ -318,6 +370,14 @@ class ImageService:
 
                 # 更新进度
                 job.progress = 20 + int((i + 1) / count * 70)
+
+            # 检查是否生成了图像
+            if not generated_files:
+                error_msg = "图像生成失败: API 未返回任何图像数据"
+                if use_google_search:
+                    error_msg += "（可能是谷歌搜索工具导致 API 返回文本而非图像）"
+                logger.error(error_msg)
+                raise Exception(error_msg)
 
             # 生成完成
             job.images = generated_files
@@ -398,8 +458,18 @@ class ImageService:
         generated_files: List[str] = []
         session_id = str(uuid.uuid4())
 
+        # 如果使用谷歌搜索，优化提示词
+        actual_prompt = prompt
+        if use_google_search:
+            optimized_prompt, was_optimized = self._optimize_prompt_for_google_search(prompt)
+            if was_optimized:
+                logger.info(f"谷歌搜索提示词优化: '{prompt}' -> '{optimized_prompt}'")
+                actual_prompt = optimized_prompt
+            else:
+                logger.debug(f"提示词已包含图像生成关键词，无需优化: '{prompt}'")
+
         # 构建请求内容
-        contents = [prompt]
+        contents = [actual_prompt]
 
         # 如果有参考图像，添加到内容中
         if reference_image:
@@ -456,7 +526,7 @@ class ImageService:
                 # 后续图像使用相同提示词
                 try:
                     response = await asyncio.wait_for(
-                        asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {prompt}"),
+                        asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {actual_prompt}"),
                         timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
                     )
                 except asyncio.TimeoutError:
