@@ -152,6 +152,45 @@ def decode_base64_image(base64_data: str) -> Image.Image:
         raise ValueError(f"无法解码图像: {e}")
 
 
+def decode_base64_to_image_bytes(base64_data: str) -> tuple[bytes, str]:
+    """
+    将 base64 编码的图像解码为二进制字节，并规范化为 PNG
+
+    Args:
+        base64_data: base64 编码的图像数据 (可包含 data URL 前缀)
+
+    Returns:
+        tuple[bytes, str]: (图像字节, mime 类型)
+
+    Raises:
+        ValueError: 如果解码失败
+    """
+    try:
+        # 解析 data URL 头部
+        mime_type = "image/png"
+        if "," in base64_data and base64_data.strip().startswith("data:"):
+            header, base64_data = base64_data.split(",", 1)
+            # header 格式: data:image/png;base64
+            if ";" in header:
+                mime_type = header[5:].split(";")[0] or mime_type
+
+        # 解码 base64 为原始字节
+        raw_bytes = base64.b64decode(base64_data)
+
+        # 使用 PIL 规范化为 PNG，避免 RGB/Alpha 兼容问题
+        image = Image.open(io.BytesIO(raw_bytes))
+        if image.mode != "RGB":
+            image = image.convert("RGB")
+
+        buffer = io.BytesIO()
+        image.save(buffer, format="PNG")
+        return buffer.getvalue(), "image/png"
+
+    except Exception as e:
+        logger.error(f"解码图像字节失败: {e}")
+        raise ValueError(f"无法解码图像: {e}")
+
+
 def safe_resolve_path(
     base_dir: Path,
     filename: str,
