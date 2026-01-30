@@ -4,7 +4,7 @@
  * 整合所有子组件，管理全局状态
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 // 布局组件
 import { Sidebar } from './components/layout/Sidebar';
@@ -83,6 +83,26 @@ export default function App() {
   const [isAssistOpen, setIsAssistOpen] = useState(false);
 
   // ==================== 副作用 ====================
+  // 轮询定时器缓存，用于清理避免内存泄漏
+  const imagePollTimeouts = useRef(new Map());
+  const videoPollTimeout = useRef(null);
+
+  /**
+   * 清理所有轮询定时器，避免组件卸载后继续运行
+   */
+  useEffect(() => {
+    return () => {
+      imagePollTimeouts.current.forEach((timeoutId) => {
+        clearTimeout(timeoutId);
+      });
+      imagePollTimeouts.current.clear();
+
+      if (videoPollTimeout.current) {
+        clearTimeout(videoPollTimeout.current);
+        videoPollTimeout.current = null;
+      }
+    };
+  }, []);
 
   /**
    * 当参考图改变时,自动设置宽高比为"auto"
@@ -180,25 +200,45 @@ export default function App() {
 
           // 移除任务
           setImageJobs(prev => prev.filter(job => job.jobId !== jobId));
+          // 清理该任务的轮询定时器
+          if (imagePollTimeouts.current.has(jobId)) {
+            clearTimeout(imagePollTimeouts.current.get(jobId));
+            imagePollTimeouts.current.delete(jobId);
+          }
 
         } else if (status.status === 'failed') {
           alert(`图像生成失败: ${status.message}`);
           setImageJobs(prev => prev.filter(job => job.jobId !== jobId));
+          if (imagePollTimeouts.current.has(jobId)) {
+            clearTimeout(imagePollTimeouts.current.get(jobId));
+            imagePollTimeouts.current.delete(jobId);
+          }
 
         } else if (attempts < maxAttempts) {
           // 继续轮询
           attempts++;
-          setTimeout(poll, 3000); // 3秒后再次查询
+          const timeoutId = window.setTimeout(poll, 3000); // 3秒后再次查询
+          imagePollTimeouts.current.set(jobId, timeoutId);
         } else {
           // 超时
           alert('图像生成超时,请稍后查看');
           setImageJobs(prev => prev.filter(job => job.jobId !== jobId));
+          if (imagePollTimeouts.current.has(jobId)) {
+            clearTimeout(imagePollTimeouts.current.get(jobId));
+            imagePollTimeouts.current.delete(jobId);
+          }
         }
       } catch (error) {
         console.error('查询图像状态失败:', error);
         if (attempts < maxAttempts) {
           attempts++;
-          setTimeout(poll, 3000);
+          const timeoutId = window.setTimeout(poll, 3000);
+          imagePollTimeouts.current.set(jobId, timeoutId);
+        } else {
+          if (imagePollTimeouts.current.has(jobId)) {
+            clearTimeout(imagePollTimeouts.current.get(jobId));
+            imagePollTimeouts.current.delete(jobId);
+          }
         }
       }
     };
@@ -218,6 +258,11 @@ export default function App() {
     setGeneratedVideo(null);
     setVideoProgress(0);
     setVideoStatusMsg('正在初始化...');
+    // 清理可能存在的历史轮询，避免并发轮询
+    if (videoPollTimeout.current) {
+      clearTimeout(videoPollTimeout.current);
+      videoPollTimeout.current = null;
+    }
 
     try {
       const result = await generateVideo({
@@ -245,37 +290,64 @@ export default function App() {
    * 轮询视频生成状态
    */
   const pollVideoStatus = useCallback(async (jobId) => {
-    try {
-      const status = await getVideoStatus(jobId);
+    const maxDurationMs = 20 * 60 * 1000; // 最长轮询 20 分钟
+    const startTime = Date.now();
 
-      setVideoProgress(status.progress);
-      setVideoStatusMsg(status.message || '处理中...');
-
-      if (status.status === 'completed' && status.video_url) {
-        // 生成完成
-        setGeneratedVideo({
-          id: jobId,
-          url: status.video_url,
-          resolution: vidRes,
-          ratio: vidRatio,
-          prompt: vidPrompt,
-        });
+    const poll = async () => {
+      // 超时保护，避免无限轮询
+      if (Date.now() - startTime > maxDurationMs) {
+        setVideoStatusMsg('视频生成超时，请稍后重试');
         setIsGeneratingVid(false);
         setCurrentJobId(null);
-      } else if (status.status === 'failed') {
-        // 生成失败
-        alert(`视频生成失败: ${status.message}`);
-        setIsGeneratingVid(false);
-        setCurrentJobId(null);
-      } else {
-        // 继续轮询
-        setTimeout(() => pollVideoStatus(jobId), 5000);
+        if (videoPollTimeout.current) {
+          clearTimeout(videoPollTimeout.current);
+          videoPollTimeout.current = null;
+        }
+        return;
       }
-    } catch (error) {
-      console.error('查询状态失败:', error);
-      // 继续尝试
-      setTimeout(() => pollVideoStatus(jobId), 5000);
-    }
+
+      try {
+        const status = await getVideoStatus(jobId);
+
+        setVideoProgress(status.progress);
+        setVideoStatusMsg(status.message || '处理中...');
+
+        if (status.status === 'completed' && status.video_url) {
+          // 生成完成
+          setGeneratedVideo({
+            id: jobId,
+            url: status.video_url,
+            resolution: vidRes,
+            ratio: vidRatio,
+            prompt: vidPrompt,
+          });
+          setIsGeneratingVid(false);
+          setCurrentJobId(null);
+          if (videoPollTimeout.current) {
+            clearTimeout(videoPollTimeout.current);
+            videoPollTimeout.current = null;
+          }
+        } else if (status.status === 'failed') {
+          // 生成失败
+          alert(`视频生成失败: ${status.message}`);
+          setIsGeneratingVid(false);
+          setCurrentJobId(null);
+          if (videoPollTimeout.current) {
+            clearTimeout(videoPollTimeout.current);
+            videoPollTimeout.current = null;
+          }
+        } else {
+          // 继续轮询
+          videoPollTimeout.current = window.setTimeout(poll, 5000);
+        }
+      } catch (error) {
+        console.error('查询状态失败:', error);
+        // 继续尝试
+        videoPollTimeout.current = window.setTimeout(poll, 5000);
+      }
+    };
+
+    poll();
   }, [vidRes, vidRatio, vidPrompt]);
 
   // ==================== 图片转视频 ====================

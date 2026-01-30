@@ -7,9 +7,9 @@
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Query
 
-from ..config import logger
 from ..models import HistoryResponse, ErrorResponse
 from ..services import history_service
+from ..utils import raise_internal_error
 
 # 创建路由器
 router = APIRouter(prefix="/api/history", tags=["历史记录"])
@@ -47,8 +47,7 @@ async def get_history(
         return HistoryResponse(items=items, total=total)
 
     except Exception as e:
-        logger.error(f"获取历史记录失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise_internal_error("获取历史记录失败", e)
 
 
 @router.delete(
@@ -77,8 +76,7 @@ async def delete_history(record_id: str) -> dict:
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"删除历史记录失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise_internal_error("删除历史记录失败", e)
 
 
 @router.delete(
@@ -108,5 +106,4 @@ async def clear_history(
         }
 
     except Exception as e:
-        logger.error(f"清空历史记录失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise_internal_error("清空历史记录失败", e)

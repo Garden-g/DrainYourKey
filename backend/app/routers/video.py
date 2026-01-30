@@ -15,7 +15,8 @@ from ..models import (
     VideoResponse,
     ErrorResponse,
 )
-from ..services import video_service, JobStatus, history_service
+from ..services import video_service, JobStatus
+from ..utils import safe_resolve_path, raise_internal_error
 
 # 创建路由器
 router = APIRouter(prefix="/api/video", tags=["视频"])
@@ -62,6 +63,11 @@ async def generate_video(request: VideoGenerateRequest) -> VideoResponse:
                 status_code=400,
                 detail="首尾帧模式需要提供首帧图像"
             )
+        if request.mode == "first_last" and not request.last_frame:
+            raise HTTPException(
+                status_code=400,
+                detail="首尾帧模式需要提供尾帧图像"
+            )
 
         # 1080p 和 4k 仅支持 8 秒
         if request.resolution in ["1080p", "4k"]:
@@ -86,8 +92,7 @@ async def generate_video(request: VideoGenerateRequest) -> VideoResponse:
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"视频生成请求失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise_internal_error("视频生成请求失败", e)
 
 
 @router.post(
@@ -131,8 +136,7 @@ async def extend_video(request: VideoExtendRequest) -> VideoResponse:
         logger.warning(f"视频延长请求无效: {e}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"视频延长请求失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise_internal_error("视频延长请求失败", e)
 
 
 @router.get(
@@ -168,15 +172,6 @@ async def get_video_status(job_id: str) -> VideoStatusResponse:
         response.video_url = f"/api/video/{job.video_filename}"
         response.message = "视频生成完成"
 
-        # 保存历史记录 (只在第一次查询完成状态时保存)
-        # 这里简化处理，实际应该在生成完成时保存
-        await history_service.add_record(
-            record_type="video",
-            prompt="",  # 可以从 job 中获取
-            filename=job.video_filename,
-            params={"job_id": job_id}
-        )
-
     elif job.status == JobStatus.FAILED:
         response.message = job.error_message or "视频生成失败"
 
@@ -204,7 +199,15 @@ async def get_video(filename: str) -> FileResponse:
     Returns:
         FileResponse: 视频文件
     """
-    file_path = Config.VIDEOS_DIR / filename
+    try:
+        # 使用安全路径解析，防止路径穿越
+        file_path = safe_resolve_path(
+            base_dir=Config.VIDEOS_DIR,
+            filename=filename,
+            allowed_extensions={".mp4"}
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="视频不存在")

@@ -19,6 +19,7 @@ from ..models import (
     ErrorResponse,
 )
 from ..services import image_service, prompt_service, history_service
+from ..utils import safe_resolve_path, raise_internal_error
 
 # 创建路由器
 router = APIRouter(prefix="/api/image", tags=["图像"])
@@ -69,8 +70,8 @@ async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
         )
 
     except Exception as e:
-        logger.error(f"启动图像生成任务失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        # 统一错误处理，避免泄露内部异常信息
+        raise_internal_error("启动图像生成任务失败", e)
 
 
 @router.get(
@@ -164,8 +165,7 @@ async def edit_image(request: ImageEditRequest) -> ImageResponse:
         logger.warning(f"图像编辑请求无效: {e}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        logger.error(f"图像编辑失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise_internal_error("图像编辑失败", e)
 
 
 @router.post(
@@ -202,8 +202,7 @@ async def enhance_prompt(request: EnhancePromptRequest) -> PromptResponse:
         )
 
     except Exception as e:
-        logger.error(f"提示词优化失败: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        raise_internal_error("提示词优化失败", e)
 
 
 @router.get(
@@ -221,7 +220,15 @@ async def get_image(filename: str) -> FileResponse:
     Returns:
         FileResponse: 图像文件
     """
-    file_path = Config.IMAGES_DIR / filename
+    try:
+        # 使用安全路径解析，防止路径穿越
+        file_path = safe_resolve_path(
+            base_dir=Config.IMAGES_DIR,
+            filename=filename,
+            allowed_extensions={".png"}
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="图像不存在")

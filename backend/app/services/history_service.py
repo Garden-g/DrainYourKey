@@ -8,6 +8,7 @@
 """
 
 import uuid
+import asyncio
 from datetime import datetime
 from typing import List, Optional, Dict, Any
 
@@ -27,6 +28,8 @@ class HistoryService:
         初始化历史记录服务
         """
         self._history_file = Config.HISTORY_FILE
+        # 使用异步锁保护读写，避免并发写入导致 JSON 损坏
+        self._lock = asyncio.Lock()
         logger.info("历史记录服务初始化完成")
 
     async def _load_history(self) -> List[Dict[str, Any]]:
@@ -80,18 +83,20 @@ class HistoryService:
             "params": params or {}
         }
 
-        # 加载现有记录
-        items = await self._load_history()
+        # 使用锁确保读取与写入的原子性
+        async with self._lock:
+            # 加载现有记录
+            items = await self._load_history()
 
-        # 添加新记录到开头 (最新的在前)
-        items.insert(0, record)
+            # 添加新记录到开头 (最新的在前)
+            items.insert(0, record)
 
-        # 限制历史记录数量 (最多保留 1000 条)
-        if len(items) > 1000:
-            items = items[:1000]
+            # 限制历史记录数量 (最多保留 1000 条)
+            if len(items) > 1000:
+                items = items[:1000]
 
-        # 保存
-        await self._save_history(items)
+            # 保存
+            await self._save_history(items)
 
         logger.info(f"添加历史记录: {record_id}, type={record_type}")
         return record_id
@@ -113,7 +118,9 @@ class HistoryService:
         Returns:
             tuple[List[Dict[str, Any]], int]: (记录列表, 总数)
         """
-        items = await self._load_history()
+        # 读取历史记录时也加锁，避免读写冲突
+        async with self._lock:
+            items = await self._load_history()
 
         # 按类型筛选
         if record_type:
@@ -136,7 +143,8 @@ class HistoryService:
         Returns:
             Optional[Dict[str, Any]]: 记录数据，不存在则返回 None
         """
-        items = await self._load_history()
+        async with self._lock:
+            items = await self._load_history()
 
         for item in items:
             if item.get("id") == record_id:
@@ -154,15 +162,16 @@ class HistoryService:
         Returns:
             bool: 是否成功删除
         """
-        items = await self._load_history()
+        async with self._lock:
+            items = await self._load_history()
 
-        # 查找并删除
-        for i, item in enumerate(items):
-            if item.get("id") == record_id:
-                del items[i]
-                await self._save_history(items)
-                logger.info(f"删除历史记录: {record_id}")
-                return True
+            # 查找并删除
+            for i, item in enumerate(items):
+                if item.get("id") == record_id:
+                    del items[i]
+                    await self._save_history(items)
+                    logger.info(f"删除历史记录: {record_id}")
+                    return True
 
         return False
 
@@ -176,22 +185,23 @@ class HistoryService:
         Returns:
             int: 删除的记录数量
         """
-        items = await self._load_history()
-        original_count = len(items)
+        async with self._lock:
+            items = await self._load_history()
+            original_count = len(items)
 
-        if record_type:
-            # 只删除指定类型
-            items = [item for item in items if item.get("type") != record_type]
-        else:
-            # 清空全部
-            items = []
+            if record_type:
+                # 只删除指定类型
+                items = [item for item in items if item.get("type") != record_type]
+            else:
+                # 清空全部
+                items = []
 
-        await self._save_history(items)
+            await self._save_history(items)
 
-        deleted_count = original_count - len(items)
-        logger.info(f"清空历史记录: 删除 {deleted_count} 条")
+            deleted_count = original_count - len(items)
+            logger.info(f"清空历史记录: 删除 {deleted_count} 条")
 
-        return deleted_count
+            return deleted_count
 
 
 # 创建全局服务实例

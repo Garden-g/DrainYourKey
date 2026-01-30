@@ -24,6 +24,7 @@ from ..utils import (
     decode_base64_image,
     retry_async,
 )
+from .history_service import history_service
 
 
 class JobStatus(Enum):
@@ -47,6 +48,10 @@ class VideoJob:
         error_message: 错误消息
         operation: Gemini API 操作对象
         created_at: 创建时间戳
+        prompt: 生成提示词
+        mode: 生成模式
+        aspect_ratio: 宽高比
+        resolution: 分辨率
     """
     job_id: str
     status: JobStatus
@@ -55,6 +60,10 @@ class VideoJob:
     error_message: Optional[str] = None
     operation: Any = None
     created_at: float = 0.0
+    prompt: str = ""
+    mode: str = "text2vid"
+    aspect_ratio: str = "16:9"
+    resolution: str = "720p"
 
 
 class VideoService:
@@ -70,8 +79,8 @@ class VideoService:
 
         创建 Gemini API 客户端和任务存储
         """
-        # 初始化 Gemini 客户端
-        self.client = genai.Client(api_key=Config.GOOGLE_CLOUD_API_KEY)
+        # 延迟初始化 Gemini 客户端，避免配置缺失导致应用启动失败
+        self.client: Optional[genai.Client] = None
 
         # 存储视频生成任务 {job_id: VideoJob}
         self._jobs: Dict[str, VideoJob] = {}
@@ -80,6 +89,44 @@ class VideoService:
         self._generated_videos: Dict[str, Any] = {}
 
         logger.info("视频服务初始化完成")
+
+    def _ensure_client(self) -> genai.Client:
+        """
+        确保 Gemini 客户端可用
+
+        Returns:
+            genai.Client: 可用的 Gemini 客户端
+
+        Raises:
+            ValueError: 当 API Key 未配置时
+        """
+        if self.client is None:
+            if not Config.GOOGLE_CLOUD_API_KEY:
+                raise ValueError("GOOGLE_CLOUD_API_KEY 未设置")
+            self.client = genai.Client(api_key=Config.GOOGLE_CLOUD_API_KEY)
+            logger.info("Gemini 客户端已初始化")
+        return self.client
+
+    def _cleanup_expired(self) -> None:
+        """
+        清理过期任务与缓存视频，避免内存占用持续增长
+        """
+        now = time.time()
+        job_ttl_seconds = Config.JOB_TTL_HOURS * 3600
+
+        for job_id, job in list(self._jobs.items()):
+            age = now - job.created_at
+
+            # 处理超时的进行中任务
+            if job.status in {JobStatus.PENDING, JobStatus.PROCESSING} and age > Config.PROCESSING_JOB_MAX_SECONDS:
+                job.status = JobStatus.FAILED
+                job.error_message = "任务超时"
+                job.progress = min(job.progress, 99)
+
+            # 清理完成或失败的历史任务
+            if job.status in {JobStatus.COMPLETED, JobStatus.FAILED} and age > job_ttl_seconds:
+                del self._jobs[job_id]
+                self._generated_videos.pop(job_id, None)
 
     async def generate_video(
         self,
@@ -107,6 +154,9 @@ class VideoService:
         Note:
             1080p 和 4k 分辨率仅支持 8 秒视频
         """
+        # 生成前先清理过期任务
+        self._cleanup_expired()
+
         job_id = str(uuid.uuid4())
         logger.info(f"创建视频生成任务: job_id={job_id}, mode={mode}")
 
@@ -114,7 +164,11 @@ class VideoService:
         job = VideoJob(
             job_id=job_id,
             status=JobStatus.PENDING,
-            created_at=time.time()
+            created_at=time.time(),
+            prompt=prompt,
+            mode=mode,
+            aspect_ratio=aspect_ratio,
+            resolution=resolution
         )
         self._jobs[job_id] = job
 
@@ -161,6 +215,7 @@ class VideoService:
 
         try:
             logger.info(f"开始处理视频生成: {job_id}")
+            start_time = time.monotonic()
 
             # 构建配置
             config = types.GenerateVideosConfig(
@@ -172,7 +227,8 @@ class VideoService:
             image = None
             if mode == "img2vid" and first_frame:
                 # 图生视频模式
-                pil_image = decode_base64_image(first_frame)
+                # 解码图像为阻塞操作，放到线程中执行
+                pil_image = await asyncio.to_thread(decode_base64_image, first_frame)
 
                 # 确保图像是RGB模式
                 if pil_image.mode != 'RGB':
@@ -184,7 +240,7 @@ class VideoService:
 
             elif mode == "first_last" and first_frame:
                 # 首尾帧插值模式
-                pil_image = decode_base64_image(first_frame)
+                pil_image = await asyncio.to_thread(decode_base64_image, first_frame)
 
                 # 确保图像是RGB模式
                 if pil_image.mode != 'RGB':
@@ -194,7 +250,7 @@ class VideoService:
                 image = pil_image
 
                 if last_frame:
-                    last_pil_image = decode_base64_image(last_frame)
+                    last_pil_image = await asyncio.to_thread(decode_base64_image, last_frame)
 
                     # 确保尾帧图像也是RGB模式
                     if last_pil_image.mode != 'RGB':
@@ -216,11 +272,17 @@ class VideoService:
                 logger.debug(f"图像详情: mode={image.mode}, size={image.size}, format={image.format}")
 
             try:
-                operation = self.client.models.generate_videos(
-                    model=Config.VIDEO_MODEL,
-                    prompt=prompt,
-                    image=image,
-                    config=config
+                client = self._ensure_client()
+                # 生成视频为阻塞调用，使用线程池并设置超时
+                operation = await asyncio.wait_for(
+                    asyncio.to_thread(
+                        client.models.generate_videos,
+                        model=Config.VIDEO_MODEL,
+                        prompt=prompt,
+                        image=image,
+                        config=config
+                    ),
+                    timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
                 )
             except Exception as e:
                 logger.error(f"视频生成API调用失败: {e}")
@@ -233,24 +295,34 @@ class VideoService:
             # 轮询等待视频生成完成
             poll_count = 0
             while not operation.done:
+                # 超过最大轮询时间则中止，避免永远挂起
+                if time.monotonic() - start_time > Config.GENAI_VIDEO_POLL_TIMEOUT_SECONDS:
+                    raise TimeoutError("视频生成超时")
+
                 poll_count += 1
                 # 更新进度 (30-90%)
                 job.progress = min(30 + poll_count * 5, 90)
                 logger.debug(f"视频生成中... 进度: {job.progress}%")
 
                 await asyncio.sleep(10)
-                operation = self.client.operations.get(operation)
+                # 轮询操作状态属于阻塞调用，放线程执行
+                operation = await asyncio.wait_for(
+                    asyncio.to_thread(client.operations.get, operation),
+                    timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
+                )
 
             job.progress = 95
 
             # 下载并保存视频
             generated_video = operation.response.generated_videos[0]
-            self.client.files.download(file=generated_video.video)
+            # 下载文件为阻塞调用，放线程执行
+            await asyncio.to_thread(client.files.download, file=generated_video.video)
 
             # 保存视频文件
             filename = generate_filename("video", "mp4")
             file_path = Config.VIDEOS_DIR / filename
-            generated_video.video.save(str(file_path))
+            # 文件保存为阻塞 IO，放线程执行
+            await asyncio.to_thread(generated_video.video.save, str(file_path))
 
             # 存储视频对象 (用于后续延长)
             self._generated_videos[job_id] = generated_video.video
@@ -261,6 +333,22 @@ class VideoService:
             job.video_filename = filename
 
             logger.info(f"视频生成完成: {filename}")
+
+            # 保存历史记录 (生成完成后一次性写入)
+            try:
+                await history_service.add_record(
+                    record_type="video",
+                    prompt=prompt,
+                    filename=filename,
+                    params={
+                        "mode": mode,
+                        "aspect_ratio": aspect_ratio,
+                        "resolution": resolution,
+                        "job_id": job_id,
+                    }
+                )
+            except Exception as history_error:
+                logger.warning(f"保存视频历史记录失败: {history_error}")
 
         except Exception as e:
             logger.error(f"视频生成失败: {e}")
@@ -289,6 +377,9 @@ class VideoService:
             - 仅支持 720p 分辨率的视频延长
             - 视频最长可延长至 148 秒
         """
+        # 扩展前先清理过期任务
+        self._cleanup_expired()
+
         # 检查原视频是否存在
         if video_id not in self._generated_videos:
             raise ValueError(f"视频不存在或已过期: {video_id}")
@@ -302,7 +393,11 @@ class VideoService:
         job = VideoJob(
             job_id=job_id,
             status=JobStatus.PENDING,
-            created_at=time.time()
+            created_at=time.time(),
+            prompt=prompt,
+            mode="extend",
+            aspect_ratio="16:9",
+            resolution="720p"
         )
         self._jobs[job_id] = job
 
@@ -333,16 +428,22 @@ class VideoService:
 
         try:
             logger.info(f"开始处理视频延长: {job_id}")
+            start_time = time.monotonic()
 
             # 调用 API 延长视频
-            operation = self.client.models.generate_videos(
-                model=Config.VIDEO_MODEL,
-                video=original_video,
-                prompt=prompt,
-                config=types.GenerateVideosConfig(
-                    number_of_videos=1,
-                    resolution="720p"
-                )
+            client = self._ensure_client()
+            operation = await asyncio.wait_for(
+                asyncio.to_thread(
+                    client.models.generate_videos,
+                    model=Config.VIDEO_MODEL,
+                    video=original_video,
+                    prompt=prompt,
+                    config=types.GenerateVideosConfig(
+                        number_of_videos=1,
+                        resolution="720p"
+                    )
+                ),
+                timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
             )
 
             job.progress = 30
@@ -350,20 +451,26 @@ class VideoService:
             # 轮询等待完成
             poll_count = 0
             while not operation.done:
+                if time.monotonic() - start_time > Config.GENAI_VIDEO_POLL_TIMEOUT_SECONDS:
+                    raise TimeoutError("视频延长超时")
+
                 poll_count += 1
                 job.progress = min(30 + poll_count * 5, 90)
                 await asyncio.sleep(10)
-                operation = self.client.operations.get(operation)
+                operation = await asyncio.wait_for(
+                    asyncio.to_thread(client.operations.get, operation),
+                    timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
+                )
 
             job.progress = 95
 
             # 下载并保存视频
             generated_video = operation.response.generated_videos[0]
-            self.client.files.download(file=generated_video.video)
+            await asyncio.to_thread(client.files.download, file=generated_video.video)
 
             filename = generate_filename("video_extended", "mp4")
             file_path = Config.VIDEOS_DIR / filename
-            generated_video.video.save(str(file_path))
+            await asyncio.to_thread(generated_video.video.save, str(file_path))
 
             # 存储新视频对象
             self._generated_videos[job_id] = generated_video.video
@@ -373,6 +480,21 @@ class VideoService:
             job.video_filename = filename
 
             logger.info(f"视频延长完成: {filename}")
+
+            # 保存历史记录
+            try:
+                await history_service.add_record(
+                    record_type="video",
+                    prompt=prompt,
+                    filename=filename,
+                    params={
+                        "mode": "extend",
+                        "resolution": "720p",
+                        "job_id": job_id,
+                    }
+                )
+            except Exception as history_error:
+                logger.warning(f"保存视频延长历史记录失败: {history_error}")
 
         except Exception as e:
             logger.error(f"视频延长失败: {e}")
@@ -389,6 +511,8 @@ class VideoService:
         Returns:
             Optional[VideoJob]: 任务对象，不存在则返回 None
         """
+        # 查询前清理过期任务
+        self._cleanup_expired()
         return self._jobs.get(job_id)
 
     def cleanup_old_jobs(self, max_age_hours: int = 24) -> int:

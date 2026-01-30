@@ -11,6 +11,7 @@ import os
 import logging
 from pathlib import Path
 from dotenv import load_dotenv
+from typing import List
 
 # 加载 .env 文件中的环境变量
 load_dotenv()
@@ -49,10 +50,32 @@ class Config:
     HOST: str = "0.0.0.0"
     PORT: int = 8080
 
+    # CORS 配置 (逗号分隔)
+    _CORS_RAW: str = os.getenv("CORS_ALLOW_ORIGINS", "")
+    CORS_ALLOW_ORIGINS: List[str] = (
+        [origin.strip() for origin in _CORS_RAW.split(",") if origin.strip()]
+        if _CORS_RAW
+        else [
+            "http://localhost:3000",
+            "http://127.0.0.1:3000",
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+        ]
+    )
+
     # API 模型名称
     IMAGE_MODEL: str = "gemini-3-pro-image-preview"
     VIDEO_MODEL: str = "veo-3.1-generate-preview"
     PROMPT_MODEL: str = "gemini-3-pro-preview"
+
+    # 任务与调用超时配置
+    JOB_TTL_HOURS: int = int(os.getenv("JOB_TTL_HOURS", "24"))
+    SESSION_TTL_HOURS: int = int(os.getenv("SESSION_TTL_HOURS", "24"))
+    PROCESSING_JOB_MAX_SECONDS: int = int(os.getenv("PROCESSING_JOB_MAX_SECONDS", "1800"))
+    GENAI_IMAGE_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_IMAGE_TIMEOUT_SECONDS", "120"))
+    GENAI_PROMPT_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_PROMPT_TIMEOUT_SECONDS", "60"))
+    GENAI_VIDEO_API_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_VIDEO_API_TIMEOUT_SECONDS", "120"))
+    GENAI_VIDEO_POLL_TIMEOUT_SECONDS: int = int(os.getenv("GENAI_VIDEO_POLL_TIMEOUT_SECONDS", "1800"))
 
     @classmethod
     def ensure_directories(cls) -> None:
@@ -94,7 +117,13 @@ def setup_logging() -> logging.Logger:
 
     # 创建日志记录器
     logger = logging.getLogger("gen_photo_n_video")
+
+    # 避免重复添加 Handler (尤其是 dev reload 场景)
+    if logger.handlers:
+        return logger
+
     logger.setLevel(logging.DEBUG)
+    logger.propagate = False
 
     # 日志格式
     formatter = logging.Formatter(

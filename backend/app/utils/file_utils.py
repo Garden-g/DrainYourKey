@@ -10,10 +10,11 @@
 import os
 import base64
 import json
+import asyncio
 import aiofiles
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional, Any, Iterable
 from PIL import Image
 import io
 
@@ -151,6 +152,55 @@ def decode_base64_image(base64_data: str) -> Image.Image:
         raise ValueError(f"无法解码图像: {e}")
 
 
+def safe_resolve_path(
+    base_dir: Path,
+    filename: str,
+    allowed_extensions: Optional[Iterable[str]] = None
+) -> Path:
+    """
+    安全解析文件路径，防止路径穿越
+
+    Args:
+        base_dir: 允许访问的基础目录
+        filename: 用户提供的文件名
+        allowed_extensions: 允许的扩展名集合 (如 [".png", ".mp4"])，None 表示不限制
+
+    Returns:
+        Path: 解析后的安全路径
+
+    Raises:
+        ValueError: 如果文件名非法或越权访问
+    """
+    # 基础目录必须存在，避免解析到非预期位置
+    base_dir_resolved = base_dir.resolve()
+
+    # 拒绝空值、当前/上级目录等高风险输入
+    if not filename or filename in {".", ".."}:
+        raise ValueError("非法文件名")
+
+    # 拒绝包含路径分隔符的输入，强制仅允许纯文件名
+    if "/" in filename or "\\" in filename:
+        raise ValueError("非法文件名")
+
+    # 拒绝路径片段，确保只保留文件名
+    if Path(filename).name != filename:
+        raise ValueError("非法文件名")
+
+    # 扩展名白名单校验，防止任意类型读取
+    if allowed_extensions is not None:
+        suffix = Path(filename).suffix.lower()
+        allowed = {ext.lower() for ext in allowed_extensions}
+        if suffix not in allowed:
+            raise ValueError("不允许的文件类型")
+
+    # 解析最终路径并验证在基础目录内
+    file_path = (base_dir_resolved / filename).resolve()
+    if not file_path.is_relative_to(base_dir_resolved):
+        raise ValueError("非法路径访问")
+
+    return file_path
+
+
 async def read_json_file(file_path: Path) -> Any:
     """
     异步读取 JSON 文件
@@ -184,8 +234,14 @@ async def write_json_file(file_path: Path, data: Any) -> None:
     # 确保目录存在
     file_path.parent.mkdir(parents=True, exist_ok=True)
 
-    async with aiofiles.open(file_path, "w", encoding="utf-8") as f:
+    # 使用临时文件写入，避免并发写导致文件损坏
+    temp_path = file_path.with_suffix(file_path.suffix + ".tmp")
+
+    async with aiofiles.open(temp_path, "w", encoding="utf-8") as f:
         await f.write(json.dumps(data, ensure_ascii=False, indent=2, default=str))
+
+    # 原子替换，保证写入过程可恢复
+    await asyncio.to_thread(os.replace, temp_path, file_path)
 
 
 def get_file_url(filename: str, file_type: str) -> str:

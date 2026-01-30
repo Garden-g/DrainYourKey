@@ -4,7 +4,7 @@
  * 提供图片上传功能，支持预览和清除
  */
 
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Plus, X } from 'lucide-react';
 
 /**
@@ -28,6 +28,20 @@ export function FileUpload({
 }) {
   // 文件输入引用
   const inputRef = useRef(null);
+  // 记录当前创建的 object URL，便于清理释放内存
+  const objectUrlRef = useRef(null);
+
+  /**
+   * 组件卸载时清理 object URL，防止内存泄漏
+   */
+  useEffect(() => {
+    return () => {
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+        objectUrlRef.current = null;
+      }
+    };
+  }, []);
 
   /**
    * 计算图像宽高比
@@ -73,7 +87,14 @@ export function FileUpload({
   const handleFile = (e) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      // 释放旧的 object URL，避免堆积
+      if (objectUrlRef.current) {
+        URL.revokeObjectURL(objectUrlRef.current);
+        objectUrlRef.current = null;
+      }
+
       const url = URL.createObjectURL(file);
+      objectUrlRef.current = url;
 
       // 读取文件为 base64
       const reader = new FileReader();
@@ -98,6 +119,19 @@ export function FileUpload({
         img.src = url;
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  /**
+   * 处理清除操作，确保释放 object URL
+   */
+  const handleClear = () => {
+    if (objectUrlRef.current) {
+      URL.revokeObjectURL(objectUrlRef.current);
+      objectUrlRef.current = null;
+    }
+    if (onClear) {
+      onClear();
     }
   };
 
@@ -157,7 +191,7 @@ export function FileUpload({
 
           {/* 清除按钮 */}
           <button
-            onClick={onClear}
+            onClick={handleClear}
             className="
               absolute top-2 right-2
               p-1.5

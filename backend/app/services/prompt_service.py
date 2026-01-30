@@ -6,6 +6,7 @@
 - 将简单描述扩展为详细的生成提示词
 """
 
+import asyncio
 from google import genai
 from google.genai import types
 
@@ -25,8 +26,26 @@ class PromptService:
         """
         初始化提示词服务
         """
-        self.client = genai.Client(api_key=Config.GOOGLE_CLOUD_API_KEY)
+        # 延迟初始化 Gemini 客户端，避免配置缺失导致应用启动失败
+        self.client = None
         logger.info("提示词服务初始化完成")
+
+    def _ensure_client(self) -> genai.Client:
+        """
+        确保 Gemini 客户端可用
+
+        Returns:
+            genai.Client: 可用的 Gemini 客户端
+
+        Raises:
+            ValueError: 当 API Key 未配置时
+        """
+        if self.client is None:
+            if not Config.GOOGLE_CLOUD_API_KEY:
+                raise ValueError("GOOGLE_CLOUD_API_KEY 未设置")
+            self.client = genai.Client(api_key=Config.GOOGLE_CLOUD_API_KEY)
+            logger.info("Gemini 客户端已初始化")
+        return self.client
 
     @retry_async(max_retries=2, delay=1.0)
     async def enhance_prompt(
@@ -82,13 +101,19 @@ class PromptService:
 直接输出优化后的提示词，不要有任何解释或前缀。"""
 
         # 调用 Gemini API
-        response = self.client.models.generate_content(
-            model=Config.PROMPT_MODEL,
-            contents=f"请优化以下提示词:\n\n{prompt}",
-            config=types.GenerateContentConfig(
-                system_instruction=system_prompt,
-                thinking_config=types.ThinkingConfig(thinking_level="low")
-            )
+        client = self._ensure_client()
+        # 提示词优化调用为阻塞操作，放线程执行并设置超时
+        response = await asyncio.wait_for(
+            asyncio.to_thread(
+                client.models.generate_content,
+                model=Config.PROMPT_MODEL,
+                contents=f"请优化以下提示词:\n\n{prompt}",
+                config=types.GenerateContentConfig(
+                    system_instruction=system_prompt,
+                    thinking_config=types.ThinkingConfig(thinking_level="low")
+                )
+            ),
+            timeout=Config.GENAI_PROMPT_TIMEOUT_SECONDS
         )
 
         enhanced = response.text.strip()
