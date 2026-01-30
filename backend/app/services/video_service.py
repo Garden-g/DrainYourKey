@@ -21,7 +21,7 @@ from ..config import Config, logger
 from ..utils import (
     generate_filename,
     save_video_from_bytes,
-    decode_base64_image,
+    decode_base64_to_image_bytes,
     retry_async,
 )
 from .history_service import history_service
@@ -227,49 +227,39 @@ class VideoService:
             image = None
             if mode == "img2vid" and first_frame:
                 # 图生视频模式
-                # 解码图像为阻塞操作，放到线程中执行
-                pil_image = await asyncio.to_thread(decode_base64_image, first_frame)
-
-                # 确保图像是RGB模式
-                if pil_image.mode != 'RGB':
-                    logger.info(f"转换图像模式: {pil_image.mode} -> RGB")
-                    pil_image = pil_image.convert('RGB')
-
-                image = pil_image
-                logger.debug(f"使用首帧图像生成视频: mode={pil_image.mode}, size={pil_image.size}")
+                # 解码图像字节并规范化为 PNG
+                image_bytes, mime_type = await asyncio.to_thread(
+                    decode_base64_to_image_bytes, first_frame
+                )
+                image = types.Image(imageBytes=image_bytes, mimeType=mime_type)
+                logger.debug(f"使用首帧图像生成视频: mime={mime_type}, bytes={len(image_bytes)}")
 
             elif mode == "first_last" and first_frame:
                 # 首尾帧插值模式
-                pil_image = await asyncio.to_thread(decode_base64_image, first_frame)
-
-                # 确保图像是RGB模式
-                if pil_image.mode != 'RGB':
-                    logger.info(f"转换首帧图像模式: {pil_image.mode} -> RGB")
-                    pil_image = pil_image.convert('RGB')
-
-                image = pil_image
+                first_bytes, first_mime = await asyncio.to_thread(
+                    decode_base64_to_image_bytes, first_frame
+                )
+                image = types.Image(imageBytes=first_bytes, mimeType=first_mime)
 
                 if last_frame:
-                    last_pil_image = await asyncio.to_thread(decode_base64_image, last_frame)
-
-                    # 确保尾帧图像也是RGB模式
-                    if last_pil_image.mode != 'RGB':
-                        logger.info(f"转换尾帧图像模式: {last_pil_image.mode} -> RGB")
-                        last_pil_image = last_pil_image.convert('RGB')
+                    last_bytes, last_mime = await asyncio.to_thread(
+                        decode_base64_to_image_bytes, last_frame
+                    )
 
                     config = types.GenerateVideosConfig(
                         aspect_ratio=aspect_ratio,
                         resolution=resolution,
-                        last_frame=last_pil_image
+                        last_frame=types.Image(imageBytes=last_bytes, mimeType=last_mime)
                     )
-                logger.debug(f"使用首尾帧插值生成视频: first_mode={pil_image.mode}, first_size={pil_image.size}")
+                logger.debug("使用首尾帧插值生成视频")
 
             job.progress = 20
 
             # 调用 API 生成视频
             logger.info(f"调用视频生成API: mode={mode}, image_type={type(image)}, has_image={image is not None}")
-            if image:
-                logger.debug(f"图像详情: mode={image.mode}, size={image.size}, format={image.format}")
+            if image and isinstance(image, types.Image):
+                image_bytes = image.image_bytes or b""
+                logger.debug(f"图像详情: mime={image.mime_type}, bytes={len(image_bytes)}")
 
             try:
                 client = self._ensure_client()
