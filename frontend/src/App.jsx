@@ -344,40 +344,45 @@ export default function App() {
           // 提取文件名
           const filename = status.video_url.split('/').pop();
 
-          // 获取任务信息
-          const job = videoJobs.find(j => j.jobId === jobId);
-          if (!job) {
-            // 如果找不到任务，从状态中获取信息
-            const newVideo = {
-              id: jobId,
-              url: status.video_url,
-              filename: filename,
-              resolution: '720p', // 默认值
-              ratio: '16:9', // 默认值
-              prompt: '',
-              videoId: jobId, // 用于延长
-              canExtend: true,
-            };
-            setGeneratedVideos(prev => [newVideo, ...prev]);
-          } else {
-            // 添加到视频列表
-            const newVideo = {
-              id: jobId,
-              url: status.video_url,
-              filename: filename,
-              resolution: job.params.resolution,
-              ratio: job.params.ratio,
-              prompt: job.prompt,
-              videoId: jobId, // 用于延长
-              canExtend: job.params.resolution === '720p',
-            };
-            setGeneratedVideos(prev => [newVideo, ...prev]);
-          }
+          // 使用函数形式获取最新的 videoJobs 状态，避免闭包问题
+          // React 的 setState 函数形式可以获取到最新的状态值
+          setVideoJobs(prevJobs => {
+            const job = prevJobs.find(j => j.jobId === jobId);
 
-          // 移除任务
-          setVideoJobs(prev => prev.filter(j => j.jobId !== jobId));
+            if (job) {
+              // 找到任务，使用任务中保存的参数
+              const newVideo = {
+                id: jobId,
+                url: status.video_url,
+                filename: filename,
+                resolution: job.params.resolution,
+                ratio: job.params.ratio,
+                prompt: job.prompt,
+                videoId: jobId, // 用于延长
+                canExtend: job.params.resolution === '720p', // 仅 720p 支持延长
+              };
+              setGeneratedVideos(prev => [newVideo, ...prev]);
+            } else {
+              // 如果找不到任务（不应该发生），使用默认值并打印警告
+              console.warn(`找不到任务 ${jobId}，使用默认值`);
+              const newVideo = {
+                id: jobId,
+                url: status.video_url,
+                filename: filename,
+                resolution: '720p',
+                ratio: '16:9',
+                prompt: '',
+                videoId: jobId,
+                canExtend: true,
+              };
+              setGeneratedVideos(prev => [newVideo, ...prev]);
+            }
 
-          // 清理轮询
+            // 返回过滤后的任务列表（移除已完成的任务）
+            return prevJobs.filter(j => j.jobId !== jobId);
+          });
+
+          // 清理轮询定时器
           if (videoPollTimeouts.current.has(jobId)) {
             clearTimeout(videoPollTimeouts.current.get(jobId));
             videoPollTimeouts.current.delete(jobId);
@@ -403,7 +408,7 @@ export default function App() {
     };
 
     poll();
-  }, [videoJobs]);
+  }, []); // 移除 videoJobs 依赖，因为现在使用 setVideoJobs 函数形式获取最新状态
 
   /**
    * 处理视频延长
