@@ -123,6 +123,7 @@ class VideoGenerateRequest(BaseModel):
         mode: 生成模式 (text2vid/img2vid/first_last)
         aspect_ratio: 视频宽高比 (16:9 或 9:16)
         resolution: 视频分辨率 (720p/1080p/4k)
+        duration_seconds: 视频秒数 (4/6/8)，1080p 和 4k 仅支持 8 秒
         first_frame: 首帧图像 base64 (可选)
         last_frame: 尾帧图像 base64 (可选)
     """
@@ -139,6 +140,10 @@ class VideoGenerateRequest(BaseModel):
         default="720p",
         description="分辨率"
     )
+    duration_seconds: Literal["4", "6", "8"] = Field(
+        default="8",
+        description="视频秒数，1080p 和 4k 仅支持 8 秒"
+    )
     first_frame: Optional[str] = Field(default=None, description="首帧图像 base64")
     last_frame: Optional[str] = Field(default=None, description="尾帧图像 base64")
 
@@ -150,9 +155,11 @@ class VideoExtendRequest(BaseModel):
     Attributes:
         video_id: 要延长的视频 ID
         prompt: 延长部分的描述
+        aspect_ratio: 视频宽高比 (16:9 或 9:16)
     """
     video_id: str = Field(..., description="视频 ID")
     prompt: str = Field(..., min_length=1, max_length=2000, description="延长描述")
+    aspect_ratio: Literal["16:9", "9:16"] = Field(default="16:9", description="视频宽高比")
 
 
 class VideoStatusResponse(BaseModel):

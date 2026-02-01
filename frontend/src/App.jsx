@@ -361,7 +361,13 @@ export default function App() {
                 videoId: jobId, // 用于延长
                 canExtend: job.params.resolution === '720p', // 仅 720p 支持延长
               };
-              setGeneratedVideos(prev => [newVideo, ...prev]);
+              // 检查是否已存在，避免重复添加
+              setGeneratedVideos(prev => {
+                if (prev.some(v => v.id === jobId)) {
+                  return prev;
+                }
+                return [newVideo, ...prev];
+              });
             } else {
               // 如果找不到任务（不应该发生），使用默认值并打印警告
               console.warn(`找不到任务 ${jobId}，使用默认值`);
@@ -375,7 +381,13 @@ export default function App() {
                 videoId: jobId,
                 canExtend: true,
               };
-              setGeneratedVideos(prev => [newVideo, ...prev]);
+              // 检查是否已存在，避免重复添加
+              setGeneratedVideos(prev => {
+                if (prev.some(v => v.id === jobId)) {
+                  return prev;
+                }
+                return [newVideo, ...prev];
+              });
             }
 
             // 返回过滤后的任务列表（移除已完成的任务）
@@ -430,7 +442,7 @@ export default function App() {
     }
 
     try {
-      const result = await extendVideo(video.videoId, extendPrompt);
+      const result = await extendVideo(video.videoId, extendPrompt, video.ratio);
 
       if (result.success && result.job_id) {
         // 添加到任务列表

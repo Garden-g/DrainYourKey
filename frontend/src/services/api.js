@@ -145,12 +145,17 @@ export async function generateVideo(params) {
  *
  * @param {string} videoId - 原视频任务 ID
  * @param {string} prompt - 延长描述
+ * @param {string} aspectRatio - 视频宽高比 (16:9 或 9:16)
  * @returns {Promise<Object>} - 包含新任务 ID
  */
-export async function extendVideo(videoId, prompt) {
+export async function extendVideo(videoId, prompt, aspectRatio = '16:9') {
   return request('/video/extend', {
     method: 'POST',
-    body: JSON.stringify({ video_id: videoId, prompt }),
+    body: JSON.stringify({
+      video_id: videoId,
+      prompt,
+      aspect_ratio: aspectRatio
+    }),
   });
 }
 

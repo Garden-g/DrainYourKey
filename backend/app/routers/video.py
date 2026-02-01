@@ -79,6 +79,7 @@ async def generate_video(request: VideoGenerateRequest) -> VideoResponse:
             mode=request.mode,
             aspect_ratio=request.aspect_ratio,
             resolution=request.resolution,
+            duration_seconds=request.duration_seconds,
             first_frame=request.first_frame,
             last_frame=request.last_frame
         )
@@ -110,6 +111,7 @@ async def extend_video(request: VideoExtendRequest) -> VideoResponse:
         request: 视频延长请求，包含:
             - video_id: 原视频的任务 ID
             - prompt: 延长部分的描述
+            - aspect_ratio: 视频宽高比 (16:9 或 9:16)
 
     Returns:
         VideoResponse: 包含新任务 ID
@@ -123,7 +125,8 @@ async def extend_video(request: VideoExtendRequest) -> VideoResponse:
 
         job_id = await video_service.extend_video(
             video_id=request.video_id,
-            prompt=request.prompt
+            prompt=request.prompt,
+            aspect_ratio=request.aspect_ratio
         )
 
         return VideoResponse(

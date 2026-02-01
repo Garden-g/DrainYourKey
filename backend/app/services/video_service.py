@@ -23,6 +23,7 @@ from ..utils import (
     save_video_from_bytes,
     decode_base64_to_image_bytes,
     retry_async,
+    RetryContext,
 )
 from .history_service import history_service
 
@@ -134,6 +135,7 @@ class VideoService:
         mode: str = "text2vid",
         aspect_ratio: str = "16:9",
         resolution: str = "720p",
+        duration_seconds: str = "8",
         first_frame: Optional[str] = None,
         last_frame: Optional[str] = None
     ) -> str:
@@ -145,6 +147,7 @@ class VideoService:
             mode: 生成模式 (text2vid/img2vid/first_last)
             aspect_ratio: 宽高比 (16:9 或 9:16)
             resolution: 分辨率 (720p/1080p/4k)
+            duration_seconds: 视频秒数 ("4"/"6"/"8")，1080p 和 4k 仅支持 "8"
             first_frame: 首帧图像 base64 (可选)
             last_frame: 尾帧图像 base64 (可选)
 
@@ -157,8 +160,13 @@ class VideoService:
         # 生成前先清理过期任务
         self._cleanup_expired()
 
+        # 1080p 和 4k 强制使用 8 秒
+        if resolution in ["1080p", "4k"]:
+            duration_seconds = "8"
+            logger.info(f"分辨率 {resolution} 强制使用 8 秒")
+
         job_id = str(uuid.uuid4())
-        logger.info(f"创建视频生成任务: job_id={job_id}, mode={mode}")
+        logger.info(f"创建视频生成任务: job_id={job_id}, mode={mode}, duration={duration_seconds}s")
 
         # 创建任务记录
         job = VideoJob(
@@ -180,6 +188,7 @@ class VideoService:
                 mode=mode,
                 aspect_ratio=aspect_ratio,
                 resolution=resolution,
+                duration_seconds=duration_seconds,
                 first_frame=first_frame,
                 last_frame=last_frame
             )
@@ -194,6 +203,7 @@ class VideoService:
         mode: str,
         aspect_ratio: str,
         resolution: str,
+        duration_seconds: str,
         first_frame: Optional[str],
         last_frame: Optional[str]
     ) -> None:
@@ -206,6 +216,7 @@ class VideoService:
             mode: 生成模式
             aspect_ratio: 宽高比
             resolution: 分辨率
+            duration_seconds: 视频秒数 ("4"/"6"/"8")
             first_frame: 首帧图像
             last_frame: 尾帧图像
         """
@@ -217,10 +228,11 @@ class VideoService:
             logger.info(f"开始处理视频生成: {job_id}")
             start_time = time.monotonic()
 
-            # 构建配置
+            # 构建配置（包含秒数参数）
             config = types.GenerateVideosConfig(
                 aspect_ratio=aspect_ratio,
-                resolution=resolution
+                resolution=resolution,
+                duration_seconds=duration_seconds
             )
 
             # 准备图像参数
@@ -249,6 +261,7 @@ class VideoService:
                     config = types.GenerateVideosConfig(
                         aspect_ratio=aspect_ratio,
                         resolution=resolution,
+                        duration_seconds=duration_seconds,
                         last_frame=types.Image(imageBytes=last_bytes, mimeType=last_mime)
                     )
                 logger.debug("使用首尾帧插值生成视频")
@@ -295,18 +308,46 @@ class VideoService:
                 logger.debug(f"视频生成中... 进度: {job.progress}%")
 
                 await asyncio.sleep(10)
-                # 轮询操作状态属于阻塞调用，放线程执行
-                operation = await asyncio.wait_for(
-                    asyncio.to_thread(client.operations.get, operation),
-                    timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
-                )
+                # 轮询操作状态，添加重试机制应对网络波动（如 SSL 错误）
+                async with RetryContext(max_retries=3, delay=2.0, backoff=2.0) as ctx:
+                    while ctx.should_retry():
+                        try:
+                            operation = await asyncio.wait_for(
+                                asyncio.to_thread(client.operations.get, operation),
+                                timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
+                            )
+                            break
+                        except Exception as e:
+                            await ctx.handle_error(e)
 
             job.progress = 95
 
+            # 检查操作是否成功
+            if operation.error:
+                error_msg = f"视频生成失败: {operation.error}"
+                logger.error(error_msg)
+                raise Exception(error_msg)
+
+            if not operation.response:
+                error_msg = "视频生成失败: 操作完成但没有返回结果"
+                logger.error(error_msg)
+                raise Exception(error_msg)
+
+            if not operation.response.generated_videos:
+                error_msg = "视频生成失败: 没有生成任何视频"
+                logger.error(error_msg)
+                raise Exception(error_msg)
+
             # 下载并保存视频
             generated_video = operation.response.generated_videos[0]
-            # 下载文件为阻塞调用，放线程执行
-            await asyncio.to_thread(client.files.download, file=generated_video.video)
+            # 下载视频文件，添加重试机制应对网络波动（如 SSL 错误）
+            async with RetryContext(max_retries=3, delay=2.0, backoff=2.0) as ctx:
+                while ctx.should_retry():
+                    try:
+                        await asyncio.to_thread(client.files.download, file=generated_video.video)
+                        break
+                    except Exception as e:
+                        await ctx.handle_error(e)
 
             # 保存视频文件
             filename = generate_filename("video", "mp4")
@@ -348,7 +389,8 @@ class VideoService:
     async def extend_video(
         self,
         video_id: str,
-        prompt: str
+        prompt: str,
+        aspect_ratio: str = "16:9"
     ) -> str:
         """
         延长视频
@@ -356,6 +398,7 @@ class VideoService:
         Args:
             video_id: 原视频的任务 ID
             prompt: 延长部分的描述
+            aspect_ratio: 视频宽高比 (16:9 或 9:16)
 
         Returns:
             str: 新任务 ID
@@ -386,14 +429,14 @@ class VideoService:
             created_at=time.time(),
             prompt=prompt,
             mode="extend",
-            aspect_ratio="16:9",
+            aspect_ratio=aspect_ratio,  # 使用传入的宽高比
             resolution="720p"
         )
         self._jobs[job_id] = job
 
         # 在后台启动延长任务
         asyncio.create_task(
-            self._process_video_extension(job_id, original_video, prompt)
+            self._process_video_extension(job_id, original_video, prompt, aspect_ratio)
         )
 
         return job_id
@@ -402,7 +445,8 @@ class VideoService:
         self,
         job_id: str,
         original_video: Any,
-        prompt: str
+        prompt: str,
+        aspect_ratio: str = "16:9"
     ) -> None:
         """
         处理视频延长任务 (后台运行)
@@ -411,6 +455,7 @@ class VideoService:
             job_id: 任务 ID
             original_video: 原视频对象
             prompt: 延长描述
+            aspect_ratio: 视频宽高比 (16:9 或 9:16)
         """
         job = self._jobs[job_id]
         job.status = JobStatus.PROCESSING
@@ -430,7 +475,8 @@ class VideoService:
                     prompt=prompt,
                     config=types.GenerateVideosConfig(
                         number_of_videos=1,
-                        resolution="720p"
+                        resolution="720p",
+                        aspect_ratio=aspect_ratio
                     )
                 ),
                 timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
@@ -447,16 +493,46 @@ class VideoService:
                 poll_count += 1
                 job.progress = min(30 + poll_count * 5, 90)
                 await asyncio.sleep(10)
-                operation = await asyncio.wait_for(
-                    asyncio.to_thread(client.operations.get, operation),
-                    timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
-                )
+                # 轮询操作状态，添加重试机制应对网络波动（如 SSL 错误）
+                async with RetryContext(max_retries=3, delay=2.0, backoff=2.0) as ctx:
+                    while ctx.should_retry():
+                        try:
+                            operation = await asyncio.wait_for(
+                                asyncio.to_thread(client.operations.get, operation),
+                                timeout=Config.GENAI_VIDEO_API_TIMEOUT_SECONDS
+                            )
+                            break
+                        except Exception as e:
+                            await ctx.handle_error(e)
 
             job.progress = 95
 
+            # 检查操作是否成功
+            if operation.error:
+                error_msg = f"视频延长失败: {operation.error}"
+                logger.error(error_msg)
+                raise Exception(error_msg)
+
+            if not operation.response:
+                error_msg = "视频延长失败: 操作完成但没有返回结果"
+                logger.error(error_msg)
+                raise Exception(error_msg)
+
+            if not operation.response.generated_videos:
+                error_msg = "视频延长失败: 没有生成任何视频"
+                logger.error(error_msg)
+                raise Exception(error_msg)
+
             # 下载并保存视频
             generated_video = operation.response.generated_videos[0]
-            await asyncio.to_thread(client.files.download, file=generated_video.video)
+            # 下载视频文件，添加重试机制应对网络波动（如 SSL 错误）
+            async with RetryContext(max_retries=3, delay=2.0, backoff=2.0) as ctx:
+                while ctx.should_retry():
+                    try:
+                        await asyncio.to_thread(client.files.download, file=generated_video.video)
+                        break
+                    except Exception as e:
+                        await ctx.handle_error(e)
 
             filename = generate_filename("video_extended", "mp4")
             file_path = Config.VIDEOS_DIR / filename
