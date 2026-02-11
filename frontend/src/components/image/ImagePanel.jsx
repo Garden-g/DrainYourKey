@@ -8,7 +8,7 @@ import React from 'react';
 import { Sparkles, Search, Check } from 'lucide-react';
 import { Select } from '../common/Select';
 import { NumberInput } from '../common/NumberInput';
-import { FileUpload } from '../common/FileUpload';
+import { ReferenceImagesUpload } from './ReferenceImagesUpload';
 import { Button } from '../common/Button';
 
 // 常量定义
@@ -29,8 +29,8 @@ const IMG_RESOLUTIONS = ['1K', '2K', '4K'];
  * @param {Function} props.onCountChange - 数量变化回调
  * @param {boolean} props.useGoogleSearch - 是否使用 Google 搜索
  * @param {Function} props.onGoogleSearchChange - Google 搜索变化回调
- * @param {Object} props.referenceImage - 参考图像
- * @param {Function} props.onReferenceImageChange - 参考图像变化回调
+ * @param {Array<Object>} props.referenceImages - 参考图像数组
+ * @param {Function} props.onReferenceImagesChange - 参考图像变化回调
  * @param {boolean} props.isGenerating - 是否正在生成
  * @param {Function} props.onGenerate - 生成回调
  * @param {Function} props.onOpenAssist - 打开提示词优化弹窗
@@ -46,12 +46,15 @@ export function ImagePanel({
   onCountChange,
   useGoogleSearch,
   onGoogleSearchChange,
-  referenceImage,
-  onReferenceImageChange,
+  referenceImages,
+  onReferenceImagesChange,
   isGenerating,
   onGenerate,
   onOpenAssist,
 }) {
+  // 多图模式下，auto 宽高比默认以第一张参考图为准
+  const firstReferenceImage = referenceImages?.[0] || null;
+
   return (
     <div className="w-full lg:w-[380px] shrink-0 flex flex-col gap-6">
       <div className="flex flex-col gap-6">
@@ -106,9 +109,9 @@ export function ImagePanel({
           <div>
             <label className="text-[10px] font-bold text-slate-400 dark:text-zinc-500 uppercase tracking-widest block mb-2">
               宽高比
-              {referenceImage && referenceImage.aspectRatio && (
+              {firstReferenceImage?.aspectRatio && (
                 <span className="ml-2 text-xs text-blue-500 dark:text-blue-400 normal-case">
-                  (原图: {referenceImage.aspectRatio})
+                  (第1张: {firstReferenceImage.aspectRatio})
                 </span>
               )}
             </label>
@@ -127,8 +130,8 @@ export function ImagePanel({
                 hover:border-slate-300 dark:hover:border-zinc-700
               "
             >
-              {referenceImage && referenceImage.aspectRatio && (
-                <option value="auto">自动 ({referenceImage.aspectRatio})</option>
+              {firstReferenceImage?.aspectRatio && (
+                <option value="auto">自动 ({firstReferenceImage.aspectRatio})</option>
               )}
               {IMG_ASPECT_RATIOS.map(ratio => (
                 <option key={ratio} value={ratio}>{ratio}</option>
@@ -186,19 +189,19 @@ export function ImagePanel({
           </div>
         </div>
 
-        {/* 参考图上传 */}
-        <FileUpload
+        {/* 参考图上传（支持拖拽 + 多图） */}
+        <ReferenceImagesUpload
           label="风格参考图"
-          preview={referenceImage?.url}
-          onFileSelect={onReferenceImageChange}
-          onClear={() => onReferenceImageChange(null)}
+          files={referenceImages}
+          onChange={onReferenceImagesChange}
+          maxFiles={14}
         />
 
         {/* 生成按钮 */}
         <div className="pt-4 border-t border-slate-200 dark:border-zinc-900">
           <Button
             onClick={onGenerate}
-            disabled={isGenerating || (!prompt && !referenceImage)}
+            disabled={isGenerating || (!prompt && (!referenceImages || referenceImages.length === 0))}
             className="w-full h-12 text-base shadow-lg shadow-blue-500/20 dark:shadow-none"
           >
             {isGenerating ? '生成中...' : '生成图像'}

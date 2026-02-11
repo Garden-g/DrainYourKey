@@ -22,7 +22,8 @@ class ImageGenerateRequest(BaseModel):
         resolution: 图像分辨率，必须大写: "1K", "2K", "4K"
         count: 生成图像数量，1-10 张
         use_google_search: 是否使用 Google 搜索增强生成
-        reference_image: 参考图像的 base64 编码 (可选)
+        reference_images: 参考图像的 base64 编码列表 (可选，最多 14 张)
+        reference_image: 兼容旧版的单张参考图 base64 编码 (可选)
     """
     prompt: str = Field(..., min_length=1, max_length=2000, description="图像描述")
     aspect_ratio: str = Field(
@@ -36,6 +37,11 @@ class ImageGenerateRequest(BaseModel):
     )
     count: int = Field(default=1, ge=1, le=10, description="生成数量")
     use_google_search: bool = Field(default=False, description="使用 Google 搜索")
+    reference_images: Optional[List[str]] = Field(
+        default=None,
+        max_length=14,
+        description="参考图 base64 列表（最多 14 张）"
+    )
     reference_image: Optional[str] = Field(default=None, description="参考图 base64")
 
 

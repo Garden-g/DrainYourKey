@@ -46,7 +46,8 @@ async function request(endpoint, options = {}) {
  * @param {string} params.resolution - 分辨率 (1K/2K/4K)
  * @param {number} params.count - 生成数量
  * @param {boolean} params.use_google_search - 是否使用 Google 搜索
- * @param {string} [params.reference_image] - 参考图 base64
+ * @param {string[]} [params.reference_images] - 参考图 base64 数组（最多 14 张）
+ * @param {string} [params.reference_image] - 兼容字段：单张参考图 base64
  * @returns {Promise<Object>} - 包含图像文件名列表和会话 ID
  */
 export async function generateImages(params) {

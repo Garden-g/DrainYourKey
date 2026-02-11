@@ -157,6 +157,56 @@ class ImageService:
 
         return optimized, True
 
+    def _normalize_reference_images(
+        self,
+        reference_images: Optional[List[str]] = None,
+        reference_image: Optional[str] = None
+    ) -> List[str]:
+        """
+        归一化参考图输入，统一为多图列表
+
+        兼容策略：
+        1. 兼容旧字段 reference_image（单图）
+        2. 支持新字段 reference_images（多图）
+        3. 两者同时存在时，按顺序合并并去重
+        4. 限制最多 14 张（Gemini 3 Pro Image 当前上限）
+
+        Args:
+            reference_images: 多图参考输入
+            reference_image: 旧版单图参考输入
+
+        Returns:
+            List[str]: 清洗后的参考图 base64 列表
+
+        Raises:
+            ValueError: 当参考图数量超限或数据格式不合法时抛出异常
+        """
+        merged: List[str] = []
+
+        if reference_image and reference_image.strip():
+            merged.append(reference_image.strip())
+
+        if reference_images:
+            for image_data in reference_images:
+                if not isinstance(image_data, str):
+                    raise ValueError("reference_images 中存在非字符串项")
+                cleaned = image_data.strip()
+                if cleaned:
+                    merged.append(cleaned)
+
+        # 按输入顺序去重，避免同图重复传入影响稳定性
+        deduplicated: List[str] = []
+        seen = set()
+        for image_data in merged:
+            if image_data not in seen:
+                seen.add(image_data)
+                deduplicated.append(image_data)
+
+        if len(deduplicated) > 14:
+            raise ValueError("参考图最多支持 14 张")
+
+        return deduplicated
+
     def _cleanup_expired(self) -> None:
         """
         清理过期任务和会话，避免内存膨胀
@@ -193,6 +243,7 @@ class ImageService:
         resolution: str = "2K",
         count: int = 1,
         use_google_search: bool = False,
+        reference_images: Optional[List[str]] = None,
         reference_image: Optional[str] = None
     ) -> str:
         """
@@ -204,16 +255,24 @@ class ImageService:
             resolution: 分辨率 (必须大写: "1K", "2K", "4K")
             count: 生成数量 (1-10)
             use_google_search: 是否使用 Google 搜索增强
-            reference_image: 参考图像的 base64 编码 (可选)
+            reference_images: 参考图像 base64 列表 (可选, 最多 14 张)
+            reference_image: 参考图像 base64（兼容旧字段，可选）
 
         Returns:
             str: 任务ID
         """
         # 先清理过期任务，避免长期运行导致内存膨胀
         self._cleanup_expired()
+        normalized_reference_images = self._normalize_reference_images(
+            reference_images=reference_images,
+            reference_image=reference_image,
+        )
 
         job_id = str(uuid.uuid4())
-        logger.info(f"创建图像生成任务: job_id={job_id}, count={count}")
+        logger.info(
+            f"创建图像生成任务: job_id={job_id}, count={count}, "
+            f"reference_count={len(normalized_reference_images)}"
+        )
 
         # 创建任务记录,保存prompt和aspect_ratio以便状态查询时返回
         job = ImageJob(
@@ -234,7 +293,7 @@ class ImageService:
                 resolution=resolution,
                 count=count,
                 use_google_search=use_google_search,
-                reference_image=reference_image
+                reference_images=normalized_reference_images
             )
         )
 
@@ -249,7 +308,7 @@ class ImageService:
         resolution: str,
         count: int,
         use_google_search: bool,
-        reference_image: Optional[str]
+        reference_images: List[str]
     ) -> None:
         """
         处理图像生成任务(后台运行)
@@ -261,14 +320,17 @@ class ImageService:
             resolution: 分辨率
             count: 生成数量
             use_google_search: 是否使用Google搜索
-            reference_image: 参考图像
+            reference_images: 参考图像列表
         """
         job = self._jobs[job_id]
         job.status = JobStatus.PROCESSING
         job.progress = 10
 
         try:
-            logger.info(f"开始处理图像生成: job_id={job_id}, prompt={prompt[:50]}..., count={count}")
+            logger.info(
+                f"开始处理图像生成: job_id={job_id}, prompt={prompt[:50]}..., "
+                f"count={count}, reference_count={len(reference_images)}"
+            )
 
             generated_files: List[str] = []
             session_id = str(uuid.uuid4())
@@ -286,11 +348,11 @@ class ImageService:
             # 构建请求内容
             contents = [actual_prompt]
 
-            # 如果有参考图像,添加到内容中
-            if reference_image:
-                logger.debug("添加参考图像到请求")
+            # 如果有参考图像，按顺序添加到输入内容中
+            for index, reference_data in enumerate(reference_images, start=1):
+                logger.debug(f"添加第 {index}/{len(reference_images)} 张参考图到请求")
                 # 解码图像是 CPU 密集操作，放到线程中执行
-                ref_image = await asyncio.to_thread(decode_base64_image, reference_image)
+                ref_image = await asyncio.to_thread(decode_base64_image, reference_data)
                 contents.append(ref_image)
 
             # 构建配置
@@ -402,6 +464,7 @@ class ImageService:
                             "resolution": resolution,
                             "count": count,
                             "use_google_search": use_google_search,
+                            "reference_image_count": len(reference_images),
                             "session_id": session_id,
                         }
                     )
@@ -437,6 +500,7 @@ class ImageService:
         resolution: str = "2K",
         count: int = 1,
         use_google_search: bool = False,
+        reference_images: Optional[List[str]] = None,
         reference_image: Optional[str] = None
     ) -> tuple[List[str], Optional[str]]:
         """
@@ -448,7 +512,8 @@ class ImageService:
             resolution: 分辨率 (必须大写: "1K", "2K", "4K")
             count: 生成数量 (1-10)
             use_google_search: 是否使用 Google 搜索增强
-            reference_image: 参考图像的 base64 编码 (可选)
+            reference_images: 参考图像 base64 列表 (可选, 最多 14 张)
+            reference_image: 参考图像 base64（兼容旧字段，可选）
 
         Returns:
             tuple[List[str], Optional[str]]: (生成的图像文件名列表, 会话ID)
@@ -458,6 +523,10 @@ class ImageService:
         """
         # 同步生成前清理过期任务
         self._cleanup_expired()
+        normalized_reference_images = self._normalize_reference_images(
+            reference_images=reference_images,
+            reference_image=reference_image,
+        )
         logger.info(f"开始生成图像: prompt={prompt[:50]}..., count={count}")
 
         generated_files: List[str] = []
@@ -476,10 +545,10 @@ class ImageService:
         # 构建请求内容
         contents = [actual_prompt]
 
-        # 如果有参考图像，添加到内容中
-        if reference_image:
-            logger.debug("添加参考图像到请求")
-            ref_image = await asyncio.to_thread(decode_base64_image, reference_image)
+        # 如果有参考图像，按顺序添加到输入内容中
+        for index, reference_data in enumerate(normalized_reference_images, start=1):
+            logger.debug(f"添加第 {index}/{len(normalized_reference_images)} 张参考图到请求")
+            ref_image = await asyncio.to_thread(decode_base64_image, reference_data)
             contents.append(ref_image)
 
         # 构建配置
@@ -564,6 +633,7 @@ class ImageService:
                         "resolution": resolution,
                         "count": count,
                         "use_google_search": use_google_search,
+                        "reference_image_count": len(normalized_reference_images),
                         "session_id": session_id,
                     }
                 )

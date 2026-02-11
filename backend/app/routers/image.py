@@ -45,6 +45,7 @@ async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
             - resolution: 分辨率 (1K/2K/4K)
             - count: 生成数量 (1-10)
             - use_google_search: 是否使用 Google 搜索
+            - reference_images: 多张参考图 base64 (可选, 最多 14 张)
             - reference_image: 参考图 base64 (可选)
 
     Returns:
@@ -60,7 +61,8 @@ async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
             resolution=request.resolution,
             count=request.count,
             use_google_search=request.use_google_search,
-            reference_image=request.reference_image
+            reference_images=request.reference_images,
+            reference_image=request.reference_image,
         )
 
         return ImageResponse(
@@ -69,6 +71,9 @@ async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
             message="图像生成任务已启动"
         )
 
+    except ValueError as e:
+        logger.warning(f"图像生成请求无效: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         # 统一错误处理，避免泄露内部异常信息
         raise_internal_error("启动图像生成任务失败", e)

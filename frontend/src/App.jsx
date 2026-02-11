@@ -58,7 +58,9 @@ export default function App() {
   const [imgRatio, setImgRatio] = useState('3:2');
   const [imgRes, setImgRes] = useState('2K');
   const [useGoogleSearch, setUseGoogleSearch] = useState(false);
-  const [imgReference, setImgReference] = useState(null);
+  // 图像参考图（多图）
+  // 每项格式: { file, url, base64, aspectRatio, width, height, signature }
+  const [imgReferences, setImgReferences] = useState([]);
   const [isGeneratingImg, setIsGeneratingImg] = useState(false);
   const [generatedImages, setGeneratedImages] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
@@ -119,10 +121,11 @@ export default function App() {
    * 当参考图改变时,自动设置宽高比为"auto"
    */
   useEffect(() => {
-    if (imgReference && imgReference.aspectRatio) {
+    const firstReference = imgReferences?.[0];
+    if (firstReference?.aspectRatio) {
       setImgRatio('auto');
     }
-  }, [imgReference]);
+  }, [imgReferences]);
 
   /**
    * 当视频分辨率变化时，自动调整秒数
@@ -140,15 +143,16 @@ export default function App() {
    * 处理图像生成
    */
   const handleGenerateImage = useCallback(async () => {
-    if (!imgPrompt && !imgReference) return;
+    if (!imgPrompt && imgReferences.length === 0) return;
 
     setIsGeneratingImg(true);
 
     try {
       // 处理宽高比:如果选择了"auto"且有参考图,使用参考图的宽高比
       let finalRatio = imgRatio;
-      if (imgRatio === 'auto' && imgReference?.aspectRatio) {
-        finalRatio = imgReference.aspectRatio;
+      const firstReference = imgReferences?.[0];
+      if (imgRatio === 'auto' && firstReference?.aspectRatio) {
+        finalRatio = firstReference.aspectRatio;
       }
 
       const result = await generateImages({
@@ -157,7 +161,12 @@ export default function App() {
         resolution: imgRes,
         count: imgCount,
         use_google_search: useGoogleSearch,
-        reference_image: imgReference?.base64,
+        // 新字段：支持多参考图（最多 14 张）
+        reference_images: imgReferences.length > 0
+          ? imgReferences.map((item) => item.base64)
+          : undefined,
+        // 兼容字段：保留首张参考图给旧版后端
+        reference_image: imgReferences?.[0]?.base64,
       });
 
       if (result.success && result.job_id) {
@@ -182,7 +191,7 @@ export default function App() {
       alert(`启动失败: ${error.message}`);
       setIsGeneratingImg(false);
     }
-  }, [imgPrompt, imgRatio, imgRes, imgCount, useGoogleSearch, imgReference]);
+  }, [imgPrompt, imgRatio, imgRes, imgCount, useGoogleSearch, imgReferences]);
 
   /**
    * 轮询图像生成状态
@@ -593,8 +602,8 @@ export default function App() {
                   onCountChange={setImgCount}
                   useGoogleSearch={useGoogleSearch}
                   onGoogleSearchChange={setUseGoogleSearch}
-                  referenceImage={imgReference}
-                  onReferenceImageChange={setImgReference}
+                  referenceImages={imgReferences}
+                  onReferenceImagesChange={setImgReferences}
                   isGenerating={isGeneratingImg}
                   onGenerate={handleGenerateImage}
                   onOpenAssist={() => setIsAssistOpen(true)}
