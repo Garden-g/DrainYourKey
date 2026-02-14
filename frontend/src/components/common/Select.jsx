@@ -16,6 +16,7 @@ import React from 'react';
  * @param {Array} props.options - 选项列表 (字符串数组或 {label, value} 对象数组)
  * @param {string} props.placeholder - 占位文本
  * @param {string} props.className - 额外的 CSS 类名
+ * @param {boolean} props.disabled - 是否禁用
  */
 export function Select({
   label,
@@ -24,6 +25,7 @@ export function Select({
   options,
   placeholder = '请选择...',
   className = '',
+  disabled = false,
 }) {
   return (
     <div className={`flex flex-col gap-2 w-full ${className}`}>
@@ -39,7 +41,8 @@ export function Select({
         <select
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className="
+          disabled={disabled}
+          className={`
             w-full bg-white dark:bg-zinc-900
             border border-slate-200 dark:border-zinc-800
             text-slate-900 dark:text-zinc-200 text-sm
@@ -51,7 +54,8 @@ export function Select({
             hover:border-blue-400 dark:hover:border-zinc-600
             transition-colors outline-none cursor-pointer
             shadow-sm
-          "
+            ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
+          `}
         >
           <option value="" disabled>
             {placeholder}

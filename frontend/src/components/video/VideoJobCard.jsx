@@ -28,7 +28,7 @@ export function VideoJobCard({ job }) {
   const { progress = 0, prompt, params, firstFrame, isExtension } = job;
 
   return (
-    <div className="relative aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/20 to-purple-500/20 dark:from-blue-600/30 dark:to-purple-600/30">
+    <div className="relative aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/20 to-cyan-500/20 dark:from-blue-600/30 dark:to-cyan-600/30">
       {/* 背景图（如果有首帧） */}
       {firstFrame && (
         <div

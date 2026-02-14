@@ -18,6 +18,18 @@ const VID_RESOLUTIONS = [
   { label: '4k (仅支持 8 秒)', value: '4k' },
 ];
 
+// 720p 支持的秒数选项
+const VID_DURATIONS_720P = [
+  { label: '4 秒', value: '4' },
+  { label: '6 秒', value: '6' },
+  { label: '8 秒', value: '8' },
+];
+
+// 1080p/4k 仅支持 8 秒
+const VID_DURATIONS_HIGH_RES = [
+  { label: '8 秒', value: '8' },
+];
+
 /**
  * VideoPanel 组件
  *
@@ -30,6 +42,8 @@ const VID_RESOLUTIONS = [
  * @param {Function} props.onAspectRatioChange - 宽高比变化回调
  * @param {string} props.resolution - 分辨率
  * @param {Function} props.onResolutionChange - 分辨率变化回调
+ * @param {string} props.duration - 视频秒数 ("4"/"6"/"8")
+ * @param {Function} props.onDurationChange - 秒数变化回调
  * @param {Object} props.firstFrame - 首帧图像
  * @param {Function} props.onFirstFrameChange - 首帧变化回调
  * @param {Object} props.lastFrame - 尾帧图像
@@ -47,6 +61,8 @@ export function VideoPanel({
   onAspectRatioChange,
   resolution,
   onResolutionChange,
+  duration,
+  onDurationChange,
   firstFrame,
   onFirstFrameChange,
   lastFrame,
@@ -61,6 +77,12 @@ export function VideoPanel({
     { key: 'img2vid', label: '图生视频' },
     { key: 'first_last', label: '首尾帧' },
   ];
+
+  // 根据分辨率动态获取秒数选项
+  // 720p 支持 4/6/8 秒，1080p/4k 仅支持 8 秒
+  const durationOptions = resolution === '720p'
+    ? VID_DURATIONS_720P
+    : VID_DURATIONS_HIGH_RES;
 
   return (
     <div className="w-full lg:w-[380px] shrink-0 flex flex-col gap-6">
@@ -147,6 +169,15 @@ export function VideoPanel({
             options={VID_ASPECT_RATIOS}
           />
         </div>
+
+        {/* 视频秒数选择 */}
+        <Select
+          label="视频时长"
+          value={duration}
+          onChange={onDurationChange}
+          options={durationOptions}
+          disabled={resolution !== '720p'}
+        />
 
         {/* 图生视频模式 - 参考图片 */}
         {mode === 'img2vid' && (

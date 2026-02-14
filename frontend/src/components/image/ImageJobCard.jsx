@@ -25,17 +25,17 @@ export function ImageJobCard({ job }) {
   const { progress = 0, prompt, params } = job;
 
   return (
-    <div className="relative aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-pink-500/20 to-orange-500/20 dark:from-pink-600/30 dark:to-orange-600/30">
+    <div className="relative aspect-square rounded-lg overflow-hidden bg-gradient-to-br from-blue-500/20 to-cyan-500/20 dark:from-blue-600/30 dark:to-cyan-600/30">
       {/* 内容层 */}
       <div className="relative h-full flex flex-col items-center justify-center p-4 backdrop-blur-sm">
         {/* 加载动画 */}
-        <Loader2 className="w-12 h-12 text-pink-500 dark:text-pink-400 animate-spin mb-4" />
+        <Loader2 className="w-12 h-12 text-blue-500 dark:text-blue-400 animate-spin mb-4" />
 
         {/* 进度条 */}
         <div className="w-full max-w-[80%] mb-3">
           <div className="h-2 bg-white/20 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-pink-500 to-orange-500 rounded-full transition-all duration-300"
+              className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>

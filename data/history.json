@@ -1,6 +1,2430 @@
 {
   "items": [
     {
+      "id": "8aa7d411-dc12-4fb2-810f-a610d6dfad20",
+      "type": "image",
+      "prompt": "拼在一起，放海报上。动物园宣传海报图，必须保证原参考图一致",
+      "filename": "image_20260211_155030_367095.png",
+      "created_at": "2026-02-11T15:50:30.369136",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "reference_image_count": 3,
+        "session_id": "ddd2f109-3dfb-44d7-aa33-2c341c16dfa0"
+      }
+    },
+    {
+      "id": "f54d17aa-0cac-4a69-bc63-fc06d8e0fb2c",
+      "type": "image",
+      "prompt": "拼在一起，放海报上。动物园宣传海报图",
+      "filename": "image_20260211_154753_328108.png",
+      "created_at": "2026-02-11T15:47:53.330107",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "reference_image_count": 3,
+        "session_id": "611f6365-2aea-4d6f-b9c6-585ac4ace104"
+      }
+    },
+    {
+      "id": "59858f5f-8ad6-430a-b583-27d2a9a4e1b2",
+      "type": "image",
+      "prompt": "拼在一起，放海报上",
+      "filename": "image_20260211_153112_136591.png",
+      "created_at": "2026-02-11T15:31:12.137590",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "reference_image_count": 3,
+        "session_id": "053e82eb-349a-4c27-9ef9-e0479f0aa1f7"
+      }
+    },
+    {
+      "id": "b58e5715-6457-40cc-911e-c6733268c1c1",
+      "type": "image",
+      "prompt": "3:4 竖图，素人感强，简单直接，低装饰，手机笔记感；干净浅色背景带轻微纸张纹理；中间是大号白色信息卡片，细边框；卡片顶部大字标题“每天30分钟领英开发SOP”，下方小字“外贸B2B：搜人-建联-跟进-约会议”；右下角有极简线性小图标（放大镜、对话气泡、表格）各一个；整体像普通外贸人自己做的清单笔记；禁止海报风、赛博霓虹、复杂背景、3D、夸张光效；文字清晰可读，无衬线字体",
+      "filename": "image_20260210_234756_812710.png",
+      "created_at": "2026-02-10T23:47:56.814666",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c901e1da-a8a7-4ee3-8eb5-a71be6fb3726"
+      }
+    },
+    {
+      "id": "f5bc3213-d9d7-48d0-9abb-0d5dae732c69",
+      "type": "image",
+      "prompt": "竖版9:16，明亮极简科技感风格，外贸业务办公场景：干净白色桌面、笔记本电脑屏幕显示“专业社交平台风格的线索列表界面（非真实LinkedIn界面）”，旁边有简洁数据卡片（连接数、回复率、会议数），整体蓝白为主、留白充足、模块化信息卡片布局，大标题置顶居中，副标题置于下方，小图标使用通用商务图标；字体为无衬线中文黑体；画面干净、对比清晰、手机可读；不要出现LinkedIn商标/Logo、不要二维码、不要联系方式、不要夸张营销词、不要复杂背景、不要人物大脸特写。封面大字文案：\"每天30分钟｜领英开发SOP\"；封面小字文案：\"外贸B2B可复制：找人-建联-跟进-复盘\"",
+      "filename": "image_20260210_232821_457740.png",
+      "created_at": "2026-02-10T23:28:21.460739",
+      "params": {
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "f442a8b0-e30c-420b-a4ce-ac1422bfd0cd"
+      }
+    },
+    {
+      "id": "b0e87114-7706-48ba-80db-562fb53fb7da",
+      "type": "image",
+      "prompt": "Create an 4K ultra high-information-density Chinese food anatomy infographic poster.\n\nTHEME:\n“潮汕牛肉火锅各部位对应牛的真实位置图”\n\nLANGUAGE:\nAll visible text MUST be Simplified Chinese only.\nNo English, no letters, no numbers in English format.\n\nSTYLE:\nTraditional food illustration + butcher shop anatomy chart.\nRealistic, grounded, market-style, culinary education poster.\nNO tech style, NO cyberpunk, NO futuristic elements, NO neon glow.\n\nCOLOR PALETTE:\nWarm, rich, food-oriented colors:\nbeef red, dark maroon, warm brown, beige, off-white, muted green.\nNatural contrast, similar to butcher charts or traditional food posters.\nAvoid blue-purple sci-fi tones.\n\nMAIN VISUAL:\nA large, realistic side-view illustration of a whole cow.\nClear anatomical segmentation with hand-drawn style outlines.\nEach meat section filled with slightly different red tones.\n\nCUT LABELING (very dense, Chinese only):\nEach cut includes:\n• 大号中文部位名\n• 小字位置说明\n• 口感关键词\n• 细线指向真实牛体位置\n\nCuts to include (exact Chinese text):\n雪花（脖仁）\n吊龙\n吊龙伴\n匙仁（匙皮）\n匙柄\n胸口朥\n嫩肉\n肥胼\n三花趾（三花腱）\n五花趾（五花腱）\n\nLOCATION TEXT (small Chinese annotations near each):\n“肩背脊前端”\n“牛脊长条肌肉”\n“吊龙两侧”\n“肩胛内层”\n“前腿连接肩胛”\n“前胸脂肪层”\n“臀部上方”\n“腹部夹层”\n“前腿肌腱”\n“后腿内侧肌腱”\n\nSURROUNDING INFORMATION BLOCKS (very dense):\n•「从脖到脚部位顺序图」\n•「脊背 / 肩胛 / 胸腹 / 腿腱 / 后臀 分区说明」\n•「潮汕火锅常见涮法提示（3秒 / 5秒 / 7秒）」\n•「口感标签云：嫩、脆、弹、油香、筋感、爽口、耐嚼」\n\nLAYOUT:\nTraditional poster composition.\nCow centered, information densely packed around.\nMany small Chinese text blocks, arrows, notes, side labels.\nAlmost no empty space, like an old-school culinary teaching chart.\n\nTYPOGRAPHY:\nSerious, readable Chinese print-style fonts.\nLooks like something you'd see on a restaurant wall or in a food textbook.\nNo playful fonts, no handwriting.\n\nOVERALL FEELING:\nHeavy, grounded, appetizing, authoritative.\nFeels like a 潮汕老师傅 + 屠夫 + 老饕 联合出的图。",
+      "filename": "image_20260210_223618_114461.png",
+      "created_at": "2026-02-10T22:36:18.118417",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "4ee95d41-8deb-4080-8b7d-6f3db7142938"
+      }
+    },
+    {
+      "id": "2f5b233b-f924-473a-bd6d-61e96aa1eba8",
+      "type": "image",
+      "prompt": "生成一个客户英文邮件，体现我的B2B cold email得到了回复。一定要符合真实邮件平台的UI。\n\n今天是2026年2月10日，所以时间只能在这之前。\n\n邮件标题是：To David/High efficiency to enlow 20% cost",
+      "filename": "image_20260210_204159_599543.png",
+      "created_at": "2026-02-10T20:41:59.601542",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "06c3048b-21d6-4cc2-92d8-1a94d3c67fb2"
+      }
+    },
+    {
+      "id": "77690dba-335b-47c3-8e45-2887e11a21d0",
+      "type": "image",
+      "prompt": "生成一个客户英文邮件，体现我的B2B cold email得到了回复。一定要符合真实邮件平台的UI。\n\n今天是2026年2月10日，所以时间只能在这之前。\n\n邮件标题是：To David/High efficiency to enlow 20% cost",
+      "filename": "image_20260210_204159_589535.png",
+      "created_at": "2026-02-10T20:41:59.600541",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "790cc36a-3541-48e1-bcd2-08cb459f02d7"
+      }
+    },
+    {
+      "id": "82d2cf0b-d440-4df1-b952-cac0d9c19df2",
+      "type": "image",
+      "prompt": "生成一个客户英文邮件，体现我的B2B cold email得到了回复。一定要符合真实邮件平台的UI。\n\n今天是2026年2月10日，所以时间只能在这之前。\n\n邮件标题是：To David/High efficiency to enlow 20% cost",
+      "filename": "image_20260210_203955_592071.png",
+      "created_at": "2026-02-10T20:39:55.593071",
+      "params": {
+        "aspect_ratio": "4:3",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "bc538ee9-ee64-40f1-b0cf-5307e84abcf9"
+      }
+    },
+    {
+      "id": "2a4e9d18-3ac5-4944-9671-e4517942fb69",
+      "type": "image",
+      "prompt": "生成一个客户英文邮件，体现我的B2B cold email得到了回复。一定要符合真实邮件平台的UI",
+      "filename": "image_20260210_203411_218156.png",
+      "created_at": "2026-02-10T20:34:11.221157",
+      "params": {
+        "aspect_ratio": "4:3",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "ef44366b-28db-4a70-8c3b-a450378bab43"
+      }
+    },
+    {
+      "id": "901796c4-f596-473c-be6b-ed793020681a",
+      "type": "image",
+      "prompt": "生成一个客户英文邮件，体现我的B2B cold email得到了回复。一定要符合真实邮件平台的UI",
+      "filename": "image_20260210_203212_872268.png",
+      "created_at": "2026-02-10T20:32:12.874069",
+      "params": {
+        "aspect_ratio": "4:3",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "ade02c47-28a1-41a3-8eb4-bbf764a6e4cb"
+      }
+    },
+    {
+      "id": "f49eae62-f757-4c62-9b6e-9fe81ecb1933",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use three large numbered boxes in a row. White background.\n\nSlide content:\n- Title text:「稳健 3 封序列：在不确定名单质量时用」\n- 三个盒子：\n  盒1：「Email 1：核心价值 + 小 CTA」\n  盒2：「Email 2（+4~5 天）：给一条案例/结果 + 继续小 CTA」\n  盒3：「Email 3（+5~7 天）：给资源 + 提供退出选项」\n- 页脚：\n  「适合：更保守行业，或你还没摸清名单质量——先保住域名信誉」\n",
+      "filename": "image_20260209_234333_012698.png",
+      "created_at": "2026-02-09T23:43:33.014655",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "adbf9704-53a4-45d1-839e-f602ecdb538b"
+      }
+    },
+    {
+      "id": "b4c6f35c-a2c5-4f97-83a6-83e35a1af4ba",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a numbered list card. White background.\n\nSlide content:\n- Title text:「个性化的底线：至少做到这三件事」\n- 列表：\n  1「他们公司具体做什么（到产品线/应用层面）」\n  2「为什么找他（和他的角色/职责挂钩）」\n  3「你能解决的一个具体风险（不是‘好质量’这种空话）」\n- 右侧用一个高亮框写一句话：\n  「做到这三点，你的邮件已经不像垃圾群发」\n",
+      "filename": "image_20260209_234317_709898.png",
+      "created_at": "2026-02-09T23:43:17.710899",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "5d156fc6-1a7a-42e9-b4b7-ac685d558172"
+      }
+    },
+    {
+      "id": "bb2b1b47-34f8-4ca3-b678-40ba86de781e",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a two-row example layout: good vs bad subjects. White background, gray card, deep blue “优”, light red “烂”.\n\nSlide content:\n- Title text:「主题行：第一件事是‘别像垃圾广告’」\n- 上半部分，用「优」示例：\n  文本1：「ISO 13485 零件：交期可做到 15 天？」\n  文本2：「[产品名称] for [应用场景] — quick question」\n- 下半部分，用「烂」示例：\n  文本1：「Best price & high quality!!!」\n  文本2：「Super promotion for you!!!」\n- 左侧要点：\n  •「36–50 字符主题往往表现更好」\n  •「带数字、具体问题的主题更容易被点开」\n  •「少用感叹号和空洞形容词」\n- 页脚小字：「把主题当问题和场景，不要当广告牌」\n",
+      "filename": "image_20260209_234300_905068.png",
+      "created_at": "2026-02-09T23:43:00.907042",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "a8252813-0b91-4231-8ca1-a64b89e0a597"
+      }
+    },
+    {
+      "id": "61dd11bf-5356-47cb-8d81-1b5c0d332d7e",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use icons per channel in a grid. White background, light gray channel cards, deep blue titles, teal icons.\n\nSlide content:\n- Title text:「邮箱从哪里来？只讲渠道类型和底线」\n- 网格中列出渠道：\n  卡片1：「官网 / 团队页 / 联系页面」\n  卡片2：「新闻稿 / 证书页 / 招聘信息」\n  卡片3：「展会名录 / 行业协会名录」\n  卡片4：「社媒公开信息」\n  卡片5：「邮箱发现 / 验证类工具」\n- 下方用红色小条列注意事项：\n  •「不要买来路不明的列表」\n  •「能验证就验证，减退信」\n  •「少用 info@ / sales@，多找具体负责人」\n",
+      "filename": "image_20260209_234247_579140.png",
+      "created_at": "2026-02-09T23:42:47.581105",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "13dda9da-885b-4e96-867a-3d849d3e06c4"
+      }
+    },
+    {
+      "id": "e964f6e9-1375-4e81-bc47-95a6d3c909ae",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide, same style. Use a scale illustration: one side “质量高名单” heavier than “十万垃圾邮箱”. White background, gray scale graphic, deep blue highlights.\n\nSlide content:\n- Title text:「名单构建：质量 > 数量」\n- 左侧要点：\n  •「你需要的不是十万邮箱，而是 500–800 个‘像样的人’」\n  •「低质量名单 = 高退信 + 高投诉 = 域名被打废」\n  •「字段越完整，越容易写出看起来不是群发的内容」\n- 右侧画一杆秤：左边少量联系人图标但更重，标注「高质量名单」；右边一堆信封图标但很轻，标注「低质量列表」\n",
+      "filename": "image_20260209_234033_557701.png",
+      "created_at": "2026-02-09T23:40:33.559701",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "9c873a4d-3635-4874-9cc2-b206cd7442c0"
+      }
+    },
+    {
+      "id": "efcb45e4-902e-476e-b4a2-b1961cd0184c",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as flat front-view, corporate style. Use two big cards side by side, labeled Direct Procurement and Indirect Procurement. White background, light gray cards.\n\nSlide content:\n- Title text:「直接采购 vs 间接采购」\n- 左卡片标题：「直接采购 Direct」\n  要点：\n  •「买的是会进入成品的物料/零件」\n  •「比如：螺丝、阀门、包装、核心组件」\n  •「关键词：Direct Procurement、Commodity Buyer、Sourcing」\n- 右卡片标题：「间接采购 Indirect」\n  要点：\n  •「买的是运营所需：设备、耗材、服务」\n  •「比如：办公用品、IT、维护服务」\n  •「关键词：Indirect Procurement、Operations」\n- 页脚一句话：「你卖‘螺丝’就别找负责办公文具的采购」\n",
+      "filename": "image_20260209_234026_706557.png",
+      "created_at": "2026-02-09T23:40:26.708559",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "8b822638-315d-4303-b62f-2c8c1072aa4f"
+      }
+    },
+    {
+      "id": "2561284c-7302-40eb-bff5-a39692bd1138",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide, same style. Use a 3-column layout for three product types, each column with “主入口角色” tags. White background, light gray columns, deep blue headings.\n\nSlide content:\n- Title text:「从公司到人：不同产品找谁？」\n- 三列：\n  列1标题：「标准品、替代多」\n    文本：「主入口：采购 / 供应链」「角色例：Purchasing、Buyer、Sourcing」\n  列2标题：「非标件、需要图纸/打样」\n    文本：「主入口：工程 / 技术负责人」「角色例：Engineer、R&D、Technical Manager」\n  列3标题：「渠道品（分销 / 代理）」\n    文本：「主入口：老板 / 合伙人 / 销售总监」「角色例：Owner、Managing Director、Sales Director」\n- 底部小字：「决定切入角色前，先判断自己卖的是哪一类」\n",
+      "filename": "image_20260209_234020_758295.png",
+      "created_at": "2026-02-09T23:40:20.761057",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "4a860f9d-13ad-4604-a208-9ff2534fc294"
+      }
+    },
+    {
+      "id": "da2e59c6-9cfd-4138-be9b-f60ba7b84ccc",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, same corporate style. Use a two-column “do / don’t” comparison card. White background, light gray card, left side deep blue “建议做” column, right side light red “不要做” column. Thin line icons.\n\nSlide content:\n- Title text:「冷邮件序列的边界：别变‘连环催命’」\n- 左侧「建议做」：\n  •「标准型：5 封，约 14–21 天，适合中高客单工业品」\n  •「稳健型：3 封，约 10–14 天，适合保守市场或名单质量不确定」\n  •「每封只讲一个点：交期 / 一致性 / 认证 / 替代方案…」\n- 右侧「不要做」：\n  •「无限期跟进，发到对方情绪爆炸」\n  •「一味 bump，内容毫无变化」\n  •「不给退订或停止联系方式」\n- 底部小字：「上限感：5 封左右 + 明确 break-up，既保护域名，也尊重对方」\n",
+      "filename": "image_20260209_233220_032066.png",
+      "created_at": "2026-02-09T23:32:20.033055",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "54485028-1345-4fda-9bd1-358509d92780"
+      }
+    },
+    {
+      "id": "9dbeefba-fa79-4494-9de2-8d6e4579c942",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, corporate style with a simple bar chart or gauge. White background, light gray chart card, deep blue bars, teal highlights. Large Chinese title, short explanation bullets on the left, simple bar chart on the right. All text in Simplified Chinese.\n\nSlide content:\n- Title text:「冷邮件的正确预期」\n- 左侧要点卡片：\n  •「大量研究：冷邮件平均回复率常在 5%–10% 左右」\n  •「环境变难，整体回复率还在缓慢下滑」\n  •「目标不是‘立刻成交’，而是‘拿到高质量回复’」\n- 右侧画一个简单对比条形图：标注「发送的邮件」→「有回复」的比例很小，用视觉强调“少数”\n- 底部小字：「心态：把冷邮件当成获客漏斗最上游，而不是一封封爆单」\n",
+      "filename": "image_20260209_232838_655713.png",
+      "created_at": "2026-02-09T23:28:38.657715",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "bf5871c7-7a47-4b3b-bb3d-51db01211fd2"
+      }
+    },
+    {
+      "id": "ce1cd112-8206-4b20-a6c8-170c40d1bacf",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use three large numbered circles. White background.\n\nSlide content:\n- Title text:「进阶者：从‘零散乱发’到‘体系化运营’」\n- 三个大步骤：\n  1「线索分层：A/B/C 账号，对 A 账号多角色低骚扰触达」\n  2「把投递健康纳入 KPI：鉴权、退订、投诉率、退信率都要监控」\n  3「做价值资产：RFQ 清单、选型指南、认证对照表等可重复使用内容」\n- 页脚：\n  「冷邮件做到这个层级，你玩的已经不只是‘写几句英文’，而是一整套增长系统」\n",
+      "filename": "image_20260209_232559_614623.png",
+      "created_at": "2026-02-09T23:25:59.616624",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c9e01259-4848-41c8-9c15-d43053bf349e"
+      }
+    },
+    {
+      "id": "ed2308a6-a770-4d6e-9b76-e992c68241da",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a timeline running from Day 1 to Day 14. White background.\n\nSlide content:\n- Title text:「完全小白：7–14 天冷邮件行动路线」\n- 时间线节点：\n  「Day 1–2：明确 ICP + 选 1 个细分品类 + 建 50–100 个高质量名单」\n  「Day 3–5：写 1 套 3 封稳健序列 + 1 套 5 封标准序列（先用 3 封跑通）」\n  「Day 6–7：小规模发出，手动跟进回复，建立‘停止联系’名单」\n  「Day 8–14：按国家/行业/角色复盘，做简单 A/B 测试，把有效话术沉淀成模板」\n",
+      "filename": "image_20260209_232559_152713.png",
+      "created_at": "2026-02-09T23:25:59.153977",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c1e61b5d-8ad6-4cbe-bd8d-2e0e04fb5c6a"
+      }
+    },
+    {
+      "id": "84fc0546-9433-4d4f-abd7-1744448d6c91",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same visual system as the cover. White background, central quote card. Modern Simplified Chinese font.\n\nSlide content:\n- Title text:「最后一句实话」\n- 中央引用卡片文字：\n  「外贸冷邮件不是‘写几封英文’的问题，」\n  「而是用合规与投递当底盘，」\n  「用结构化内容当发动机，」\n  「用数据迭代当方向盘。」\n- 底部一行小字：\n  「你把这三层搭起来，行业再卷、邮箱再严，你也能持续跑下去。」\n",
+      "filename": "image_20260209_232556_080355.png",
+      "created_at": "2026-02-09T23:25:56.082353",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "2f8a8847-c5a8-436b-9537-18133797ea72"
+      }
+    },
+    {
+      "id": "8e5d6a06-1127-49db-bd11-980d0f1fe019",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same corporate style. Use five small cards in a grid. White background.\n\nSlide content:\n- Title text:「实战场景模板：这五种情况最常见」\n- 五个卡片标题：\n  卡1：「第一次冷开发：介绍自己与价值」\n  卡2：「半热线索：浏览官网/下载资料后」\n  卡3：「展会名录线索：弱关系触达」\n  卡4：「价格敏感客户：想压价/比价」\n  卡5：「高认证/高门槛行业客户」\n- 页脚：\n  「结构逻辑固定：相关性 → 价值 → 可信点 → 小 CTA；只是细节和语气根据场景切换」\n",
+      "filename": "image_20260209_232549_669688.png",
+      "created_at": "2026-02-09T23:25:49.671199",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "bb03e39b-9c3d-4b79-9bb1-53b2b9f9c237"
+      }
+    },
+    {
+      "id": "2676697b-12de-4762-b778-6b5a145e6123",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a flowchart with arrows. White background.\n\nSlide content:\n- Title text:「从建名单到成交：一个简化版流程图」\n- 流程节点：\n  「Build list（按 ICP 选公司和人）」\n   → 「Email Sequence（3–5 封）」\n   → 分支1：「有积极回复？」→「资格确认（规格 / MOQ / 交期 / 条款）」→「样品 / 报价」→「成交」\n   → 分支2：「不是对的人？」→「请对方指路正确负责人」→「对正确负责人重新跑序列」\n   → 分支3：「完全没回复？」→「Break-up + Stop」\n   对于高价值客户，加一条旁路：「适度电话 / LinkedIn 触达一次」\n",
+      "filename": "image_20260209_232543_360201.png",
+      "created_at": "2026-02-09T23:25:43.361202",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "0dbcf59b-4d82-4e9e-aa18-e49556586aa0"
+      }
+    },
+    {
+      "id": "cfe982b7-08e7-49bb-8b22-ef2f6af7f436",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a table layout mimicking a spreadsheet. White background.\n\nSlide content:\n- Title text:「一张表就能开始的冷邮件运营看板」\n- 表格字段示意：\n  「Company」\n  「Country / Timezone」\n  「Contact」\n  「Role」\n  「Segment（国家/行业/角色分层）」\n  「Sequence ID」\n  「Step」\n  「Last sent date」\n  「Reply type（positive / neutral / stop）」\n  「Next action」\n  「Notes（痛点 / 规格 / 条款）」 \n- 页脚：\n  「关键是用这张表回答：去哪儿投放更多？用哪个切入角度？什么时候换渠道？」\n",
+      "filename": "image_20260209_232541_213771.png",
+      "created_at": "2026-02-09T23:25:41.216740",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "26038549-f8af-462b-bcfd-526e8685bd3c"
+      }
+    },
+    {
+      "id": "a35262a6-f605-400e-93b5-322b85f409c1",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use two email cards side by side labelled A and B. White background.\n\nSlide content:\n- Title text:「A/B 测试：少改一点，才能看清原因」\n- 两个小邮件卡片「方案 A」「方案 B」，外观相同，只在标题上标注差异\n- 左侧要点：\n  •「每次只测一个变量：主题 / 长度 / CTA / 价值角度」\n  •「控制字数，短句 + <200 词更稳」\n  •「重点看第 2 封跟进的效果变化」\n",
+      "filename": "image_20260209_232533_843390.png",
+      "created_at": "2026-02-09T23:25:33.845391",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "8ed3f813-27d8-41de-944d-7eff2a7cef1c"
+      }
+    },
+    {
+      "id": "f0df383f-9870-4226-92d6-2ccb629484c8",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a small dashboard card. White background.\n\nSlide content:\n- Title text:「冷邮件运营：别自嗨，先把这几项看清楚」\n- 中央卡片列出：\n  单封层面：\n  •「送达率（退信情况）」\n  •「回复率」\n  •「积极回复率（有意向/愿意了解）」\n  •「停止联系/投诉信号」\n  序列层面：\n  •「序列总回复率」\n  •「样品/报价/会议触发率」\n- 页脚：\n  「环境确实在变难，只能靠迭代对抗，而不是靠运气」\n",
+      "filename": "image_20260209_232530_870569.png",
+      "created_at": "2026-02-09T23:25:30.872570",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "93d84da7-cb76-4ef6-8513-577f8b81e377"
+      }
+    },
+    {
+      "id": "291158cd-41cf-4d56-83f2-c2acddb42b92",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use EU and UK icons. White background.\n\nSlide content:\n- Title text:「欧盟/英国：直销邮件的几个关键点」\n- 左侧「GDPR + ePrivacy」：\n  •「直销有时可基于‘合法利益’，但不是永远都行」\n  •「某些场景需要事先同意，还要告知数据来源与用途」\n  •「从第三方拿列表，对方必须证明数据合规获得」\n- 右侧「UK GDPR + PECR」：\n  •「不能隐藏身份，必须有有效联系方式」\n  •「软性同意多适用于既有客户，不是冷开发随便用」\n- 底部一句话：\n  「合规的核心：透明、可退出、不滥用第三方数据」\n",
+      "filename": "image_20260209_232528_424811.png",
+      "created_at": "2026-02-09T23:25:28.427813",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "29105562-2c90-4682-a098-1173a2e15d5e"
+      }
+    },
+    {
+      "id": "8fd87719-798c-4b0f-9816-1947ed176318",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a simple decision flow icon. White background.\n\nSlide content:\n- Title text:「冷邮件序列也可以写得很有礼貌」\n- 中央要点：\n  •「第一封就说明你是谁、为什么联系」\n  •「每套序列里至少有一次明确的退出选项」\n  •「收到任何形式的‘不想再被打扰’，立即停止」\n  •「Break-up 邮件体面收尾，而不是情绪化」\n- 页脚：\n  「长期玩的是信誉和品牌，而不是一次成交」\n",
+      "filename": "image_20260209_232527_320141.png",
+      "created_at": "2026-02-09T23:25:27.322140",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "9d871485-0c42-4943-92bf-83ad19eb701d"
+      }
+    },
+    {
+      "id": "8759bdb3-aa34-4d7b-9823-fa8a3ed02de3",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a staircase chart showing volume ramp-up. White background.\n\nSlide content:\n- Title text:「新域名/新邮箱：别一上来就‘用满额度’」\n- 中央小阶梯图：从每天少量邮件慢慢爬升\n- 左侧要点：\n  •「日发送上限是防滥用配额，不是冷开发安全建议」\n  •「新域名要从低量开始，退信率、投诉率稳定后再缓慢加量」\n  •「宁可慢一点，也不要把域名玩死」\n",
+      "filename": "image_20260209_232523_472557.png",
+      "created_at": "2026-02-09T23:25:23.474555",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c710e05c-a8fd-478a-8b37-627753e108e2"
+      }
+    },
+    {
+      "id": "56e4e534-c362-4c8a-a035-a5d4be9a0396",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a blurred “open rate” gauge crossed out, and a clear “reply / meeting / quote” chart. White background.\n\nSlide content:\n- Title text:「别再崇拜打开率」\n- 左侧说明：\n  •「隐私保护功能会屏蔽追踪，很多邮件被‘虚假打开’」\n  •「平台自己也承认打开率不再准确」\n- 右侧展示一个小图表，横轴是「回复数、积极回复数、会议/报价数」，强调这些是真正指标\n- 页脚：\n  「冷邮件要盯的，是回复率、积极回复率、样品/报价触发，而不是所谓 70% 打开率」\n",
+      "filename": "image_20260209_232523_073033.png",
+      "created_at": "2026-02-09T23:25:23.076051",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "5056ede6-06f7-488b-a14f-f635adf41c19"
+      }
+    },
+    {
+      "id": "94ead181-771d-4e81-8de8-25f0a5c404c7",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a law document icon and short bullet list. White background.\n\nSlide content:\n- Title text:「美国 CAN-SPAM：几条你必须知道的底线」\n- 要点：\n  •「不能伪造邮件头信息」\n  •「主题不得误导，对方一眼就知道大致内容」\n  •「必须提供有效的退订方式，并在 10 个工作日内处理」\n  •「必须包含有效实体地址」\n- 页脚小字：\n  「这套规则同样适用于 B2B 商业邮件，不是只管 B2C」\n",
+      "filename": "image_20260209_232521_082683.png",
+      "created_at": "2026-02-09T23:25:21.084692",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "8163f385-1c83-4d7b-a1e5-67bb2a2ddf83"
+      }
+    },
+    {
+      "id": "6f80d4ec-637c-4e60-963c-e4911979dcb3",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same palette. Use a 3-step analogy with house and stamp icons. White background.\n\nSlide content:\n- Title text:「用一个比喻理解 SPF / DKIM / DMARC」\n- 三格：\n  格1：「SPF」说明：「声明哪些服务器可以代表你这个域发信 = 挂门牌」\n  格2：「DKIM」说明：「给邮件做签名，证明没被篡改 = 盖公章」\n  格3：「DMARC」说明：「要求门牌和公章必须是同一家，并规定失败怎么办」\n- 底部一句话：\n  「大厂都要求这三样齐全，还要‘对齐’，否则更容易进垃圾箱」\n",
+      "filename": "image_20260209_232514_303440.png",
+      "created_at": "2026-02-09T23:25:14.305440",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "9e0daaa7-23a8-44d3-b2bf-526272d9d4ff"
+      }
+    },
+    {
+      "id": "b5613db2-b76b-4534-be6f-e6ad43e3c884",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use two contrasting buttons: “退订” vs “举报垃圾邮件”. White background.\n\nSlide content:\n- Title text:「退订机制，是在保护你自己」\n- 中央说明：\n  •「给出简单的退出方式：如‘回复 stop 我就不再联系’」\n  •「一旦有人表示不想再被联系，立刻加入永久不联系名单」\n  •「不要无限跟进不回复的人，3–5 封之后必须 Break-up」\n- 底部用红色标注：\n  「逼对方点‘举报垃圾邮件’，是最快毁掉域名信誉的方式」\n",
+      "filename": "image_20260209_232513_360326.png",
+      "created_at": "2026-02-09T23:25:13.362324",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "cbd1eb07-e6f9-499d-a0c2-ae88db3e92eb"
+      }
+    },
+    {
+      "id": "88bc61c8-a0f2-4f2f-9176-3370e670462d",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use three big icons: shield (auth), exit door (unsubscribe), warning (complaints). White background.\n\nSlide content:\n- Title text:「Gmail / Yahoo / Outlook 的共同要求」\n- 中央三列：\n  列1「鉴权」\n    文本：「SPF、DKIM、DMARC 必须配置并对齐」\n  列2「退订」\n    文本：「商业/批量邮件必须提供一键退订，并在几天内处理」\n  列3「投诉率」\n    文本：「垃圾投诉率要保持极低，<0.1% 更安全」\n- 页脚：\n  「再用粗暴群发，不是风格问题，是技术上更容易被系统封杀」\n",
+      "filename": "image_20260209_232509_951875.png",
+      "created_at": "2026-02-09T23:25:09.954615",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "b7eaaf4b-483d-4cd1-aea8-5788b5b5a5cc"
+      }
+    },
+    {
+      "id": "06a56817-04e6-4160-ab8e-83fd47f9a3fe",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use two side-by-side diagrams labelled “Delivery” and “Inbox Placement”. White background.\n\nSlide content:\n- Title text:「送达率 ≠ 收件箱到达率」\n- 左图：「已送达 Delivery」说明：\n  「服务器接收了，但可能在垃圾箱或直接被丢弃」\n- 右图：「收件箱到达率 Deliverability」说明：\n  「真正落在收件箱、能被看到」\n- 下方要点：\n  •「很多报告显示，即使许可式邮件，收件箱到达率也只是 80%+」\n  •「冷开发只会更难，所以必须尊重投递规则」\n",
+      "filename": "image_20260209_232507_179488.png",
+      "created_at": "2026-02-09T23:25:07.181487",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "9e90712e-e5d0-466b-a9a1-567fdcaff0b3"
+      }
+    },
+    {
+      "id": "554513a4-bcfa-4f61-aeb4-f7306330b11e",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same corporate style. Use a central email icon with three arrows to LinkedIn, Phone, IM icons. White background.\n\nSlide content:\n- Title text:「冷邮件 + 其他渠道：一场对话，不是骚扰」\n- 左侧要点：\n  •「冷邮件 + LinkedIn：先邮件 → 有打开/回复迹象 → 再加好友」\n  •「冷邮件 + 电话：只用于高客单或已确认负责人」\n  •「冷邮件 + 即时通讯：仅在对方市场和名片上都常见时使用」\n- 右下角红字提醒：\n  「不要在多个渠道同时狂轰滥炸同一个人」\n",
+      "filename": "image_20260209_232504_742319.png",
+      "created_at": "2026-02-09T23:25:04.744335",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "b46797c6-e0bd-4a9d-92ba-8be923400769"
+      }
+    },
+    {
+      "id": "31fc0925-a393-4e60-b845-a92c9f232295",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same palette. Use a numbered vertical list of 5 emails with short roles. White background.\n\nSlide content:\n- Title text:「标准 5 封冷邮件序列：角色分工」\n- 列表：\n  「Email 1：相关性 + 核心价值 + 小 CTA」\n  「Email 2：换角度讲风险/成本，不是‘顶一下’」\n  「Email 3：给资源，用价值换关注（如 RFQ 清单）」\n  「Email 4：资格确认——继续还是暂停？」\n  「Email 5：体面收尾（Break-up），留一个未来钩子」\n- 右侧用小图标表现从 1 到 5 的渐进进度条\n",
+      "filename": "image_20260209_232453_611610.png",
+      "created_at": "2026-02-09T23:24:53.613619",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "cbd5d1da-7edd-4ab2-91dc-a9f47a9e92db"
+      }
+    },
+    {
+      "id": "b2835570-2c41-43a1-a15c-9c86c4a181f2",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a 4-step horizontal journey. White background.\n\nSlide content:\n- Title text:「冷邮件序列真正要达成的，是这四步」\n- 四个连续节点：\n  1「不知道你是谁」\n  2「知道你大概做什么」\n  3「觉得有点相关，愿意看你的资料」\n  4「愿意回复你 / 同意见面 / 考虑样品或报价」\n- 下方说明：\n  •「序列不是为了刷存在感，而是每封向前推半步」\n",
+      "filename": "image_20260209_232450_442258.png",
+      "created_at": "2026-02-09T23:24:50.443257",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "1059633f-f186-4217-b762-d4441637fe7a"
+      }
+    },
+    {
+      "id": "2feb3e49-209f-447a-b81d-cc01fee3c6d5",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same B2B style. Use a 2x2 grid of “knobs” with labels. White background.\n\nSlide content:\n- Title text:「跨文化写冷邮件，不靠刻板印象，靠四个旋钮」\n- 2x2 网格，每格一个旋钮标题 + 简短说明：\n  「直接度」—「主题和 CTA 是直接问，还是更委婉？」\n  「信息密度」—「更短更硬，还是稍多背景？」\n  「关系感」—「更任务导向，还是多一点寒暄和人情味？」\n  「礼貌策略」—「称呼和格式要多正式？」\n- 页脚一句话：\n  「不要听传言，用小批量 A/B 测试去调旋钮，数据比八卦更可靠」\n",
+      "filename": "image_20260209_232437_380708.png",
+      "created_at": "2026-02-09T23:24:37.381707",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "39bd88b5-28d3-4189-97a8-2642085055a0"
+      }
+    },
+    {
+      "id": "59104990-43c2-413e-9d67-0d2da0b8cc0a",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a “to-delete list” card with red cross icons. White background.\n\nSlide content:\n- Title text:「这类内容，建议你直接从冷邮件里删掉」\n- 中央列表：\n  •「公司历史、创始故事、团队合影」\n  •「一串‘best price / high quality’ 之类空话」\n  •「没有上下文的证书大礼包」\n  •「跟这封邮件 CTA 无关的长篇介绍」\n- 页脚小字：「对方不是来听你讲故事的，他只想知道你能不能解决他的具体问题」\n",
+      "filename": "image_20260209_232432_651155.png",
+      "created_at": "2026-02-09T23:24:32.652151",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "b8c9e149-4451-44cc-9169-859b6ed7edcb"
+      }
+    },
+    {
+      "id": "85028abd-ba29-4dd8-b798-1d9180327381",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same palette. Use three icons: target, bar chart, shield. White background.\n\nSlide content:\n- Title text:「高价值内容的三个特征」\n- 中央三列：\n  列1标题：「痛点洞察」\n    文本：「谈旺季交期波动、一致性下降、备份供应商缺失，而不是‘您需要更好价格’」\n  列2标题：「可量化」\n    文本：「用交期范围、MOQ、抽检规则、追溯批次、常见缺陷控制方式说话」\n  列3标题：「交付可信」\n    文本：「包装、标签、合规、产能窗口、贸易条款，随时能展开细讲」\n",
+      "filename": "image_20260209_232430_639667.png",
+      "created_at": "2026-02-09T23:24:30.642664",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "29402258-85fa-429f-bc79-3f41d25386e8"
+      }
+    },
+    {
+      "id": "7fa4d0b4-4d3e-4a3e-ad26-e02e5bf06e3b",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same palette. Use three icons: target, bar chart, shield. White background.\n\nSlide content:\n- Title text:「高价值内容的三个特征」\n- 中央三列：\n  列1标题：「痛点洞察」\n    文本：「谈旺季交期波动、一致性下降、备份供应商缺失，而不是‘您需要更好价格’」\n  列2标题：「可量化」\n    文本：「用交期范围、MOQ、抽检规则、追溯批次、常见缺陷控制方式说话」\n  列3标题：「交付可信」\n    文本：「包装、标签、合规、产能窗口、贸易条款，随时能展开细讲」\n",
+      "filename": "image_20260209_232425_481411.png",
+      "created_at": "2026-02-09T23:24:25.482412",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "d1a929d0-aa36-49e4-8ed5-b0fdbe9c1a30"
+      }
+    },
+    {
+      "id": "1c6e6b32-5e03-4636-86c5-e9000799c09c",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a checklist card with three sections. White background.\n\nSlide content:\n- Title text:「发冷邮件前，至少做 5–10 分钟调研」\n- 中央卡片分三块：\n  块1标题：「他们卖什么 / 服务谁？」\n    文本：「看首页、产品页、案例页」\n  块2标题：「供应链信号」\n    文本：「招聘采购/工程、质量声明、认证要求、新闻稿」\n  块3标题：「你能对齐的风险点」\n    文本：「交期、认证、材料追溯、稳定性、替代方案」\n- 底部强调句：「只要能写出 2–3 个‘和他相关的细节’，你就已经领先 80% 群发选手」\n",
+      "filename": "image_20260209_232422_568863.png",
+      "created_at": "2026-02-09T23:24:22.570875",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "8a8802dc-ebca-4aca-8279-69d6537be76b"
+      }
+    },
+    {
+      "id": "b19310bc-cc8a-43a6-918c-1eb13156c69c",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a “trash can vs clean email” illustration. White background, gray cards.\n\nSlide content:\n- Title text:「如何避免写成‘垃圾开发信’？」\n- 左侧要点：\n  •「垃圾信的共性：和对方无关、不可验证、一次要太多」\n  •「不是英文差的问题，而是结构和对象都错」\n  •「拒绝公司自夸 + 证书堆砌」\n- 右侧画两个小图：\n  图1：一堆空洞形容词飞向垃圾桶\n  图2：一封精简邮件，只有少数关键点和一个清晰 CTA\n",
+      "filename": "image_20260209_232415_815688.png",
+      "created_at": "2026-02-09T23:24:15.819693",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "fce878b8-afd2-4560-814b-a5180c63ce6b"
+      }
+    },
+    {
+      "id": "8e4f5919-d4d4-4e68-95a0-e158ec9541d0",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same B2B style. Use a single large gray text card summarizing a short Chinese template, with key parts highlighted using color blocks. White background.\n\nSlide content:\n- Title text:「一封冷邮件，从头到尾长什么样？」\n- 中央文本卡片分行展示模板结构（中文）：\n  「主题：[产品] 供应 — 想确认一个问题」\n  「您好 [姓名]，我看到贵司在做 [具体产品/市场]，想确认您是否负责 [品类] 供应商评估？」\n  「我们主要帮助类似贵司在 [交期稳定/一致性/合规] 上降低风险，常规 MOQ [Y]，交期 [X] 天。」\n  「如果方便，我发您 1 页规格/报价区间供参考，可以吗？」\n  「[姓名]  [职位 | 公司]  [官网 / 联系方式]」\n- 右下角小框提示：「绿色部分 = 根据客户信息替换」\n",
+      "filename": "image_20260209_232408_850875.png",
+      "created_at": "2026-02-09T23:24:08.852827",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "9c1b4d49-48dd-4371-be19-aee271166622"
+      }
+    },
+    {
+      "id": "cdda6948-b419-4321-afc0-1b58b33a7228",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a simple email signature mockup. White background, gray signature card.\n\nSlide content:\n- Title text:「签名：不要把签名做成广告海报」\n- 中央签名示意：\n  「姓名 Name」\n  「职位 | 公司名」\n  「公司官网」\n  「邮箱 | 电话」\n- 左侧要点：\n  •「让对方能快速查到你是谁」\n  •「可以适度带一个社媒链接，但不要塞满」\n  •「少用大段口号和产品关键词堆砌」\n",
+      "filename": "image_20260209_232404_004724.png",
+      "created_at": "2026-02-09T23:24:04.006725",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "ff2c0887-f144-4764-8b1e-a3370a3bbbc9"
+      }
+    },
+    {
+      "id": "790a717c-9f83-4dd3-a4e5-d8570acc64c4",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same palette. Use a large checkmark icon and two short example CTAs. White background.\n\nSlide content:\n- Title text:「CTA：让对方‘回得起’，而不是做问卷」\n- 中央卡片写 CTA 原则：\n  •「一次只问一件小事」\n  •「可以 yes/no 回答，或者一句话就能答」\n- 下方示例 CTA 文本：\n  「方便的话，我发您 1 页规格 + 报价区间供参考，可以吗？」\n  「如果您不是负责人，能否指点我应该联系谁？」\n- 侧边用小字列出反例：\n  •「第一封就要年采购量、目标价、竞争对手报价 → 直接劝退」\n",
+      "filename": "image_20260209_232358_193887.png",
+      "created_at": "2026-02-09T23:23:58.196885",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "4807e10a-998f-436a-9cb0-9b524d0940e6"
+      }
+    },
+    {
+      "id": "1411a210-b827-4f78-a394-142a9f08a312",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a simple “case card” visual. White background, gray case card, icons of certificate and factory.\n\nSlide content:\n- Title text:「社会证明：让对方相信‘你不是随便写写’」\n- 中间案例卡片：\n  •「目前为 [行业] 客户供应 [产品]」\n  •「通过 [认证/测试]，可按需提供报告」\n  •「可以分享 1 页 QC 控制点或选型清单」\n- 左侧要点：\n  •「越具体越可信：客户类型 + 要求 + 能力」\n  •「少堆 10 个 PDF 附件，信息越多越没人看」\n- 底部小字：「一句证据 + 一句‘可按需提供’，比证书炸弹有效多了」\n",
+      "filename": "image_20260209_232346_738534.png",
+      "created_at": "2026-02-09T23:23:46.741556",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "48c84fd4-1331-4f3c-9fd4-42a4c7d87b30"
+      }
+    },
+    {
+      "id": "fa143f44-83a2-4772-b75b-6e1ae0107ffe",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a “problem → solution → result” three-column layout. White background, gray card, blue arrows.\n\nSlide content:\n- Title text:「正文核心价值：从‘我卖什么’换成‘我解决什么’」\n- 三列：\n  列1标题：「问题」\n    文本：「旺季交期波动」「一致性差」「返工率高」\n  列2标题：「你如何解决」\n    文本：「工艺能力」「抽检规则」「追溯体系」\n  列3标题：「业务结果」\n    文本：「交期更稳定」「缺陷更可控」「供应风险更低」\n- 底部一句话示例：\n  「我们帮助 [客户类型] 在 [产品] 上稳定交期与一致性，常规交期 [X] 天，MOQ [Y]。」\n",
+      "filename": "image_20260209_232339_480240.png",
+      "created_at": "2026-02-09T23:23:39.481240",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "08649659-e93c-45c1-b156-a65adc8c7928"
+      }
+    },
+    {
+      "id": "6c7bedf6-76dc-4be4-909d-17a43a13e98d",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same B2B style. Use side-by-side good vs bad openings in Chinese. White background, gray card.\n\nSlide content:\n- Title text:「开场 1–2 句：让对方知道‘这不是群发’」\n- 左侧「优」示例：\n  文本：\n  「您好 [姓名]，我看到贵司在做 [具体产品/市场]，很多团队在扩产时会遇到 [痛点]。」\n  「想确认您是否负责这块供应商评估？」\n- 右侧「烂」示例：\n  文本：\n  「We are a professional manufacturer with 20 years history…」\n- 下方要点：\n  •「开头先讲对方：公司、产品、市场信号」\n  •「避免上来背公司简介」\n  •「一句话确认‘找对人没’」\n",
+      "filename": "image_20260209_232337_950551.png",
+      "created_at": "2026-02-09T23:23:37.952552",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "9ef2ec7f-8fd3-4126-9e9a-4f4fcf7e06dd"
+      }
+    },
+    {
+      "id": "cbfa6667-37f3-4fab-bd82-ca82273c191c",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, same style. Use a vertical list of six numbered items with icons. White background, gray list card, deep blue numbers.\n\nSlide content:\n- Title text:「一封高转化冷邮件的 6 个关键部件」\n- 中间列表：\n  1「主题 Subject」\n  2「开场 1–2 句」\n  3「正文核心价值」\n  4「社会证明 / Credibility」\n  5「CTA：行动号召」\n  6「签名与联系方式」\n- 右侧用简短说明卡片写一句总结：「KPI 只有一个：让对方愿意回你下一步」\n",
+      "filename": "image_20260209_232328_307951.png",
+      "created_at": "2026-02-09T23:23:28.308954",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c1933c8a-c02c-41b6-9dfa-8ccc4a7e2821"
+      }
+    },
+    {
+      "id": "9b6067d4-c121-46b5-83a0-c096a88efd8b",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen slide, flat front-view, same design system. Use a warning-style card with red icons (no symbol). White background.\n\nSlide content:\n- Title text:「这几类人，冷邮件尽量别发」\n- 中央警示卡片，列出：\n  •「明显不相关行业和岗位」\n  •「竞争对手公司」\n  •「大量通用邮箱（info@、sales@…）」\n  •「你自己也说不清‘为什么要联系他’的人」\n  •「无法提供退订/停止联系路径却还打算高频触达的人」\n- 底部放一个红色感叹号图标 + 文本：「这些对象只会帮你拉低域名信誉」\n",
+      "filename": "image_20260209_232326_819437.png",
+      "created_at": "2026-02-09T23:23:26.821393",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "11697fb9-e715-4be7-99ac-0e2f2ac63f4c"
+      }
+    },
+    {
+      "id": "ddfcaac3-4509-48e7-896d-c292511f1027",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide, flat front view, same palette. Use a table-style card listing key fields. White background, light gray table card, deep blue headers.\n\nSlide content:\n- Title text:「一份像样的冷邮件名单，至少要有这些字段」\n- 中间大卡片，做成表格感，每一行一个字段 + 说明：\n  行1：「公司名」—「方便做背景调研」\n  行2：「官网域名」—「验证行业与产品线」\n  行3：「国家 / 时区」—「安排发送时间 & 电话节奏」\n  行4：「联系人姓名」—「避免用 Dear Sir/Madam」\n  行5：「职位」—「判断是否有决策权」\n  行6：「邮箱地址」—「最好经过验证」\n  行7：「产品线匹配点」—「你凭什么找他？」\n  行8：「触发信号」—「如扩产、招聘、展会、新闻稿」\n- 下方小字：「字段越全，个性化越容易，回复率越有救」\n",
+      "filename": "image_20260209_232318_056193.png",
+      "created_at": "2026-02-09T23:23:18.058191",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "081ffc8f-77ad-402d-99e5-abf0879da531"
+      }
+    },
+    {
+      "id": "750e8410-03dd-4198-800e-1b8846f1b1ed",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide, flat front view, same visual system. Use a central card titled ICP, with surrounding tags. White background, light gray card, deep blue title, teal tag pills.\n\nSlide content:\n- Title text:「理想客户画像 ICP：先选对公司」\n- 中心大卡片标题「ICP = 最可能买你、买得起你、买得久你的一类公司」\n- 卡片内用标签形式展示要素：\n  标签1：「区域：如 北美 / 欧盟」\n  标签2：「规模：50–500 人的中型制造商」\n  标签3：「产品：有自有品牌 + 稳定出货」\n  标签4：「需求：有高强度 / 高认证要求」\n  标签5：「采购额：能达到你的 MOQ 门槛」\n- 底部一行文本：「先锁定 ICP，再谈如何写邮件，否则都是胡乱开枪」\n",
+      "filename": "image_20260209_232307_112630.png",
+      "created_at": "2026-02-09T23:23:07.114626",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "02a5a3c0-4db4-4b45-9bbc-c04aad2401c3"
+      }
+    },
+    {
+      "id": "c66fe0c4-1476-46a6-9a53-26cfa7557cc0",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide, flat front view, same palette. Use a simple line chart card showing response rate vs number of touches. White background, light gray chart area, deep blue response line, teal annotation dots. Modern Simplified Chinese text.\n\nSlide content:\n- Title text:「为什么要用冷邮件序列？」\n- 左侧要点：\n  •「多份大样本研究：对同一联系人多次触达，可带来约 2 倍响应」\n  •「第 2 封跟进通常贡献最大增益」\n  •「前几封是‘拉升区’，之后进入边际递减」\n- 右侧图表：横轴标「触达次数」，纵轴标「回复率」，画出先升后平的曲线，并在第二个节点加标注：「首次跟进 → 增益最大」\n- 底部小字提示：「序列有效，但不是越长越好」\n",
+      "filename": "image_20260209_232256_331826.png",
+      "created_at": "2026-02-09T23:22:56.333832",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "1509198d-30da-4ca6-93b7-cfbd0dddae8b"
+      }
+    },
+    {
+      "id": "4675ac7f-8cd3-490b-9c9b-958af52a9285",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, same style. Use a vertical stacked cards layout, each card representing one email in a sequence, but只展示概念不展示正文。White background, light gray stacked cards, deep blue titles, teal accents.\n\nSlide content:\n- Title text:「什么是冷邮件序列？」\n- 中间竖向 4 张小卡片，依次写：\n  卡片1：「第 1 封：你能解决什么问题？」\n  卡片2：「第 2 封：同类客户怎么做？」\n  卡片3：「第 3 封：给对方一个选型/检查清单」\n  卡片4：「第 4–5 封：确认是否继续联系 + 体面收尾」\n- 左侧补充说明要点：\n  •「围绕同一目标客户，在一个合理时间窗内按节奏多次触达」\n  •「角度不同，但人设和主题保持一致」\n- 底部小字总结：「目的：把‘不知道你是谁’推进到‘愿意回你’」\n",
+      "filename": "image_20260209_232249_526630.png",
+      "created_at": "2026-02-09T23:22:49.528144",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "7d6ccada-1533-4995-b3ab-d5ba3c738aff"
+      }
+    },
+    {
+      "id": "51d5e101-0547-4d2d-871d-7d0845cc82aa",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, corporate style with a simple bar chart or gauge. White background, light gray chart card, deep blue bars, teal highlights. Large Chinese title, short explanation bullets on the left, simple bar chart on the right. All text in Simplified Chinese.\n\nSlide content:\n- Title text:「冷邮件的正确预期」\n- 左侧要点卡片：\n  •「大量研究：冷邮件平均回复率常在 5%–10% 左右」\n  •「环境变难，整体回复率还在缓慢下滑」\n  •「目标不是‘立刻成交’，而是‘拿到高质量回复’」\n- 右侧画一个简单对比条形图：标注「发送的邮件」→「有回复」的比例很小，用视觉强调“少数”\n- 底部小字：「心态：把冷邮件当成获客漏斗最上游，而不是一封封爆单」\n",
+      "filename": "image_20260209_232249_226244.png",
+      "created_at": "2026-02-09T23:22:49.228243",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "6d186c18-fbd7-4c35-8736-3b8a8ea8fab4"
+      }
+    },
+    {
+      "id": "0614bf3d-fad5-45fb-8b1b-79a0b7b0a12c",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, same B2B style. Use an organization chart style illustration in the center: multiple people icons connected to a decision box. White background, light gray org chart card, deep blue titles, teal node outlines. Modern Simplified Chinese font.\n\nSlide content:\n- Title text:「B2B 采购是‘委员会投票’」\n- 中间卡片用简化组织结构图展示：上层「老板/合伙人」，中层「采购/供应链」「工程/技术」「质量/合规」，底部汇总到一个「采购决策」框\n- 左侧短句要点：\n  •「典型复杂采购常有 6–10 人参与，有研究甚至提到 13 个相关方」\n  •「决策不再是一个人点头，而是一群人投票」\n- 右下角一句红色强调文本：「冷邮件只盯一个人，会天然吃亏」\n",
+      "filename": "image_20260209_232246_644539.png",
+      "created_at": "2026-02-09T23:22:46.646536",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "6c94f1d5-7a20-4112-86c2-f5ead8a36f87"
+      }
+    },
+    {
+      "id": "3172ab5f-5680-4d1e-8292-a8bbbebdaf69",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, same corporate style and palette. Use one big horizontal process diagram card in center, with 4 small nodes. White background, light gray card, deep blue nodes, teal connecting arrows, thin line icons. Modern Simplified Chinese sans-serif, all Chinese text.\n\nSlide content:\n- Title text:「为什么要发冷邮件？」\n- 中间一条流程线，从左到右 4 个节点，节点标题和说明：\n  节点1：「找谁」说明：「可以精确选 ICP 公司 + 关键角色」\n  节点2：「说什么」说明：「围绕痛点设计价值主张」\n  节点3：「什么时候说」说明：「按时区和节奏规划触达」\n  节点4：「说几次」说明：「用序列迭代，不是碰运气」\n- 在流程下方加一句总结文本：「把获客变成‘可迭代系统’，而不是靠心情群发」\n- 图标：放邮箱、齿轮、图表等扁平图标强化“系统化”感觉\n",
+      "filename": "image_20260209_232235_370065.png",
+      "created_at": "2026-02-09T23:22:35.372067",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "0d3a39b4-568b-4490-ae0b-83ff6fe2882c"
+      }
+    },
+    {
+      "id": "7dbcc145-fc2a-42c8-88f7-643bc901768e",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, clean modern B2B style. Use a 4-quadrant comparison layout: each block is a light gray card with deep blue titles. White background, teal accents, thin line icons (booth, computer, social media, handshake, email envelope). Modern Simplified Chinese sans-serif font, all text in Chinese. Large title at top, 4 small cards below.\n\nSlide content:\n- Title text:「冷邮件在外贸获客里的位置」\n- 四个小卡片横向排布，对比不同渠道：\n  卡片1标题：「展会/拜访」\n    文本：「信任快，但成本高、周期受限」\n  卡片2标题：「B2B 平台线索」\n    文本：「线索被动，同质化竞争严重」\n  卡片3标题：「社媒 / LinkedIn」\n    文本：「更像‘关系与背书层’，节奏慢」\n  卡片4标题：「冷邮件」\n    文本：「可控触达 + 可规模化试错 + 可持续跟进」\n- 底部用一行颜色突出的小字：「冷邮件是‘可控触达拼图’，不是替代一切的银弹」\n",
+      "filename": "image_20260209_232230_361184.png",
+      "created_at": "2026-02-09T23:22:30.362182",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "de9353f8-eab3-49d5-bb04-7ece96b97688"
+      }
+    },
+    {
+      "id": "3797eb30-b6e5-4d6e-a160-5acd6ed3657c",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, same clean modern B2B corporate style as before. White background, light warm gray dialogue-style box in the center, deep blue and teal accent elements, thin line icons. Modern Simplified Chinese sans-serif typeface. Large bold Chinese title at top, below it a chat-style example with two speech bubbles. Plenty of white space, subtle shadows.\n\nSlide content:\n- Title text:「冷邮件的一个简单例子」\n- 中间放一个对话框卡片，左侧小标题：「场景」\n  文本：「你做不锈钢阀门出口，找到一家化工设备集成商的采购负责人邮箱。」\n- 右侧小标题：「冷邮件示例」\n  文本用短句分行展示：\n  「您好，我们在为化工设备集成商供应不锈钢阀门。」\n  「想确认贵司目前是否在评估阀门供应商？」\n  「方便的话，能否发一份当前规格表/认证要求给我参考？」\n- 在底部用一行小字总结：「重点：问‘是否在看供应商’ + 要一个小动作，而不是直接求订单」\n- 配一个小信封 + 工厂图标作为装饰\n",
+      "filename": "image_20260209_232150_749258.png",
+      "created_at": "2026-02-09T23:21:50.751258",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "ddd5e754-7039-41ac-bf21-d64afdf72387"
+      }
+    },
+    {
+      "id": "698ab9f3-0032-4263-b45b-f865d842dca1",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, clean modern B2B corporate style. White background, light warm gray content blocks, deep blue and teal accent colors, thin line vector icons, flat illustration only. Modern Simplified Chinese sans-serif typeface. Large bold Chinese title at the top, 2–3 short bullet points in a left-aligned card, icons on the right. Plenty of white space. Same color palette and typography as previous slide. All on-screen text in Simplified Chinese. No watermark, no logo.\n\nSlide content:\n- Title text:「什么是冷邮件？」\n- Under the title, a main content card with bullets:\n  •「对方之前没和你有业务往来，也没主动订阅你」\n  •「你主动发到对方工作邮箱，目的是‘开拓商机’」\n  •「一对一或一对少，而不是群发广告」\n- On the right，画一个信封图标 + 问号图标，表示“陌生联系人”\n- 在卡片底部用小一号字加一句说明：「关键词：主动 + 陌生 + 商机导向」\n",
+      "filename": "image_20260209_232110_767489.png",
+      "created_at": "2026-02-09T23:21:10.769455",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "fc8b5059-3802-4a6f-b63e-7c16d486a8f9"
+      }
+    },
+    {
+      "id": "15696c6f-f5bd-4837-bf4e-01a94bb641de",
+      "type": "image",
+      "prompt": "Design a 16:9 widescreen PowerPoint slide as a flat front-view image, clean modern B2B corporate style. White background, light warm gray content blocks, deep blue and teal accent colors, thin line vector icons, flat illustration, no photos, no 3D, no gradients. Use a modern Simplified Chinese sans-serif typeface. Large bold Chinese title at the top, 1 subtitle line below, center layout, plenty of white space, subtle drop shadows under the main title block. Theme: B2B 外贸冷邮件与冷邮件序列最佳实践。All on-screen text in Simplified Chinese. No watermark, no logo, no UI chrome.\n\nSlide content:\n- Main title text in large Chinese font:「B2B 外贸冷邮件与冷邮件序列最佳实践」\n- Subtitle text under it:「让冷联系人从‘不认识你’走到‘愿意回复你’」\n- At the bottom, a small line of text:「适用对象：B2B 外贸业务员、销售经理、团队负责人」\n- On the right side, show a simple flat illustration: 邮件信封图标 + 漏斗 + 工厂/地球图标，组成一个获客漏斗意象\n",
+      "filename": "image_20260209_231316_441800.png",
+      "created_at": "2026-02-09T23:13:16.442842",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "6ee887ee-b896-4039-8a7d-1338710255d3"
+      }
+    },
+    {
+      "id": "b2f42981-b6fe-43c2-8e4a-2dfea3901786",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 PPT 截图，白底深蓝配色。\n- 左侧为数据指标与 A/B 测试要点，右侧为新手 / 进阶的路线图示意。\n\n【本页主题：用数据迭代冷邮件 & 新手 / 进阶行动路径】\n\n标题文字：\n“冷邮件不是一锤子买卖，而是一套可迭代系统”\n\n副标题：\n“指标、A/B 测试与执行路线图”\n\n正文要点：\n1. 指标最小集合：送达率（退信）、回复率、积极回复率（有意向 / 愿意了解）、“停止联系 / 投诉”信号，以及序列触发样品 / 报价 / 会议的比例。\n2. A/B 测试原则：一次只改一个变量，例如主题（含不含数字、具体 vs 泛泛）、邮件长度（6–8 句 <200 词）、CTA 类型（确认负责人 / 要不要资料 / 是否需要备份供应商）。\n3. 冷邮件环境整体变难，需要用迭代对抗“回复率下滑、触点增加”的大趋势，而不是指望老话术一直有效。\n4. 对完全小白，可以用 7–14 天计划：先定 ICP 和名单，再写 3 封稳健序列，小规模发出、复盘，再升级到更长的标准序列。\n5. 对进阶者，要学会分层账号（A/B/C）、把投递健康纳入 KPI，并沉淀 RFQ 清单、选型指南、认证对照表等“价值资产”。\n\n右侧信息图设计提示：\n- 上半部分是一个简单的“KPI 仪表板”小图，显示 Reply / Positive reply / Meetings。\n- 下半部分是两条简化路线：“Newbie 7–14 days plan” 与 “Advanced systemization”，用箭头连接几个步骤节点。\n",
+      "filename": "image_20260209_230615_365900.png",
+      "created_at": "2026-02-09T23:06:15.369027",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "e3626d13-2a6a-4787-8765-bc65409cb8af"
+      }
+    },
+    {
+      "id": "eed86d46-811f-48b1-9179-e9632561bd55",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 PPT 截图，白底深蓝配色。\n- 左侧文字概括 CAN-SPAM、GDPR/ePrivacy、UK GDPR/PECR 等底线，右侧用三块法规卡片图示。\n\n【本页主题：冷邮件的合规底线】\n\n标题文字：\n“跨境冷邮件，至少要守的几条法规底线”\n\n副标题：\n“不是律师课，但要活得下去”\n\n正文要点：\n1. 美国 CAN-SPAM：不得伪造邮件头，主题不得误导，必须提供有效退订方式与实体地址，并在规定时间内处理退订，B2B 商业邮件同样适用。\n2. 欧盟 GDPR + ePrivacy：某些直销场景可能需要事先同意，从第三方获得名单必须确保对方合法合规，首次联系时要告知数据来源与用途，并尊重随时反对直销的权利。\n3. 英国 UK GDPR + PECR：营销邮件规则对电子邮件和电话都有要求，不得隐藏身份，必须提供有效联系方式用于退订或投诉。\n4. 实战层面的最低动作：说明你是谁、为什么联系；给出简单的退出机制；收到退出请求立即停发；不要使用明显违规来源的“黑名单”。\n5. 冷邮件能不能长期做下去，往往不是输在话术，而是输在合规和尊重选择权上。\n\n右侧信息图设计提示：\n- 三张平铺的法规卡片，分别标注“CAN-SPAM / GDPR & ePrivacy / UK GDPR & PECR”，下面用小图标（法槌、盾牌、文件）。\n",
+      "filename": "image_20260209_230605_480830.png",
+      "created_at": "2026-02-09T23:06:05.484656",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "8ae3b814-15f3-46a9-a32b-d0bfc31dfb14"
+      }
+    },
+    {
+      "id": "319ee326-1081-4e83-8d4e-f32c3f5d60f1",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 PPT 截图，白底深蓝配色。\n- 左侧为策略说明，右侧为渐进式柱状图或台阶图。\n\n【本页主题：新域名如何预热，日发送量怎么控】\n\n标题文字：\n“新域名别一上来就‘自杀式群发’”\n\n副标题：\n“发送上限不是你的目标，是警戒线”\n\n正文要点：\n1. 邮箱服务商给出的“每日发送上限”是防滥用配额，不是冷开发安全建议，更不是鼓励你每天打满额度。\n2. 新域名 / 新邮箱应该从低量开始，逐步爬坡：先少量高质量名单，观察退信、投诉与拒收情况，再缓慢增加发送。\n3. 谷歌等会按主域汇总发送量，一旦被识别为高发送量域名，就会长期套用更严格的规则与监控。\n4. 实务上，与其追求每天发几百几千封，不如稳定在“每个账号几十封级别 + 高命中 + 低投诉”的状态，把重点放在质量和回复率。\n5. 核心监控指标：硬退信 / 软退信比例、投诉率、垃圾文件夹投递信号，而不是单纯的“今天发出去了多少封”。\n\n右侧信息图设计提示：\n- 用一组逐级升高的蓝色台阶柱，标注 Day 1 / Day 7 / Day 14 等，每一级上方写 small volume / healthy / scale carefully。\n",
+      "filename": "image_20260209_230600_222987.png",
+      "created_at": "2026-02-09T23:06:00.225986",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "8b54e1e6-5cdc-4bb1-8555-f2196bf7b55f"
+      }
+    },
+    {
+      "id": "bbc19258-7654-4246-877d-96956cd8a1de",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 PPT 截图，白底深蓝配色。\n- 左侧为退订 / 投诉 / 打开率的说明，右侧为简单仪表盘或 KPI 卡片。\n\n【本页主题：如何看退订、投诉率和打开率】\n\n标题文字：\n“别再迷信打开率了”\n\n副标题：\n“退订与投诉率，是域名生死线”\n\n正文要点：\n1. 主流邮箱逐步要求商业邮件必须支持一键退订，并在 1–2 个工作日内处理，退订易用性被视为降低垃圾投诉的关键机制。\n2. 垃圾投诉率如果长期超过阈值（很多指南建议控制在 0.1% 以下，绝不能接近 0.3%），域名就会被系统“拉黑”或降权。\n3. 冷邮件序列里，一旦有人回复“stop / 不要再联系我”，必须立刻加入永久不联系名单，并停止所有后续邮件。\n4. 苹果的邮件隐私保护等功能会屏蔽真实打开行为，第三方打开率数据越来越不可信，因此应把重心转向回复率、积极回复率、样品 / 报价触发等硬指标。\n5. 打开率可以作为“提醒你有问题”的信号，但不能再当成主要 KPI，更不能以“打开率好”来为垃圾式群发辩护。\n\n右侧信息图设计提示：\n- 三个并列 KPI 卡片：Complaints%、Unsubscribes%、Replies%，其中 Complaints 卡片标红提醒，Replies 用绿色显示。\n",
+      "filename": "image_20260209_230552_708149.png",
+      "created_at": "2026-02-09T23:05:52.711146",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "ff296f74-585e-4bea-b585-5f090d6c36b1"
+      }
+    },
+    {
+      "id": "341a053d-2ff5-49b7-bf3e-7d127e163202",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 PPT 截图，白底深蓝配色。\n- 左侧解释文字，右侧为三层安全 / 门锁类图示。\n\n【本页主题：让冷邮件“送得到、进收件箱”的技术基础】\n\n标题文字：\n“SPF / DKIM / DMARC 到底在管什么？”\n\n副标题：\n“地基没打好，再好的文案也没人看”\n\n正文要点：\n1. 送达（delivery）只是“服务器收到了”，真正关键是投递能力（deliverability）：邮件能不能落在收件箱而不是垃圾箱。\n2. SPF：声明哪些服务器可以代表你的域名发信，好比“门牌号白名单”；DKIM：给邮件内容做数字签名，证明途中没被篡改；DMARC：规定 SPF / DKIM 要和 From 域对齐，并告知验证失败怎么处理。\n3. 谷歌、雅虎、微软等主流邮箱对大规模发件人都明确要求通过 SPF + DKIM + DMARC，对齐失败和缺失鉴权会明显增加被拒收与进垃圾箱概率。\n4. 冷邮件环境下，如果忽视鉴权，你看到的“送达 99%”很可能只是“99% 被系统悄悄丢进了黑洞和垃圾箱”。\n5. 正确做法：把鉴权当地基，先确保技术合规，再谈文案和序列优化。\n\n右侧信息图设计提示：\n- 画三层同心圆或三扇“门”：最外层标 SPF，中间 DKIM，最内 DMARC，每层都配一个小锁头图标。\n",
+      "filename": "image_20260209_230544_871486.png",
+      "created_at": "2026-02-09T23:05:44.873785",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "0c4d481b-f29c-4164-97b7-4991e8546d32"
+      }
+    },
+    {
+      "id": "6f14b0fb-961d-4587-ab8a-2ec80021611e",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 宽屏 PPT 截图，白底深蓝配色。\n- 左侧文字说明，右侧用箭头图示“Email ↔ LinkedIn ↔ Call”。\n\n【本页主题：冷邮件之外，如何联动其他渠道】\n\n标题文字：\n“冷邮件 + 其他渠道，怎么配？”\n\n副标题：\n“不要围追堵截，要同一对话多种语境”\n\n正文要点：\n1. 冷邮件 + LinkedIn：更推荐“先邮件→对方有打开 / 回复 / 访问迹象→再发好友申请”，并在邀请里提一句“怕邮件进垃圾箱”。\n2. 冷邮件 + 电话：适合高客单或已确认对方是关键决策人但长期不回邮件的情况，可在邮件里先埋一句“如方便也可以电话确认两个问题”。\n3. 冷邮件 + WhatsApp / 即时通讯：仅在对方市场确实常用且联系方式来源合理（名片、展会沟通、公开商务号）时使用，否则容易踩隐私红线。\n4. 多渠道本质不是“多平台骚扰”，而是把同一条业务对话放到不同语境下继续推进，频率与次数要明显低于垃圾式轰炸。\n5. 对高价值账号，可以在冷邮件序列结束后，给一次轻量的其它渠道触达，再决定继续还是完全停止。\n\n右侧信息图设计提示：\n- 一个三节点的环形流程：Email、LinkedIn、Call / IM，用箭头连接，中心写“Same conversation”。\n",
+      "filename": "image_20260209_230531_540198.png",
+      "created_at": "2026-02-09T23:05:31.543194",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c741b670-ee60-4a81-bd6b-40ba298bb3ff"
+      }
+    },
+    {
+      "id": "169905c2-99b7-460a-9b08-0598befe8a71",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 极简 PPT 截图，白底深蓝。\n- 左侧为每一封的角色说明，右侧为 5 步流程图。\n\n【本页主题：标准 5 封冷邮件序列的分工】\n\n标题文字：\n“5 封冷邮件，各自干什么？”\n\n副标题：\n“按价值角度分工，而不是按‘催促程度’分”\n\n正文要点：\n1. Email 1：相关性 + 核心价值 + 小 CTA，确认找对人并抛出一个清晰的业务结果承诺。\n2. Email 2：换角度讲风险 / 成本，例如旺季交期波动、返工与出运风险，用一两个真实场景放大痛点。\n3. Email 3：给资源，用 RFQ 清单 / 选型要点换取对方关注，而不是单纯再问“你看了吗？”。\n4. Email 4：资格确认，给出“继续 / 暂停”的二选一，让对方可以非常低成本地表达态度。\n5. Email 5：Break-up 收尾，承认目前时机不合适，给未来一个简单“重启”暗号（例如“回复 Q2 再联系”）。\n\n右侧信息图设计提示：\n- 画五个依次相连的卡片，从左到右分别标注：Intro / Risk / Resource / Qualify / Break-up。\n- 每个卡片下方用一行极短英文描述，例如“Core value & CTA”“Risk angle”“Checklist”“Yes/No choice”“Exit with hook”。\n",
+      "filename": "image_20260209_230529_498291.png",
+      "created_at": "2026-02-09T23:05:29.502296",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "1968d385-a5c9-4655-b8e6-ad443e1cde49"
+      }
+    },
+    {
+      "id": "6604ccae-947f-475e-b2e1-91e1856e2baa",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 PPT 截图风格，白底，深蓝 + 钴蓝配色。\n- 左侧文字解释，右侧为时间轴或日历式图示。\n\n【本页主题：冷邮件序列的长度与节奏】\n\n标题文字：\n“冷邮件序列，发几封算合适？”\n\n副标题：\n“有上限、有理由、有退路”\n\n正文要点：\n1. 序列有效的原因：多次触达提高熟悉度，每封换一个价值角度比反复“just bumping”更容易获得回应。\n2. 但研究也发现：第一封之后的首次跟进贡献最大增益，往后收益递减，同时投诉 / 退订风险明显上升。\n3. 推荐的“标准型”模型：5 封，在 14–21 天内完成，适合客单价中高、需要打样 / 认证 / 多轮确认的工业品、OEM/ODM。\n4. 推荐的“稳健型”模型：3 封，在 10–14 天内完成，适合更保守行业，或你对名单质量没那么有把握时，优先保住域名健康。\n5. 关键不是死记 3 封还是 5 封，而是：每封都有独立价值、节奏不压迫，最后要有 break-up 邮件体面收尾并停止打扰。\n\n右侧信息图设计提示：\n- 一条水平时间线，标出 E1~E5 节点，下面标注 Day 1 / Day 4 / Day 8 / Day 13 / Day 18 之类。\n- 另画一条较短时间线只到 E3，标成“Safe 3-step sequence”，用不同色块区分。\n",
+      "filename": "image_20260209_230523_871276.png",
+      "created_at": "2026-02-09T23:05:23.874302",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "a8661408-da49-4cf4-ac4f-57c1084fa8b6"
+      }
+    },
+    {
+      "id": "26690dd7-5bb9-4953-a333-bb0af33bbf1c",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 宽屏 PPT 截图，白底深蓝配色，世界地图 / 地球线性图标。\n- 左侧文字，右侧为四个“旋钮”图示。\n\n【本页主题：不同市场文化差异下，怎么调冷邮件风格】\n\n标题文字：\n“不同国家，要不要改写法？”\n\n副标题：\n“用四个‘旋钮’，而不是靠刻板印象”\n\n正文要点：\n1. 高语境 vs 低语境文化，会影响信息写在“字面”还是更多依赖关系与上下文，但不等于简单的“某国就只爱寒暄 / 只爱直接”。\n2. 与其背一堆刻板印象，不如把冷邮件当成四个可调的“旋钮”：直接度、信息密度、关系感、礼貌策略。\n3. 直接度：主题与 CTA 可以更直给或更委婉；信息密度：短硬要点或适当补一点背景。\n4. 关系感：更任务导向（直接谈事）或稍多一点建立信任的语气；礼貌策略：称呼、问候语的正式程度可以按市场微调。\n5. 最靠谱的做法是用小样本 A/B 测试这些“旋钮”的不同组合，而不是相信道听途说的“某国人就喜欢长篇寒暄”。\n\n右侧信息图设计提示：\n- 画出四个并排的旋钮控件，每个下面英文短标签：Directness / Density / Relationship / Politeness。\n- 每个旋钮有低到高刻度，高亮出“可测试”的感觉。\n",
+      "filename": "image_20260209_230451_061049.png",
+      "created_at": "2026-02-09T23:04:51.064089",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "261ecf4c-7a62-45f3-9aad-a5870516d0cf"
+      }
+    },
+    {
+      "id": "0fd177ff-5269-4926-83bd-95b352300b2a",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 宽屏 PPT 截图，白底深蓝配色。\n- 左侧文字拆结构，右侧用 6 步结构图（例如竖向流程或分栏）。\n\n【本页主题：一封高转化冷邮件的 6 个部件】\n\n标题文字：\n“高转化冷邮件的结构”\n\n副标题：\n“6 个关键部件：从主题到 CTA”\n\n正文要点：\n1. 核心 KPI：高转化冷邮件不是写得多花哨，而是结构正确、信息可信、对方“回得起”。\n2. 典型 6 部分结构：主题（Subject）→ 开场相关性 → 核心价值 → 社会证明 → 单一 CTA → 签名与联系方式。\n3. 好主题：具体、可判断，例如 “ISO 13485 parts: lead time 15 days?”，而不是“best price & high quality!!!”。\n4. 开场关键：用 1–2 句证明“不是群发”，提到对方具体产品 / 市场 / 行为信号，而不是背公司简介。\n5. CTA 只让对方做一件小事，例如“要不要发一页规格 + 价格区间？”而不是索要年采购量和全部细节。\n\n右侧信息图设计提示：\n- 画一个垂直流程图，6 个矩形自上而下，分别标注：Subject / Opening / Value / Social proof / CTA / Signature。\n- 每个矩形用不同深浅蓝色填充，线条简洁。\n",
+      "filename": "image_20260209_230422_494635.png",
+      "created_at": "2026-02-09T23:04:22.497652",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "d5d3a840-c7b9-4684-9c07-3f0c20e87625"
+      }
+    },
+    {
+      "id": "df4bb5c7-865a-4dc3-9913-bd775a2759ee",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 极简 PPT 截图风格，白底，深蓝 + 钴蓝配色。\n- 左侧为“好内容 vs 垃圾信”的要点对比，右侧用对比表或 A/B 卡片。\n\n【本页主题：内容策略——避免“垃圾开发信”】\n\n标题文字：\n“怎样写，才不像垃圾开发信？”\n\n副标题：\n“个性化、痛点、可验证，而不是堆形容词”\n\n正文要点：\n1. 垃圾信的本质不是英文差，而是“与对方无关 + 不可验证 + 要求过大”，阅读成本远大于潜在收益。\n2. 5–10 分钟基础调研：搞清楚对方卖什么、服务谁，他们的供应链信号（认证、招聘、扩产等），以及你能对齐的具体风险点。\n3. 个性化的底线：至少要出现 3 个细节——公司做什么、为什么找他、你能解决的一个具体风险，而不是“我们专业制造 20 年”。\n4. 高价值内容长相：围绕旺季交期、质量一致性、备份\n",
+      "filename": "image_20260209_230418_202538.png",
+      "created_at": "2026-02-09T23:04:18.205538",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "830e620c-b8fc-4956-9142-f14391cc7597"
+      }
+    },
+    {
+      "id": "d773e1b4-98d7-4cee-bb2a-c401a435f4fb",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 同样为 16:9 极简 B2B PPT 截图，白底深蓝配色。\n- 左侧为“红线清单”文字列表，右侧用警告 / 禁止类线性图标（例如叹号、stop 标志）。\n\n【本页主题：冷邮件的负面名单——谁千万别发】\n\n标题文字：\n“这些人，最好不要发冷邮件”\n\n副标题：\n“避免自毁域名信誉的高风险对象”\n\n正文要点：\n1. 明显不相关行业或用不到你产品的公司：只会让你的投诉率和“垃圾邮件”标签飙升。\n2. 竞争对手或高度敏感的同行：容易引发投诉、拉黑甚至法律风险。\n3. 大量通用邮箱（info@、sales@ 等）：要么没人看，要么被规则自动过滤，价值极低。\n4. 你自己也说不清“为什么要联系他”的联系人：没有清晰理由，就没有个性化内容，几乎必进垃圾箱。\n5. 无法提供退订 / 停止联系路径，却还打算高频触达的人：这在当下主流邮箱政策下，几乎等于“主动申请被封杀”。\n\n右侧信息图设计提示：\n- 一个竖直的“红色 Stop 清单”卡片，每一条旁边配线性图标（工厂叉号、人物叉号、邮箱叉号等）。\n",
+      "filename": "image_20260209_230416_865553.png",
+      "created_at": "2026-02-09T23:04:16.870357",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "729b18b1-3499-411d-9b84-38feda5bcc5b"
+      }
+    },
+    {
+      "id": "d8410698-8eaa-46f4-b0ae-7a098b6b6317",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 宽屏 PPT 截图风格，白底、深蓝配色、极简 B2B。\n- 左侧文字，右侧为表格 / 卡片示意图，图标为列表、数据库、放大镜。\n\n【本页主题：名单构建——质量优先于数量】\n\n标题文字：\n“冷邮件名单怎么搭？”\n\n副标题：\n“质量比‘十万邮箱’重要得多”\n\n正文要点：\n1. 核心原则：你需要的不是“十万邮箱”，而是“几百到上千个可证据化的合适联系人”，名单质量直接决定回复率与域名健康。\n2. 建议基础字段：公司名、官网域名、国家 / 时区、联系人姓名、职位、邮箱、产品线匹配点、触发信号（如扩产、新品、招聘、展会等）。\n3. 字段越完整，就越容易写出“看起来不像群发”的内容，这被大量数据证明能明显提高回复率。\n4. 获取渠道类型：官网团队页、新闻稿、证书页、展会名录、行业协会名录、公开社媒信息，以及邮箱发现 / 验证类工具。\n5. 三个底线：不买来路不明的列表；能验证就验证（减少退信）；尽量避免 info@ / sales@ 这类无主邮箱，优先找到具体负责人。\n\n右侧信息图设计提示：\n- 用一个简化的“表格卡片”视图，列头用英文短词：Company / Website / Country / Name / Title / Email / Signal。\n- 表格只是示意，不展示真实数据，线框简洁。\n",
+      "filename": "image_20260209_230404_419848.png",
+      "created_at": "2026-02-09T23:04:04.422884",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "cdfff502-3131-4631-8d20-272a562d7d83"
+      }
+    },
+    {
+      "id": "8ce356b0-70d1-4e0a-9227-9c561ae47981",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束（与前两页完全相同）】\n- 16:9 宽屏 PPT 截图风格，极简 B2B 企业设计。\n- 白底，大量留白；主色深蓝 + 钴蓝，辅色浅灰，细线图标。\n- 左文右图布局，中英无衬线字体，图示为时间线或多步流程。\n\n【本页主题：什么是冷邮件序列（cold email sequence / drip），为什么要多封】\n\n标题文字：\n“什么是冷邮件序列？”\n\n副标题：\n“从‘没人认识你’到‘愿意回复你’”\n\n正文要点：\n1. 一句话定义：冷邮件序列是围绕同一目标客户，在一个合理时间窗口内按节奏发多封“角度不同但人设一致”的邮件。\n2. 典型序列示例：第 1 封讲你能解决什么问题，第 2 封讲同类客户怎么做，第 3 封给选型清单，第 4 封确认是否继续联系，第 5 封礼貌收尾。\n3. 数据上，多次触达能显著提升响应率：对同一联系人进行合理次数的跟进，整体回应往往可接近或超过单封的 2 倍。\n4. 但“多≠好”：超过一定次数会出现严重边际递减，还会抬高投诉 / 退订风险，所以要设置上限和体面收尾。\n5. 冷邮件序列的本质：每一封都用一个新的价值点，把对方从“完全陌生”一点点推进到“至少愿意回一句话”。\n\n右侧信息图设计提示：\n- 一条水平时间线，从左到右标注 E1~E5，分别简短英文标注：“Intro value / Risk & cost / Checklist / Close the loop / Break-up”。\n- 时间线节点用圆点和小图标（信封、文档、清单、问号、握手），颜色统一。\n",
+      "filename": "image_20260209_230359_914283.png",
+      "created_at": "2026-02-09T23:03:59.917189",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "57d8bda8-31f2-469c-aed8-373081fd720c"
+      }
+    },
+    {
+      "id": "6dd98675-036a-4e23-9ee3-56a9c9ee503b",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束】\n- 16:9 宽屏 PPT 截图风格，极简 B2B。\n- 白色背景，深海军蓝 + 钴蓝主色，线性人物 /工厂 / 齿轮图标。\n- 左侧标题和说明文字，右侧为“公司 → 岗位 → 决策链”结构图。\n\n【本页主题：目标客户与决策人——从公司到具体收件人】\n\n标题文字：\n“要给谁发冷邮件？”\n\n副标题：\n“ICP 与决策链：从公司下钻到具体人”\n\n正文要点：\n1. 一句话定义：理想客户画像（ICP）是“最可能买你、买得起你、买得久你、且成交阻力最小”的那一类公司集合。\n2. 决策链常见结构：使用 / 技术 → 采购 / 供应链 → 财务 / 老板 / 合伙人，不同产品对应不同第一入口。\n3. 标准件、价格透明、替代多：优先找采购 / 供应链（direct procurement / sourcing）作为起点。\n4. 非标件、需要图纸与验证：优先找工程 / 技术负责人，采购更多负责流程与落地。\n5. 渠道类（分销 / 代理）：老板、合伙人、销售总监往往是关键角色；多角色并行合理，但同一公司触达人数要控制。\n\n右侧信息图设计提示：\n- 从左到右画一个简化“金字塔”或“三级盒子”：底层“使用 / 技术”，中层“采购 / 供应链”，顶层“老板 / 财务”。\n- 在侧边用小号英文标注：“Users & Engineering / Procurement / Executives”。\n",
+      "filename": "image_20260209_230353_295629.png",
+      "created_at": "2026-02-09T23:03:53.298638",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "0341839e-8450-4f33-bc5b-52a1ed6d539c"
+      }
+    },
+    {
+      "id": "22360070-0357-440a-80af-b3f6107bb964",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束（与第 1 页完全相同）】\n- 画面类型：16:9 宽屏 PowerPoint 截图风格，极简 B2B 企业设计，白色背景。\n- 主色：深海军蓝 #0B1F3B + 钴蓝 #2563EB，辅色浅灰 #E5E7EB，少量绿色强调 #059669。\n- 布局：左侧标题 + 要点，右侧为漏斗 / 数据示意图，所有元素对齐整齐。\n- 字体：中文 Noto Sans SC 风格无衬线，英文 Inter 风格无衬线。\n- 图标：线性图标，扁平化，无阴影、无渐变背景。\n\n【本页主题：为什么要发冷邮件 & 正确预期是什么】\n\n标题文字：\n“为什么要发冷邮件？”\n\n副标题：\n“别幻想一封邮件立刻爆单”\n\n正文要点（4–5 条中文）：\n1. 冷邮件是“获客漏斗的最上游”，真正目标不是立刻成交，而是“拿到高质量回复 → 建立对话 → 推进样品 / 报价 / 会议”。\n2. 主流外联研究显示：大样本冷邮件平均回复率通常在 5%–10% 左右，环境变难后还在下降，单封“神邮件”神话基本不存在。\n3. 冷邮件的优势在于可规模化：可以不断迭代主题、话术、受众，测试什么样的 ICP、角度、CTA 更容易得到回复。\n4. 它让你从“等询盘”变成主动搭建“找谁—说什么—说几次”的实验系统，而不是把希望压在展会运气或平台排名上。\n5. 正确预期：冷邮件是长期工程，是优化“每 100 封里多 1–2 个优质对话”，而不是幻想一封群发全世界都来下单。\n\n右侧信息图设计提示：\n- 一个简化“获客漏斗图”：顶部标注“冷邮件触达”，中间“回复 / 对话”，底部“样品 / 报价 / 成交”，每一层人数逐步减少。\n- 在漏斗旁用小号英文标注：“Top of funnel / Replies / Opportunities / Deals”。\n",
+      "filename": "image_20260209_230343_595967.png",
+      "created_at": "2026-02-09T23:03:43.598967",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "2c4808b2-b60f-49f6-91d3-1afb1366eea6"
+      }
+    },
+    {
+      "id": "82b7aaf6-fd8d-468e-aa65-d96c98fc5865",
+      "type": "image",
+      "prompt": "【PPT 生图统一风格约束（本组所有页面均一致）】\n- 画面类型：高分辨率 16:9 宽屏 PowerPoint 幻灯片截图风格，横版。\n- 设计风格：极简、现代、B2B 企业感，偏理性、干净、略有科技感，不花哨、不卡通。\n- 背景：纯白或极浅灰背景，大量留白。\n- 主色：深海军蓝 (#0B1F3B) 和钴蓝 (#2563EB)，辅色浅灰 (#E5E7EB)，少量墨绿色 (#059669) 作为强调色。\n- 布局：左侧上方大标题，左侧下方 3–5 条中文要点；右侧为简单信息图（如漏斗 / 拼图 / 对比表），整体严格对齐到网格。\n- 字体：中文为干净无衬线体（类似 Noto Sans SC），英文为无衬线体（类似 Inter）；中英混排，字号层级清晰（标题最大，要点次之，注释最小）。\n- 图标：细线条扁平图标（信封、地球、人物轮廓、漏斗、时间线等），无手绘、无 3D、无渐变背景。\n- 整体氛围：专业、可信、克制，适合外贸老板 / B2B 销售团队看培训课件。\n\n【本页主题：什么是 B2B 冷邮件，在外贸获客里的定位】\n\n标题文字（置于左上，中文）：\n“什么是 B2B 冷邮件？”\n\n副标题（小一号，放在标题下方）：\n“在外贸获客里的定位与作用”\n\n正文要点（左侧 4 条中文简明要点，用项目符号呈现）：\n1. 一句话定义：你和对方此前没有业务往来、对方也没主动订阅，你主动发到其工作邮箱、以开拓商机为目的的一对一 / 一对少邮件。\n2. 典型例子：例如做不锈钢阀门出口，给化工设备集成商的采购负责人发邮件，确认是否在看新供应商、索要规格表与认证要求。\n3. 冷邮件不是替代一切，而是补上“可控触达 + 可规模化试错 + 可持续跟进”的那一块，和展会、B2B 平台、社媒、老客户转介绍相互补充。\n4. 它最大的价值：可以把“找谁、说什么、什么时候说、说几次”做成一个可迭代的系统，而不是靠运气碰客户。\n\n右侧信息图设计提示：\n- 用一个简洁的“获客拼图”图示：四块拼图分别标注“展会 / 拜访”“B2B 平台线索”“社媒 / LinkedIn”“冷邮件”，冷邮件那块高亮。\n- 每块拼图下面用极短英文标签：“Trade shows”“Platforms”“Social”“Cold email”。\n- 线条简洁、色块单色填充，符合统一配色。\n",
+      "filename": "image_20260209_230338_680986.png",
+      "created_at": "2026-02-09T23:03:38.686680",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "d510f63a-4451-41e5-b011-2ddfcdeeb440"
+      }
+    },
+    {
+      "id": "f14e5fe0-db91-4ecb-bd9e-5f66cd195e7f",
+      "type": "image",
+      "prompt": "一个中国美女，腿部向上拍呈仰视，用近大远小构图；人物慵懒靠扶手、翘二郎腿，穿黑丝+红底高跟鞋；一手撑脸，表情嫌弃，头微倾看镜头",
+      "filename": "image_20260209_132209_908520.png",
+      "created_at": "2026-02-09T13:22:09.912520",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c4fccedc-12a7-4866-a40a-8624a9d34fb1"
+      }
+    },
+    {
+      "id": "6d634c05-e742-49b9-8fe3-81e9640a4e8c",
+      "type": "image",
+      "prompt": "图中文字改为中文",
+      "filename": "image_20260209_123222_420816.png",
+      "created_at": "2026-02-09T12:32:22.423780",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "00c8f2fa-50da-4452-b83d-0499ad6e3299"
+      }
+    },
+    {
+      "id": "0357a4d3-1b37-4a8e-99da-91bf1b50ef95",
+      "type": "image",
+      "prompt": "画一幅画，体现不吃肉的人就宛如建筑缺乏非常重要的地基，软弱无力。搞笑嘲讽素食主义者",
+      "filename": "image_20260209_122920_478899.png",
+      "created_at": "2026-02-09T12:29:20.480897",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "27cc4ec1-0f95-41b7-89f8-a163cce0f736"
+      }
+    },
+    {
+      "id": "ce3928a2-1c85-4ef6-9747-41d00e198a00",
+      "type": "image",
+      "prompt": "画一幅画，体现不吃肉的人就宛如建筑缺乏非常重要的地基，软弱无力",
+      "filename": "image_20260209_122818_849657.png",
+      "created_at": "2026-02-09T12:28:18.852621",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "50dddc2a-bdce-40ad-9f7d-5c51c5954504"
+      }
+    },
+    {
+      "id": "74c36e4a-04e4-45fd-9a72-82995f31a20b",
+      "type": "image",
+      "prompt": "black matte metal laser cut wall art, abstract geometric flock of birds, each bird made of minimal polygons, arranged in a flowing spiral composition, large negative space, modern minimalist home decor, wall-mounted, crisp edge detail, soft side lighting casting subtle shadows, studio product photography,\n",
+      "filename": "image_20260209_113925_639789.png",
+      "created_at": "2026-02-09T11:39:25.641753",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "928163d3-35f6-4cc3-9aab-e074bc9b2951"
+      }
+    },
+    {
+      "id": "87287828-7f22-474e-95d3-498fbca6f7f3",
+      "type": "image",
+      "prompt": "黑色金属激光切割墙面装饰，工业机械主题：三个不同尺寸齿轮咬合，旁边是简化的扳手与螺母轮廓，背景局部用蜂窝网格镂空，整体力量感强，金属哑光，浅灰水泥墙，摄影棚光，阴影锐利",
+      "filename": "image_20260209_113914_663477.png",
+      "created_at": "2026-02-09T11:39:14.666456",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "4fc5a16e-3336-44ba-8f63-be645540b0af"
+      }
+    },
+    {
+      "id": "bd127dc9-af21-4fdc-bcf1-84cd8cf92fa1",
+      "type": "image",
+      "prompt": "黑色哑光金属激光切割墙面装饰，顶视等高线地形图纹理作为背景镂空，中央是极简指南针玫瑰图案，底部一条山脊线剪影（帐篷、松树、攀登者小剪影），构图对称，现代户外风，白墙投影清晰，产品摄影",
+      "filename": "image_20260209_113911_075709.png",
+      "created_at": "2026-02-09T11:39:11.077743",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "47d9b613-06af-4784-bc14-60b323459981"
+      }
+    },
+    {
+      "id": "7e64ad7e-c073-48c7-abc7-93e6d3b3f248",
+      "type": "image",
+      "prompt": "黑色金属激光切割家族徽章墙饰，圆形外圈橄榄枝或花环，中心大号字母 “G”，下方横幅刻字 “EST. 2026”，整体美式农舍风，边缘圆润无毛刺，白墙安装，暖光侧打，真实阴影，高清产品摄影",
+      "filename": "image_20260209_113907_201511.png",
+      "created_at": "2026-02-09T11:39:07.204496",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "0378634e-cef8-423b-ae0c-5a9250a9943f"
+      }
+    },
+    {
+      "id": "dc5e1480-9d79-4c9c-a3f9-c8a36a6a2db8",
+      "type": "image",
+      "prompt": "黑色金属激光切割墙饰，赛博朋克城市剪影，建筑轮廓简化但具有霓虹牌匾形状（无文字），背景用电路板线路纹理做填充，局部镂空形成层次，整体未来感但可量产，哑光金属质感，暗灰背景墙，侧光投影，高清产品摄影",
+      "filename": "image_20260209_113858_072889.png",
+      "created_at": "2026-02-09T11:38:58.074886",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "b81c50a1-8124-4381-bfcc-3edf6da8e8d1"
+      }
+    },
+    {
+      "id": "da4331aa-7c7c-43d2-9e21-6eea25409af1",
+      "type": "image",
+      "prompt": "black matte metal laser cut wall decor, silhouette landscape: Mount Fuji with snow cap, torii gate in foreground, layered flowing clouds, small pine tree, minimalist Japanese style, balanced negative space, wall-mounted, clean shadow, studio product photo, high detail edges",
+      "filename": "image_20260209_113855_024590.png",
+      "created_at": "2026-02-09T11:38:55.027550",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "48868245-c909-4843-8d50-1b8c88be34f7"
+      }
+    },
+    {
+      "id": "25dfad8d-5870-414a-8559-a0a87258a5ec",
+      "type": "image",
+      "prompt": "黑色哑光金属激光切割墙面装饰，横向城市天际线剪影（高楼、塔、桥），上方一排月相从新月到满月，线条极简几何风，整体留白高级，墙面投影清晰，产品摄影，4K细节",
+      "filename": "image_20260209_113853_569165.png",
+      "created_at": "2026-02-09T11:38:53.575016",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c7031e6e-7f99-401e-9a29-e760fb4ebe94"
+      }
+    },
+    {
+      "id": "d152ccbc-c41b-4193-b480-e5f29d212012",
+      "type": "image",
+      "prompt": "黑色金属激光切割钥匙挂架，五只不同姿态的猫剪影排成一排：伸懒腰、坐立、尾巴卷曲、趴着、回头，底部猫尾或爪子自然延伸形成 6 个挂钩，设计可爱但线条干净，现代极简风，白墙，柔光，真实阴影",
+      "filename": "image_20260209_113850_549910.png",
+      "created_at": "2026-02-09T11:38:50.553919",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "ae31478b-b1dd-47b9-ac37-5d4248a118ac"
+      }
+    },
+    {
+      "id": "4d1d394d-0584-4d4b-b07b-6810150daddc",
+      "type": "image",
+      "prompt": "黑色金属激光切割墙饰，爵士乐队剪影：立式贝斯手、三角钢琴演奏者、鼓手与爵士帽，乐器细节清晰，地面阴影与站姿自然，构图横向长条适合挂墙，极简背景，摄影棚布光，金属哑光质感强",
+      "filename": "image_20260209_113847_127488.png",
+      "created_at": "2026-02-09T11:38:47.129486",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "6145161b-f0e4-4d64-82be-03320c4e8702"
+      }
+    },
+    {
+      "id": "e001e495-0cdf-4122-9798-d8ecf7a22e07",
+      "type": "image",
+      "prompt": "黑色哑光金属激光切割墙面钥匙挂架，剪影场景：高耸灯塔、海浪分层线条、三只海鸥飞过、右侧松树与岩石海岸，底部一体化 5 个挂钩，整体轮廓干净利落，圆角安全边缘，墙面安装孔位自然融入设计，白色墙面，柔光侧打，真实投影阴影，高清产品摄影",
+      "filename": "image_20260209_113843_071261.png",
+      "created_at": "2026-02-09T11:38:43.073233",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "c450674a-1086-45df-bc28-f0a62f239a04"
+      }
+    },
+    {
+      "id": "2bda5dfe-a1be-4da5-904c-464f31797f84",
+      "type": "image",
+      "prompt": "中国新年氛围浓烈，主色调正红与中国红渐变背景，局部烫金工艺与金色描边边框，宣纸纹理或丝绸纹理底，点缀金色祥云、灯笼、烟花、梅花、金粉飞散效果，加入“马年”主题元素：金色线描骏马剪影或剪纸马纹、马头纹样、马蹄印暗纹（低对比不抢字），整体喜庆红艳艳但不俗气。\n顶部居中大标题使用端庄书法或宋体风格，烫金质感：\n「年夜饭菜谱清单」\n标题下方小字副标题：\n「马年 · 团圆家宴」\n中间为菜单清单，全部中文，文字必须清晰可读、排版整齐对齐、层级分明、留白舒服，采用现代宋体/黑体混排（如思源宋体/思源黑体风格），每行前有小金色圆点或小图标（小福结/小铜钱符号），行距适中。\n底部加入小祝福语（小号字，烫金）：\n「新春大吉 · 阖家安康」\n画面高清、印刷质感、无杂乱元素、无英文、无水印、无logo。\n\n菜单文字内容如下（按这个原样排版）：\n卤味拼盘（小肠 / 大肠 / 牛腱子 / 鸡爪 / 鸡翅中）\n肘子肉\n炸排骨\n麻辣红烧牛排\n虾\n螃蟹\n葱烧海参\n清蒸鱼\n鸡汤\n炒冬笋\n清炒时蔬（菜心/芥蓝/小白菜）",
+      "filename": "image_20260209_003948_443315.png",
+      "created_at": "2026-02-09T00:39:48.446944",
+      "params": {
+        "aspect_ratio": "5:4",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "d7b34d8a-ee79-4ac1-8bfd-109976614234"
+      }
+    },
+    {
+      "id": "4fcf6ecf-d582-47d9-a53e-6cde4940f861",
+      "type": "image",
+      "prompt": "新年春节主题竖版菜单海报，马年元素（优雅的剪纸骏马轮廓或金箔线稿马，带少量祥云与灯笼点缀），整体风格简约明亮、高级留白、现代中式设计，主色中国红 + 米白底 + 少量金色烫金质感，高对比但不刺眼；版式为中轴对齐的中文排版，标题大字烫金，副标题小字，正文为分组菜谱清单，字形清晰可读、笔画不糊，排版工整有呼吸感；背景有极淡的宣纸纹理与隐约烟花颗粒；高分辨率印刷质感，细节精致，干净不杂乱。\n文字内容（保持原样排版，分组分隔线精致）：\n《年夜饭菜谱》\n卤味拼盘（小肠、大肠、牛腱子、鸡爪、鸡翅中）\n肘子肉\n炸排骨\n麻辣红烧牛排\n虾\n螃蟹\n葱烧海参\n清蒸鱼\n鸡汤\n炒冬笋\n清炒时蔬（菜心/芥蓝/小白菜）\n添加小印章风格落款：福 / 马到成功（任选其一），整体视觉高级、喜庆、克制",
+      "filename": "image_20260209_003439_684130.png",
+      "created_at": "2026-02-09T00:34:39.687086",
+      "params": {
+        "aspect_ratio": "9:16",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "db111065-592e-4bf5-a3d9-6b2f5cf7e1c2"
+      }
+    },
+    {
+      "id": "8b58fa33-f5bd-4854-bcb3-d1728a674c7a",
+      "type": "image",
+      "prompt": "新年春节主题竖版菜单海报，马年元素（优雅的剪纸骏马轮廓或金箔线稿马，带少量祥云与灯笼点缀），整体风格简约明亮、高级留白、现代中式设计，主色中国红 + 米白底 + 少量金色烫金质感，高对比但不刺眼；版式为中轴对齐的中文排版，标题大字烫金，副标题小字，正文为分组菜谱清单，字形清晰可读、笔画不糊，排版工整有呼吸感；背景有极淡的宣纸纹理与隐约烟花颗粒；高分辨率印刷质感，细节精致，干净不杂乱。\n文字内容（保持原样排版，分组分隔线精致）：\n《年夜饭菜谱清单》\n卤味拼盘（小肠、大肠、牛腱子、鸡爪、鸡翅中）\n肘子肉\n炸排骨\n麻辣红烧牛排\n虾\n螃蟹\n葱烧海参\n清蒸鱼\n鸡汤\n炒冬笋\n清炒时蔬（菜心/芥蓝/小白菜）\n添加小印章风格落款：福 / 马到成功（任选其一），整体视觉高级、喜庆、克制",
+      "filename": "image_20260209_003219_333608.png",
+      "created_at": "2026-02-09T00:32:19.335610",
+      "params": {
+        "aspect_ratio": "9:16",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "cc13f5cb-0ff2-42e7-bc00-8e4f5be56b3e"
+      }
+    },
+    {
+      "id": "547126b1-6d16-4b7c-a4a5-1a5446409dbb",
+      "type": "image",
+      "prompt": "新年年夜饭菜谱清单海报，2026马年主题，简约明亮风格，大面积暖白或淡米色底，红金点缀，烫金质感的剪纸骏马作为主视觉（侧面奔跑姿态），祥云纹、灯笼、小福字印章、细金边框，整体高级不花哨。海报中间使用清晰可读的中文排版（像正式菜单印刷品），标题为「年夜饭菜谱清单」，下面分组列出菜名，使用整齐的对齐与行距，字体为现代中文无衬线（类似 Noto Sans SC），文字为深灰或墨黑。菜谱内容必须包含并严格按行显示：\n「卤味拼盘（小肠/大肠/牛腱子/鸡爪/鸡翅中）」\n「肘子肉」\n「炸排骨」\n「麻辣红烧牛排」\n「虾」\n「螃蟹」\n「葱烧海参」\n「清蒸鱼」\n「鸡汤」\n「炒冬笋」\n「清炒时蔬」\n画面干净，留足呼吸感，质感高级，高清，印刷海报风",
+      "filename": "image_20260209_002917_201317.png",
+      "created_at": "2026-02-09T00:29:17.203316",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "b1277e01-ca2f-4669-95c7-ec2f86c8d8ec"
+      }
+    },
+    {
+      "id": "37451145-453a-4ded-887e-577c04b45288",
+      "type": "image",
+      "prompt": "设计一张简约明亮的中文年夜饭菜单海报，白色背景，干净留白，现代排版，清晰网格对齐，柔和浅灰分割线，少量红色点缀（新年氛围但不过度），高质感纸张印刷风，扁平化小图标（卤味、猪肉、牛肉、海鲜、鱼、汤、蔬菜），A4 竖版，高清。\n标题文字：年夜饭菜谱清单\n分组与条目（必须出现且按顺序排版）：\n冷菜 / 卤味：卤味拼盘（小肠 / 大肠 / 牛腱子 / 鸡爪 / 鸡翅中）\n猪肉类：肘子肉；炸排骨\n牛肉类：麻辣红烧牛排\n海鲜类：虾；螃蟹；葱烧海参\n鱼：清蒸鱼\n汤：鸡汤\n素菜：炒冬笋；清炒时蔬（菜心/芥蓝/小白菜）\n字体风格接近无衬线中文字体，清爽、易读、层级分明：标题加粗，分组小标题略大，条目用圆点列表。整体高级、克制、明亮。",
+      "filename": "image_20260209_002611_583135.png",
+      "created_at": "2026-02-09T00:26:11.586425",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "0c2ca274-6cf3-4b3f-8467-852100d57f7a"
+      }
+    },
+    {
+      "id": "f44f5755-034d-4d86-afb0-022839867cad",
+      "type": "image",
+      "prompt": "让这个人和习近平合影，全身照",
+      "filename": "image_20260203_173319_894298.png",
+      "created_at": "2026-02-03T17:33:19.899265",
+      "params": {
+        "aspect_ratio": "9:16",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "3a00e408-de73-4317-bfe6-d996ebff2f5c"
+      }
+    },
+    {
+      "id": "d07a942a-58b7-4ca0-9071-f477e3c91461",
+      "type": "image",
+      "prompt": "让这个人和习近平合影，全身照",
+      "filename": "image_20260203_173208_098733.png",
+      "created_at": "2026-02-03T17:32:08.100732",
+      "params": {
+        "aspect_ratio": "9:16",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "4a3cd46a-b4dd-49d4-b90f-9243c5d45863"
+      }
+    },
+    {
+      "id": "bd46f1c2-5cc0-4481-984f-33258e24f925",
+      "type": "image",
+      "prompt": "让这个人和习近平合影",
+      "filename": "image_20260203_172653_991037.png",
+      "created_at": "2026-02-03T17:26:53.993037",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "6b2c9517-3a99-488d-b41b-6707e723abc9"
+      }
+    },
+    {
+      "id": "6cb997f5-a5f6-41cd-a247-3c00cb88fed6",
+      "type": "video",
+      "prompt": "EP5《收汁：一口解决一切》\n\n场景：肉在小火里咕嘟咕嘟，像城市的远处在呼吸。\n剧情：\n\n猫猫蹲在锅边守着，表情像守灵也像守梦。\n\n收汁那一刻，油光浮起，肉块被光包住，像终于得到承认。\n\n猫猫夹一块尝，先烫到眯眼，再缓慢点头：\n“活着的意义可能很复杂，但这一口很清楚。”\n终镜头：猫猫把红烧肉端上桌，窗外车流如常。世界没有变好，但猫猫赢了一局。",
+      "filename": "video_extended_20260202_011935_076747.mp4",
+      "created_at": "2026-02-02T01:19:35.084231",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "c3d3c70e-8010-48ee-b938-a688777f1a2a"
+      }
+    },
+    {
+      "id": "5ce16cae-dbea-462e-8a40-ba3b5f41135a",
+      "type": "video",
+      "prompt": "EP4《起锅：糖色是命运》\n\n场景：厨房灯亮起，像舞台开演。\n剧情（节奏感强）：\n\n猫猫把锅烧热，油下去，锅里先是沉默，然后开始发出细碎的“现实音效”。\n\n冰糖下锅，融化成琥珀，颜色从浅到深，像人生从天真到懂事。\n\n五花肉入锅，滋啦一声，全世界瞬间变得具体。\n\n葱姜蒜入场，负责把“苦涩”翻译成“香”。\n抽象桥段：猫猫盯着糖色的变化，像盯着一条不可逆的时间线。火大了会糊，火小了没灵魂。\n\n结尾：猫猫把酱油倒下去，锅里颜色骤然加深，像夜幕突然落下。",
+      "filename": "video_extended_20260202_011818_257303.mp4",
+      "created_at": "2026-02-02T01:18:18.261332",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "4271fa4d-0723-4c44-93bd-e13ccea0196d"
+      }
+    },
+    {
+      "id": "1896a066-1b31-421e-afcf-4c8253efd5cf",
+      "type": "video",
+      "prompt": "场景：回家路上变成“审判庭”，调料在袋子里开会。\n剧情：\n\n老抽站在阴影里说：“没有我，你的红烧肉就没有历史感。”\n\n生抽在光里说：“没有我，你的红烧肉就没有诚实的咸味。”\n\n冰糖冷笑：“你以为甜是温柔？甜是控制。”\n\n料酒像逃兵：“我只是来洗掉尴尬。”\n猫猫一边走一边听，像在接受社会对“正确红烧肉”的道德评判。\n结尾：猫猫路过一家便利店，看见现成便当，停顿两秒，毅然走开。英雄往往只是拒绝偷懒。",
+      "filename": "video_extended_20260202_011635_165808.mp4",
+      "created_at": "2026-02-02T01:16:35.169798",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "3a4eb51e-4b23-4778-8861-742c3296fbf2"
+      }
+    },
+    {
+      "id": "c688afb7-84a1-45cd-8eed-4f24fece227e",
+      "type": "video",
+      "prompt": "场景：菜市场像宗教仪式现场，摊贩喊价像诵经。\n剧情：\n\n猫猫走到肉摊前，肉摊老板像神谕：“要肥瘦相间，才扛得住人生。”\n\n猫猫挑肉的过程像选盟友：摸一摸，按一按，沉默对峙。\n\n旁边的葱姜蒜开始吵：\n\n葱：“我负责香气，别人记不住你但记得我。”\n\n姜：“我负责去腥，也负责让你流泪。”\n\n蒜：“我负责最后的狠劲。”\n结尾：猫猫拎起五花肉，塑料袋勒进爪子里，像拎着一段沉甸甸的现实。",
+      "filename": "video_extended_20260202_011457_830731.mp4",
+      "created_at": "2026-02-02T01:14:57.833792",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "c2b64712-5c43-42ea-a0b0-44f33391c253"
+      }
+    },
+    {
+      "id": "98430a1f-bf6f-4981-858d-a745e7d41699",
+      "type": "video",
+      "prompt": "开场画面：猫猫把门把手按下去那一刻，走廊像无限延伸的副本入口。\n剧情：\n\n猫猫对镜子整理胡须，像在穿盔甲。\n\n叮嘱自己三次：“就买五花肉，别被别的东西诱惑。”\n\n电梯里贴着“今日特价”，猫猫读完，眼神变得复杂，像看见了命运的价签。\n结尾：门一开，风吹来一股“生活要开始为难你了”的味道。",
+      "filename": "video_20260202_011325_056879.mp4",
+      "created_at": "2026-02-02T01:13:25.058899",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "9:16",
+        "resolution": "720p",
+        "job_id": "27d89dcd-914a-438e-b3f9-ba72caea8dae"
+      }
+    },
+    {
+      "id": "cab59d95-c192-4ef8-9df5-e445475c8efe",
+      "type": "video",
+      "prompt": "EP2《回帖管网的月光》\n\n形式：黑白默片 + 弹幕式字幕\n主线：鼠鼠在下水道发帖求助：“鼠鼠我啊，真的顶不住了”，却被“理中客”点赞教育。\n关键段落：\n\n鼠鼠用碎纸拼出“简历”，投进漂流瓶一样的邮箱。\n\n每个“已读”都是一声水滴。\n结尾意象：鼠鼠抬头看井盖缝隙，光像“offer”一样窄。",
+      "filename": "video_extended_20260202_010457_601009.mp4",
+      "created_at": "2026-02-02T01:04:57.604009",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "14d6930a-3a92-40ab-9b94-b216334171ce"
+      }
+    },
+    {
+      "id": "20f8225e-a02b-42da-9ff0-0c818d971187",
+      "type": "video",
+      "prompt": "EP1《工位草原的日出》\n\n形式：伪纪录片 + 广角静止镜头\n主线：新来的牛马被套上“成长型思维”缰绳，学会在晨会里点头。\n关键段落：\n\n旁白讲“自由”，镜头扫过整齐工位像马厩。\n\n牛马的第一句台词不是“你好”，是“我能不能把午休换成加班抵扣”。\n结尾意象：牛马低头喝“热爱工作”的饲料，杯底写着“你也配躺平？”",
+      "filename": "video_20260202_010316_753928.mp4",
+      "created_at": "2026-02-02T01:03:16.755932",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "9:16",
+        "resolution": "720p",
+        "job_id": "7b0f1ca0-b3dd-4ae3-bb43-3847078920a5"
+      }
+    },
+    {
+      "id": "1a161e49-dcf4-46cb-bb67-1bb3a833b89e",
+      "type": "video",
+      "prompt": "EP1《工位草原的日出》\n\n形式：伪纪录片 + 广角静止镜头\n主线：新来的牛马被套上“成长型思维”缰绳，学会在晨会里点头。\n关键段落：\n\n旁白讲“自由”，镜头扫过整齐工位像马厩。\n\n牛马的第一句台词不是“你好”，是“我能不能把午休换成加班抵扣”。\n结尾意象：牛马低头喝“热爱工作”的饲料，杯底写着“你也配躺平？”",
+      "filename": "video_20260202_004234_027601.mp4",
+      "created_at": "2026-02-02T00:42:34.029598",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "9:16",
+        "resolution": "720p",
+        "job_id": "2fed192d-221e-4466-8b40-b1ccd7356a2a"
+      }
+    },
+    {
+      "id": "9ebef67c-9c2c-4e49-8876-475789d20519",
+      "type": "video",
+      "prompt": "【第一幕：下水道的王】\n(场景：凌晨4点。一间暗无天日的出租屋。屏幕的蓝光照亮了主角油腻的脸。地上全是外卖盒和不明液体。)\n\n(BGM：极度悲伤的二胡独奏，突然混入土味DJ)\n\n主角（鼠鼠形态，内心独白，混响）： 唉，鼠鼠我啊，今天又是在互联网垃圾堆里游泳的一天。看着朋友圈里的现充们在夏威夷晒太阳，我只能在被窝里晒我发霉的灵魂。呜呜呜，破防了，毁灭吧赶紧的。\n\n(突然，屏幕上弹出一个巨大的红色警告框：【检测到宿主废物浓度过高，强制进行“牛马改造计划”！】)\n\n主角： ？？？什么鬼？依托答辩！我不要！让我烂在床……\n\n(一阵马桶冲水的声音，主角被吸入屏幕。)",
+      "filename": "video_20260202_001730_578328.mp4",
+      "created_at": "2026-02-02T00:17:30.583322",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "9:16",
+        "resolution": "720p",
+        "job_id": "4d2338cf-893d-42ba-bb1b-c7f39fbbf5dc"
+      }
+    },
+    {
+      "id": "6eeeafdd-086d-46fb-ba83-2eaef6c7604e",
+      "type": "video",
+      "prompt": "【第7集】8秒电影级续集 Prompt：蓝雾星球降落，发现“会发光的猫城”\n\n生成一段8秒电影级高质感写实硬科幻视频，承接上一集结尾：同一只橘白小猫、同一套复古太空服（透明头盔、缝线磨损、胸口贴纸“MEOW-1”一致），手握晶体钥匙，控制室投影指向“被蓝色薄雾包裹的星球”，从上一镜切白后继续。整体风格：写实硬科幻 + 童话遗迹，HDR、体积光、真实反射、微尘漂浮、自然景深、电影调色（冷蓝雾气主调，点缀暖金文明灯光）。主体外观稳定，绝不换猫、绝不换太空服。\n\n【节奏要求】8秒内完成4段连贯蒙太奇，每段约2秒；转场用“匹配运动 + 镜头甩动/云雾擦拭”，保证连贯不跳帧。\n\n0-2s（穿雾入轨）\n从切白回落到蓝雾星球近轨道：猫漂浮在一艘小型“胶囊式”舱外平台旁（不需要完整飞船细节，但要写实金属质感），手里晶体钥匙发出淡金光，照亮头盔边缘；星球表面被厚蓝雾覆盖，云层中偶尔闪过微弱闪电。镜头：从猫手里的钥匙特写拉到星球全景，尺度强烈。\n\n2-4s（云层俯冲）\n镜头甩动转场进入云层：视野被蓝雾吞没，水汽与冰晶颗粒高速掠过，体积光形成光柱；猫在微重力中被“下降气流”推着下落，太空服推进器短促点火稳定姿态。雾中隐约出现几何灯光线条，像城市轮廓在云里闪现。镜头：跟拍下落，主体清晰，背景动感模糊。\n\n4-6s（雾开见城）\n匹配运动转到云层破开瞬间：一座“会发光的猫城”出现在下方，建筑融合晶体与黑金属，整体形态大量采用“猫耳尖顶、爪印拱门、尾巴形桥梁”但保持写实工程逻辑；街道像发光回路，暖金光沿纹路流动；远处有巨型猫形雕像半埋在山体。猫缓慢降落在一块悬浮平台边缘，脚下尘埃轻轻浮起。镜头：先广角震撼全景，再快速推近猫的落地动作。\n\n6-8s（钥匙回应与守门者）\n镜头甩动到中近景：猫举起晶体钥匙，钥匙与城市中心的“尖塔核心”产生共振，城市灯光像被唤醒一样逐层点亮；同时一只“机械猫守门者”从阴影中出现（写实机械结构，关节有微型推进器，眼睛是柔和蓝光，不要恐怖风），它绕着猫慢慢走一圈，扫描光轻扫太空服贴纸“MEOW-1”。最后0.4秒：守门者用爪尖轻触钥匙，发出一声无声光脉冲，地面出现一道发光路径指向城内深处，猫耳朵一抖，回头看镜头眨眼，画面在路径强光中切黑收尾。\n\n【质量约束】\n写实、稳定、无崩脸、无多余肢体、无错误解剖、太空服结构一致、不要卡通渲染、不要低清噪点、不要文字水印/字幕/logo、不要可读文字。机械守门者要精密真实，不要玩具感。\n\n【Negative Prompt】\nlow resolution, cartoon, plastic texture, face deformation, extra limbs, bad anatomy, heavy jitter, watermark, subtitles, logo, duplicated frames, ghosting, smearing, pixelation, overexposure, banding, random character change, inconsistent spacesuit, readable text\n",
+      "filename": "video_extended_20260131_172410_119912.mp4",
+      "created_at": "2026-01-31T17:24:10.181233",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "bfcd8c81-04b8-4692-85c2-7a6a0731886a"
+      }
+    },
+    {
+      "id": "15ef1d49-15c6-48f4-b54a-69af835b07cd",
+      "type": "video",
+      "prompt": "【第6集】8秒电影级续集 Prompt：穿越星门，进入“猫文明控制室”\n\n生成一段8秒电影级高质感写实硬科幻视频，承接上一集结尾：同一只橘白小猫、同一套复古太空服（透明头盔、缝线磨损、胸口贴纸“MEOW-1”一致），前方是“爪印形”星门，画面从切黑后继续。整体风格：写实硬科幻 + 神秘遗迹，HDR、体积光、真实反射、微尘漂浮、自然景深、电影调色（冷蓝黑为基底，金色导光点缀）。主体外观稳定，绝不换猫、绝不换太空服。\n\n【节奏要求】8秒内完成4段连贯蒙太奇，每段约2秒；转场用“匹配运动 + 光擦拭/镜头甩动”，保持连贯。\n\n0-2s（贴近星门）\n从黑场淡入：猫与太空鲸一起逼近“爪印形”星门，星门边缘由漂浮碎片构成环形结构，碎片表面刻蚀微纹并反射金光；星门中心是深邃黑暗，像液态阴影缓慢翻涌。猫抱着透明数据漂流瓶，眼睛盯住星门中心，胡须在头盔内轻颤。镜头：低角度推进，强调星门尺度压迫感。\n\n2-4s（穿越与重构）\n镜头甩动转场进入星门内部：空间被拉伸成几何走廊，像晶体与金属的分形结构，光线沿棱边流动；猫短暂失重翻滚，但姿态可控，尾巴像舵一样调整方向。漂流瓶在猫怀里发光，投影星图变成“锁孔形”路径与走廊纹理对齐，形成“被引导”的感觉。镜头：贴身跟拍猫的旋转，背景强动感但主体清晰。\n\n4-6s（控制室苏醒）\n匹配运动转到一座巨大控制室内部：空间像古老天文台与未来机库融合，中央悬浮一个“核心球”，周围是层层环形轨道与漂浮仪表碎片；墙面有巨型爪印浮雕与晶体管道，淡金色光脉冲沿纹路流动逐段点亮。猫缓慢落到一块悬浮平台上，磁力靴轻触发出微小粒子涟漪。镜头：广角展示全景后快速推近到猫与核心球。\n\n6-8s（猫爪认证与新目标）\n镜头甩动到中近景：猫把爪子按在漂浮的认证面板上（抽象符号，不要可读文字），爪垫触碰瞬间，核心球发出一圈扫描光环，头盔反射出精密几何；漂流瓶“啪”地打开一道裂缝，释放出一枚小小晶体钥匙漂浮到猫爪前。核心球投射出新的星图：一条路径指向远处一颗被蓝色薄雾包裹的星球。最后0.4秒：猫抓住晶体钥匙，回头看镜头眨眼，控制室灯光同步脉冲一下，画面在蓝色星球投影的强光中切白收尾。\n\n【质量约束】\n写实、稳定、无崩脸、无多余肢体、无错误解剖、太空服结构一致、不要卡通渲染、不要低清噪点、不要文字水印/字幕/logo、不要可读文字。镜头运动真实，转场顺滑不跳帧。\n\n【Negative Prompt】\nlow resolution, cartoon, plastic texture, face deformation, extra limbs, bad anatomy, heavy jitter, watermark, subtitles, logo, duplicated frames, ghosting, smearing, pixelation, overexposure, banding, random character change, inconsistent spacesuit, readable text\n",
+      "filename": "video_extended_20260131_171917_280652.mp4",
+      "created_at": "2026-01-31T17:19:17.335823",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "f8af10e9-35cd-4202-b2d3-d8563fd6d5d6"
+      }
+    },
+    {
+      "id": "d1e59bf4-6b49-4272-82c1-0cde05667caf",
+      "type": "video",
+      "prompt": "\n\n生成一段8秒电影级高质感写实硬科幻视频，延续上一集结尾：同一只橘白小猫、同一套复古太空服（透明头盔、缝线磨损、胸口贴纸“MEOW-1”一致），被“核心之眼”开启的发光通道吸入，上一镜切白后继续。整体风格：写实硬科幻 + 童话冒险，HDR、体积光、真实反射、微尘漂浮、自然景深、电影调色（冷色宇宙为主，少量金色引导光）。主体始终为同一只猫，外观稳定不变形。\n\n【节奏要求】8秒内完成4段连贯蒙太奇，每段约2秒；转场使用“匹配运动 + 镜头甩动/光擦拭”，保证连贯不跳帧。\n\n0-2s（虫洞内壁）\n从纯白过曝逐渐回落到虫洞内部：猫在发光通道中高速漂移，通道内壁像液态玻璃与星尘混合，形成流动纹理与光纤条带；猫的头盔反射拉伸的星点轨迹，毛发与太空服细节清晰，边缘有轻微色散。镜头：近景跟拍猫胸口到脸，速度感强但主体对焦稳定。\n\n2-4s（抛出虫洞）\n镜头甩动转场，猫被“弹出”到一片静谧深空，瞬间从高速到近乎静止，周围星尘慢慢飘；远处出现巨大的半透明太空鲸（生物荧光纹路沿背部缓慢脉动），鲸尾轻摆产生柔和粒子涟漪。猫在失重中翻转一圈稳住姿态，抱紧透明数据漂流瓶。镜头：广角远中近结合，从猫到鲸的尺度震撼对比。\n\n4-6s（鲸背星图）\n匹配运动转到猫靠近鲸背，鲸背荧光纹路与漂流瓶投影发生共振：漂流瓶自动投射出立体星图路径，星图像织带缠绕鲸的身体轮廓并延伸到远方；鲸发出无声的“光脉冲”，沿星图路径点亮一连串遥远坐标（抽象符号，不要可读文字）。猫伸爪轻触星图，爪尖引发微小光波扩散。镜头：中近景环绕猫与鲸背纹理，体积光穿过漂浮微粒。\n\n6-8s（领航冲刺与悬念收尾）\n镜头甩动到追逐镜头：太空鲸突然加速领航，星图路径化为一道金色航道，周围星点拉成长线；猫被牵引在航道边缘滑行，推进器喷出细小冷雾状粒子。最后0.4秒：前方出现一个巨大“爪印形”星门轮廓（由碎片环绕的发光结构），星门中心黑暗深邃，边缘金光脉动；猫回头看镜头眨眼，头盔上“MEOW-1”贴纸反光一闪，画面在星门强光中收束切黑。\n\n【质量约束】\n写实、稳定、无崩脸、无多余肢体、无错误解剖、太空服结构一致、不要卡通渲染、不要低清噪点、不要文字水印/字幕/logo、不要可读文字。转场顺滑不跳帧，动感模糊仅作用于背景，主体始终清晰。\n\n【Negative Prompt】\nlow resolution, cartoon, plastic texture, face deformation, extra limbs, bad anatomy, heavy jitter, watermark, subtitles, logo, duplicated frames, ghosting, smearing, pixelation, overexposure, banding, random character change, inconsistent spacesuit, readable text\n",
+      "filename": "video_extended_20260131_171705_030468.mp4",
+      "created_at": "2026-01-31T17:17:05.067369",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "4b29bb0e-9470-4798-9a03-a19a248f69fc"
+      }
+    },
+    {
+      "id": "87d86b2f-2fda-4ee7-8304-7a139a2edf34",
+      "type": "video",
+      "prompt": "生成一段8秒电影级高质感写实硬科幻视频，延续上一集结尾：同一只橘白小猫、同一套复古太空服（透明头盔、缝线磨损、胸口贴纸“MEOW-1”一致），抱着透明数据漂流瓶，从遗迹之门跃入“黑暗海”般的负空间。整体风格：写实硬科幻 + 诡谲童话，HDR、体积光、真实反射、微粒漂浮、自然景深、电影调色（暗蓝黑主调+少量生物荧光点缀）。\n8秒内4段连贯蒙太奇，每段约2秒，转场用“匹配运动 + 镜头甩动”，主体始终同一只猫。\n\n0-2s（坠入黑暗海）：镜头从门缝外红光切入到门内深暗空间，猫像坠入深海一样缓慢下沉，周围漂浮发光微粒像浮游生物，暗影波纹从远处掠过。猫的头盔上凝结细小霜花与水汽错觉（实际上是冰晶微尘），呼吸在面罩上形成轻微雾气。镜头：跟随下沉，中近景，强空间深度。\n\n2-4s（暗流生物）：镜头甩动转场，巨大“暗流生物”从旁边滑过，像由烟雾与星尘组成的半透明长体，表面偶尔闪出脉冲光纹。猫被暗流轻轻卷起旋转，尾巴和四肢自然伸展保持平衡，漂流瓶差点脱手，猫用爪子一把抓住。镜头：旋转跟拍，动感但主体不糊。\n\n4-6s（文明碎片回放）：匹配运动切到猫爪抓住漂流瓶的动作，漂流瓶被触发，投影出一段“远古猫文明”记忆碎片：几何猫形星舰群在星云中航行，巨型爪印状空间站缓慢转动，星图像织物一样铺开。投影是立体全息，环绕猫和镜头，投影光映在猫毛上。镜头：环绕猫半圈，投影与现实融合。\n\n6-8s（核心之眼）：镜头甩动到深处，一个巨大“核心之眼”结构出现：像黑曜石球体嵌着发光瞳孔环，周围漂浮环形碎片缓慢旋转。瞳孔中心射出一束细光扫描猫的头盔贴纸“MEOW-1”，贴纸反光像被识别为“钥匙”。猫耳朵微动，瞳孔光环迅速收缩，开启一条发光通道。最后0.4秒：猫顺着通道被吸入，画面在强光中切白收尾。\n\n质量约束：写实、稳定、无崩脸、无多余肢体、太空服结构一致、不要卡通渲染、不要低清噪点、不要可读文字/字幕/水印。\n光影：深暗环境高对比，微粒荧光点缀，核心之眼扫描光是唯一强光源之一。\n镜头语言：电影摄影机运动，转场顺滑，不要跳帧，不要突然换猫换服装。\n\nNegative Prompt:\n低清晰度，卡通风，塑料材质，脸部变形，多余肢体，错误解剖，过度抖动，水印，字幕，logo，重复帧，鬼影，涂抹感，马赛克，过曝，色带，外观变化，太空服变化，可读文字",
+      "filename": "video_extended_20260131_171222_575977.mp4",
+      "created_at": "2026-01-31T17:12:22.582935",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "c60a2aa0-77ec-41c8-86d3-2561b6c92b3d"
+      }
+    },
+    {
+      "id": "2e99d257-c594-487e-a101-9fe974571dc3",
+      "type": "video",
+      "prompt": "生成一段8秒电影级高质感写实硬科幻视频，延续上一集：同一只橘白小猫、同一套复古太空服（透明头盔、缝线磨损、胸口贴纸“MEOW-1”一致），抱着透明数据漂流瓶。整体质感：HDR、体积光、真实反射、微尘漂浮、自然景深、电影调色（冷色宇宙+红色目标对比）。\n8秒内4段连贯蒙太奇，每段约2秒，转场用“匹配运动 + 镜头甩动”，主体始终同一只猫。\n\n0-2s（逼近红色天体）：从猫怀里漂流瓶的星图投影开始，星图发光路径拉成一道红色导航线，镜头顺着线甩出去，接到远处一颗红色小行星/红矮星边缘。表面有细微尘暴和发光裂隙，像呼吸一样脉动。猫漂浮靠近，头盔反射红光。镜头：从近景投影到远景目标的快速匹配转场。\n\n2-4s（贴地掠过）：镜头甩动到低空掠过红色地表，地表岩层像被高温玻璃化，有熔融纹理与黑红条带，碎石在微弱重力下缓慢弹跳。猫打开太空服的小推进器，贴地滑行躲开喷出的微小气体羽流。镜头：低角度跟拍，强速度感但主体清晰。\n\n4-6s（遗迹与门）：匹配运动转到一座半埋在尘埃里的古老遗迹入口，形状像巨大“猫爪印”凹槽结构，边缘有金属与晶体融合的纹理，红光从缝隙漏出。猫把爪子贴到凹槽中心，爪垫触碰瞬间触发微弱蓝色电弧，遗迹纹路逐段点亮。镜头：中近景，细节拉满（爪毛、尘埃、纹理发光）。\n\n6-8s（开门与黑暗海）：门缝缓缓开启，里面不是房间而是一片“黑暗海”般的负空间（像深海一样有漂浮粒子和缓慢翻涌的暗影），远处漂着几何碎片与发光符号（抽象，不可读文字）。猫犹豫0.3秒后抱紧漂流瓶一跃而入，尾巴最后一瞬扫过镜头，门后红光闪一下收尾。镜头：从门外推近到猫跃入，最后0.2秒轻微震动作为冲击感。\n\n质量约束：写实、稳定、无崩脸、无多余肢体、太空服结构一致、不要卡通渲染、不要低清噪点、不要可读文字/字幕/水印。\n光影：红色地表主光 + 蓝色激活纹路点缀；门内是低照度高对比的“深空深海感”。\n镜头语言：电影摄影机运动，转场顺滑，不要乱跳镜头。\n\nNegative Prompt：\n\n低清晰度，卡通风，塑料质感，脸崩，多余肢体，错误解剖，抖动过强，水印，字幕，logo，重复帧，鬼影，涂抹感，马赛克，过曝，色带，角色外观变化，太空服变化，可读文字",
+      "filename": "video_extended_20260131_170933_317295.mp4",
+      "created_at": "2026-01-31T17:09:33.322297",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "a550759b-f799-4423-9975-77c0d8b7a813"
+      }
+    },
+    {
+      "id": "cc53e631-bac6-469b-a001-46b718338c6c",
+      "type": "video",
+      "prompt": "生成一段8秒电影级高质感写实硬科幻视频，承接上一段结尾：同一只橘白小猫，复古太空服一致（透明头盔、缝线与磨损细节、胸口贴纸“MEOW-1”），整体风格写实+童话冒险，HDR、体积光、微尘漂浮、自然景深、电影调色。\n8秒内完成4段连贯蒙太奇，每段约2秒，转场保持“匹配运动 + 镜头甩动”流畅，主体始终为同一只猫。\n\n0-2s（信号出现）：延续上集的猫眼特写，猫眨眼后，瞳孔里出现一圈微弱的蓝色几何光纹，头盔HUD上跳出“未知信号”图标（注意：不要真实可读文字，只要抽象UI符号）。远处星云深处闪烁一个脉冲光点。镜头：从特写缓慢拉开到半身，光点在远处对齐猫的视线。\n\n2-4s（追逐脉冲）：镜头甩动转场，猫被轻柔的“信号波”推着漂移加速，周围星尘形成流线，出现极细微的引力透镜效果（背景星点轻微弯曲）。猫伸爪去抓一条像丝带一样的发光粒子流，粒子绕过爪尖产生涟漪。镜头：广角跟拍，主体清晰，背景动感模糊。\n\n4-6s（星云灯塔）：匹配运动转到一个巨大的“星云灯塔”结构：像天然晶体与古老金属融合的巨型环形遗迹，表面刻蚀微纹，内部有慢速旋转的光环。猫从灯塔环洞中央穿过，体积光束扫过太空服，头盔反射遗迹纹理。镜头：从正前方穿洞推进，强透视，震撼尺度对比。\n\n6-8s（发现漂流瓶）：镜头甩动到灯塔内部近景，猫发现一个漂浮的透明“数据漂流瓶”（像玻璃胶囊），里面悬着一枚小小的星图投影，星图投影在猫爪上展开成发光路径，指向远处一颗红色小行星/红矮星方向。最后0.4秒：猫把漂流瓶轻轻抱住，回头看镜头，耳朵微动，背景灯塔光环脉冲一下作为收尾。镜头：中近景推近，收束在猫与漂流瓶的接触动作。\n\n质量约束：写实、稳定、无崩脸、无多余肢体、太空服结构一致、不要卡通渲染、不要低清噪点、不要可读文字/字幕/水印。\n光影：冷蓝紫星云主色，点缀灯塔暖金反光；体积光穿过微尘；反射真实。\n镜头语言：电影摄影机运动，轻微手持呼吸感但不眩晕，转场顺滑不跳帧。\n\nNegative Prompt：\n\n低清晰度，卡通风，塑料材质，脸部变形，多余肢体，错误解剖，强抖动，文字水印，字幕，logo，重复帧，鬼影，涂抹感，马赛克，过曝刺眼，色带，随机角色变化，太空服不一致",
+      "filename": "video_extended_20260131_170639_939361.mp4",
+      "created_at": "2026-01-31T17:06:39.943669",
+      "params": {
+        "mode": "extend",
+        "resolution": "720p",
+        "job_id": "0d4c14b5-e20a-4e2d-aeaf-cff4ab25b575"
+      }
+    },
+    {
+      "id": "473353fe-4822-4873-a073-d1a2b98c910f",
+      "type": "video",
+      "prompt": "生成一段8秒电影级高质感视频：一只橘白小猫穿复古太空服环游太空，写实硬科幻质感但带童话冒险气质。画面极致细节：毛发清晰、头盔真实反射、体积光、微尘漂浮、HDR、自然景深、电影调色。镜头连贯且快速切换，但主体始终是同一只猫（外观一致）。\n节奏必须在8秒内完成4段场景连贯蒙太奇，每段约2秒，转场用“匹配运动 + 镜头甩动”保持流畅：\n\n0-2s（地球出舱）：空间站气闸门打开，白雾和冰晶飘散，猫用磁力靴踏出舱口漂浮，舷窗外巨大地球弧面与日出，头盔反射控制面板灯光。镜头：近景跟拍猫脸到半身，轻微镜头呼吸。\n\n2-4s（小行星穿梭）：镜头甩动转场到碎石带，猫用尾巴微调姿态从两块小行星间穿过，近景碎石高速掠过制造强烈视差，远处彩色星云。镜头：广角跟随，动感模糊但主体清晰。\n\n4-6s（土星环冲浪）：匹配运动转到土星环前，猫站在一块透明冰晶上“冲浪”滑行，冰晶折射彩虹光，土星环横贯画面，背后有微弱极光。镜头：侧后方追拍，光线从环后切出形成轮廓光。\n\n6-8s（鲸落星云终章）：镜头再甩到深空，一只巨大的发光太空鲸从旁边缓慢游过（半透明生物荧光），猫在其旁漂浮伸爪触碰漂浮的水滴球，水滴中倒映地球。最后0.3秒猫回头看镜头眨眼，头盔上闪过“MEOW-1”贴纸反光，星光粒子飘散收尾。镜头：推近特写，收束到猫眼高光。\n\n质量约束：写实、稳定、无变形、无多余肢体、猫脸不崩、太空服结构一致、不要卡通渲染、不要低清噪点、不要文字水印。\n光影：强背光 + 冷色主调，点缀暖色日出反光；体积光穿过漂浮微尘。\n镜头语言：电影感、真实摄影机运动、轻微手持感但不晃到眩晕。\n\n负面提示词：\n\n低清晰度，卡通风，塑料材质，过度磨皮，脸部变形，多余肢体，错误解剖，抖动过强，文字水印，字幕，logo，重复帧，鬼影，涂抹感，马赛克，过曝刺眼，色带",
+      "filename": "video_20260131_170050_785878.mp4",
+      "created_at": "2026-01-31T17:00:50.786915",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "e04f771e-f13f-4c7a-bbff-093a3f3c1223"
+      }
+    },
+    {
+      "id": "956e9ac8-4b44-4959-9bbf-c880c88d81d8",
+      "type": "video",
+      "prompt": "生成一段8秒电影级高质感视频：一只橘白小猫穿复古太空服环游太空，写实硬科幻质感但带童话冒险气质。画面极致细节：毛发清晰、头盔真实反射、体积光、微尘漂浮、HDR、自然景深、电影调色。镜头连贯且快速切换，但主体始终是同一只猫（外观一致）。\n节奏必须在8秒内完成4段场景连贯蒙太奇，每段约2秒，转场用“匹配运动 + 镜头甩动”保持流畅：\n\n0-2s（地球出舱）：空间站气闸门打开，白雾和冰晶飘散，猫用磁力靴踏出舱口漂浮，舷窗外巨大地球弧面与日出，头盔反射控制面板灯光。镜头：近景跟拍猫脸到半身，轻微镜头呼吸。\n\n2-4s（小行星穿梭）：镜头甩动转场到碎石带，猫用尾巴微调姿态从两块小行星间穿过，近景碎石高速掠过制造强烈视差，远处彩色星云。镜头：广角跟随，动感模糊但主体清晰。\n\n4-6s（土星环冲浪）：匹配运动转到土星环前，猫站在一块透明冰晶上“冲浪”滑行，冰晶折射彩虹光，土星环横贯画面，背后有微弱极光。镜头：侧后方追拍，光线从环后切出形成轮廓光。\n\n6-8s（鲸落星云终章）：镜头再甩到深空，一只巨大的发光太空鲸从旁边缓慢游过（半透明生物荧光），猫在其旁漂浮伸爪触碰漂浮的水滴球，水滴中倒映地球。最后0.3秒猫回头看镜头眨眼，头盔上闪过“MEOW-1”贴纸反光，星光粒子飘散收尾。镜头：推近特写，收束到猫眼高光。\n\n质量约束：写实、稳定、无变形、无多余肢体、猫脸不崩、太空服结构一致、不要卡通渲染、不要低清噪点、不要文字水印。\n光影：强背光 + 冷色主调，点缀暖色日出反光；体积光穿过漂浮微尘。\n镜头语言：电影感、真实摄影机运动、轻微手持感但不晃到眩晕。\n\n负面提示词：\n\n低清晰度，卡通风，塑料材质，过度磨皮，脸部变形，多余肢体，错误解剖，抖动过强，文字水印，字幕，logo，重复帧，鬼影，涂抹感，马赛克，过曝刺眼，色带",
+      "filename": "video_20260131_165830_818309.mp4",
+      "created_at": "2026-01-31T16:58:30.961082",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "4k",
+        "job_id": "d006162e-71a6-441e-89a1-3774baa2a6bd"
+      }
+    },
+    {
+      "id": "8b55fcd2-be92-4437-8396-89a4a2a4980b",
+      "type": "video",
+      "prompt": "生成一段8秒电影级高质感视频：一只橘白小猫穿复古太空服环游太空，写实硬科幻质感但带童话冒险气质。画面极致细节：毛发清晰、头盔真实反射、体积光、微尘漂浮、HDR、自然景深、电影调色。镜头连贯且快速切换，但主体始终是同一只猫（外观一致）。\n节奏必须在8秒内完成4段场景连贯蒙太奇，每段约2秒，转场用“匹配运动 + 镜头甩动”保持流畅：\n\n0-2s（地球出舱）：空间站气闸门打开，白雾和冰晶飘散，猫用磁力靴踏出舱口漂浮，舷窗外巨大地球弧面与日出，头盔反射控制面板灯光。镜头：近景跟拍猫脸到半身，轻微镜头呼吸。\n\n2-4s（小行星穿梭）：镜头甩动转场到碎石带，猫用尾巴微调姿态从两块小行星间穿过，近景碎石高速掠过制造强烈视差，远处彩色星云。镜头：广角跟随，动感模糊但主体清晰。\n\n4-6s（土星环冲浪）：匹配运动转到土星环前，猫站在一块透明冰晶上“冲浪”滑行，冰晶折射彩虹光，土星环横贯画面，背后有微弱极光。镜头：侧后方追拍，光线从环后切出形成轮廓光。\n\n6-8s（鲸落星云终章）：镜头再甩到深空，一只巨大的发光太空鲸从旁边缓慢游过（半透明生物荧光），猫在其旁漂浮伸爪触碰漂浮的水滴球，水滴中倒映地球。最后0.3秒猫回头看镜头眨眼，头盔上闪过“MEOW-1”贴纸反光，星光粒子飘散收尾。镜头：推近特写，收束到猫眼高光。\n\n质量约束：写实、稳定、无变形、无多余肢体、猫脸不崩、太空服结构一致、不要卡通渲染、不要低清噪点、不要文字水印。\n光影：强背光 + 冷色主调，点缀暖色日出反光；体积光穿过漂浮微尘。\n镜头语言：电影感、真实摄影机运动、轻微手持感但不晃到眩晕。\n\nNegative Prompt：低清晰度，卡通风，塑料材质，过度磨皮，脸部变形，多余肢体，错误解剖，抖动过强，文字水印，字幕，logo，重复帧，鬼影，涂抹感，马赛克，过曝刺眼，色带",
+      "filename": "video_20260131_163137_788231.mp4",
+      "created_at": "2026-01-31T16:31:37.851788",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "job_id": "bb2378af-febe-4d54-99de-48c7b56b9f11"
+      }
+    },
+    {
+      "id": "fb3977a1-cd14-419e-abf6-ba5cfc59463e",
+      "type": "image",
+      "prompt": "大米饭",
+      "filename": "image_20260131_110127_182561.png",
+      "created_at": "2026-01-31T11:01:27.184291",
+      "params": {
+        "aspect_ratio": "21:9",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "adc663ef-08ba-4929-a722-2bb3340797a1"
+      }
+    },
+    {
+      "id": "376c265a-912f-4cf9-89a4-d24aabcbffef",
+      "type": "image",
+      "prompt": "鸵鸟",
+      "filename": "image_20260131_110020_232979.png",
+      "created_at": "2026-01-31T11:00:20.235338",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "19669451-c211-4f3c-89f5-1263649162de"
+      }
+    },
+    {
+      "id": "6fa3011e-c7a5-4955-84a0-5a45603cf143",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214738_732585.png",
+      "created_at": "2026-01-30T21:47:38.773860",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "9325c237-58f0-4683-ad31-6b330e8a6701",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214700_575708.png",
+      "created_at": "2026-01-30T21:47:38.769884",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "0b3a749c-2d9e-4557-8745-2f16877c7b1e",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214622_083510.png",
+      "created_at": "2026-01-30T21:47:38.764857",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "e10f3c0e-880d-4b39-97b7-81312dbfefea",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214547_327085.png",
+      "created_at": "2026-01-30T21:47:38.759859",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "83f50176-6e47-4aff-ae08-8fc8a48c9d80",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214509_320746.png",
+      "created_at": "2026-01-30T21:47:38.754890",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "0e96de18-ac16-4665-b31b-a67bae71400b",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214432_209018.png",
+      "created_at": "2026-01-30T21:47:38.751859",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "d436a197-faab-40b0-93ae-9a74d7cf4364",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214405_378698.png",
+      "created_at": "2026-01-30T21:47:38.747857",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "23475050-63e8-4698-8b58-c40a973161c5",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214337_275481.png",
+      "created_at": "2026-01-30T21:47:38.742856",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "7b6ce120-8549-441e-94e7-9bf46f2e8c5a",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214313_018383.png",
+      "created_at": "2026-01-30T21:47:38.738882",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "1671c2f8-03d5-46d0-ba0f-3d7a28545bbb",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_214251_847994.png",
+      "created_at": "2026-01-30T21:47:38.734833",
+      "params": {
+        "aspect_ratio": "1:1",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "d8687f5c-7466-416d-b5f8-875e6aeec532"
+      }
+    },
+    {
+      "id": "6148c6ec-0024-425b-9046-9ebbede40e98",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_213140_412197.png",
+      "created_at": "2026-01-30T21:31:40.463793",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "fcf32a12-2fc1-47a7-bbd9-291f57a81269",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_213058_808352.png",
+      "created_at": "2026-01-30T21:31:40.457790",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "686e95a4-1bdd-4966-bbdc-01e4b2e166ea",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_213024_952177.png",
+      "created_at": "2026-01-30T21:31:40.452889",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "6d32369a-fd08-4282-b579-75cc1e5b70c1",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_212944_658301.png",
+      "created_at": "2026-01-30T21:31:40.447916",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "5b73327c-28b2-4bfb-b6b2-c67da75c2750",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_212910_116146.png",
+      "created_at": "2026-01-30T21:31:40.441915",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "0ea5a078-0926-49f7-b606-dfdeb5c5cac6",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_212836_067128.png",
+      "created_at": "2026-01-30T21:31:40.436890",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "df8aa475-a30d-42ef-a80b-d42ab833a48c",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_212806_350162.png",
+      "created_at": "2026-01-30T21:31:40.431887",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "338408f4-32bd-4930-8932-a1f2e1f8fb26",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_212737_196549.png",
+      "created_at": "2026-01-30T21:31:40.424896",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "8945b703-621b-48b4-8353-b6cf5674fc7a",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_212710_656144.png",
+      "created_at": "2026-01-30T21:31:40.420718",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "750b5771-4fa0-451f-817c-bf45fe0ec7e9",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_212647_815102.png",
+      "created_at": "2026-01-30T21:31:40.414198",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 10,
+        "use_google_search": false,
+        "session_id": "eaac4856-84e5-49ef-9a07-e33514b62a83"
+      }
+    },
+    {
+      "id": "e0eb0e04-6dd4-4a82-abe2-86ba7bf1b5ad",
+      "type": "image",
+      "prompt": "牛",
+      "filename": "image_20260130_212616_323911.png",
+      "created_at": "2026-01-30T21:26:16.324882",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "7281b997-78fe-47dc-961b-42a8da774da0"
+      }
+    },
+    {
+      "id": "5689e5fc-b19a-4c0d-b623-444ecbefb591",
+      "type": "image",
+      "prompt": "画一只猫猫",
+      "filename": "image_20260130_203009_830510.png",
+      "created_at": "2026-01-30T20:30:09.843311",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 2,
+        "use_google_search": false,
+        "session_id": "fb1e021d-4976-4133-b409-09a580ab474a"
+      }
+    },
+    {
+      "id": "d79a1695-68f2-40eb-bb05-96991975a56f",
+      "type": "image",
+      "prompt": "画一只猫猫",
+      "filename": "image_20260130_202937_787010.png",
+      "created_at": "2026-01-30T20:30:09.832298",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 2,
+        "use_google_search": false,
+        "session_id": "fb1e021d-4976-4133-b409-09a580ab474a"
+      }
+    },
+    {
+      "id": "72a7d0bf-16bc-4282-8af6-93f7cc94d968",
+      "type": "image",
+      "prompt": " 生成一张福州未来10天天气预报的信息图表",
+      "filename": "image_20260130_181605_598068.png",
+      "created_at": "2026-01-30T18:16:05.604090",
+      "params": {
+        "aspect_ratio": "16:9",
+        "resolution": "2K",
+        "count": 1,
+        "use_google_search": true,
+        "session_id": "475988f1-b1f2-49ff-86d6-29300d463a39"
+      }
+    },
+    {
+      "id": "b8aad951-255f-4074-8e08-7009d26d9252",
+      "type": "video",
+      "prompt": "Cinematic medium shot. A fluffy orange tabby cat floats effortlessly in zero gravity against the vast, star-studded backdrop of deep space. The cat is wearing a tiny, transparent astronaut helmet bubble. In its paws, it gently holds a glistening stick of Tanghulu, the candied red hawthorn berries reflecting the blue glow of a distant nebula.\n\nThe camera slowly rotates around the cat, capturing the surreal moment. The cat’s whiskers twitch as it takes a slow-motion bite of the crunchy sugar coating, sending tiny shards of crystallized sugar drifting away into the vacuum like diamond dust. The lighting is dramatic, with a bright rim light from a nearby planet illuminating the cat's fur and the sticky gloss of the candy. The atmosphere is whimsical and serene, blending sci-fi wonder with a cute, everyday delight.",
+      "filename": "video_20260130_180122_171893.mp4",
+      "created_at": "2026-01-30T18:01:22.175897",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "4861bfae-59d2-4b86-9490-0e23cac791c7"
+      }
+    },
+    {
+      "id": "84c2b351-5245-4598-a835-a2fb112e7ac1",
+      "type": "video",
+      "prompt": "动起来",
+      "filename": "video_20260130_175927_005658.mp4",
+      "created_at": "2026-01-30T17:59:27.009655",
+      "params": {
+        "mode": "img2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "cbcbdc6c-5678-432f-87d7-70c58f7c0823"
+      }
+    },
+    {
+      "id": "fb5a3602-7786-4a49-a0a0-152fbb7ae48a",
+      "type": "video",
+      "prompt": "下雨了",
+      "filename": "video_20260130_175922_274562.mp4",
+      "created_at": "2026-01-30T17:59:22.277563",
+      "params": {
+        "mode": "img2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "b0b1e821-9b58-4425-abc1-da7b98fe55c4"
+      }
+    },
+    {
+      "id": "323b11dc-de67-4a23-a522-798952c1699b",
+      "type": "video",
+      "prompt": "吃饭的女人\n",
+      "filename": "video_20260130_175836_767159.mp4",
+      "created_at": "2026-01-30T17:58:36.770123",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "8f094075-ed1c-4231-993a-42b6dc5ec993"
+      }
+    },
+    {
+      "id": "d715deb5-fb5f-4ae6-8c2d-58b4aeab8172",
+      "type": "image",
+      "prompt": "鸵鸟吃芒果",
+      "filename": "image_20260130_175605_480799.png",
+      "created_at": "2026-01-30T17:56:05.482818",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "67665651-d0c6-4320-aa59-371eeb9dec62"
+      }
+    },
+    {
+      "id": "afb9f2ad-cbff-422c-9269-21f67f4a3f7a",
+      "type": "video",
+      "prompt": "窗外下雨了",
+      "filename": "video_20260130_173913_130651.mp4",
+      "created_at": "2026-01-30T17:39:13.132651",
+      "params": {
+        "mode": "img2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "b21de3fa-828e-45d9-a8f4-de5a3da6bc60"
+      }
+    },
+    {
+      "id": "e3130fe6-a7c9-47a6-85e1-404909a08fa7",
+      "type": "video",
+      "prompt": "马吃草",
+      "filename": "video_20260130_173910_865133.mp4",
+      "created_at": "2026-01-30T17:39:10.867132",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "98b120b3-08a2-438c-8819-23a06c876ee5"
+      }
+    },
+    {
+      "id": "e1c2d5ae-7a89-46bc-9496-624685768670",
+      "type": "image",
+      "prompt": "A candid, close-up shot of a young woman enjoying a warm, home-cooked meal in a cozy, sunlit kitchen. She is holding a ceramic bowl filled with steaming rice and colorful stir-fried vegetables, lifting a spoonful to her mouth with a gentle smile. Soft, golden morning sunlight streams through a nearby window, illuminating the steam rising from the food and creating a warm, inviting atmosphere. The table is set with a rustic tablecloth and a glass of water. The image has a cinematic, shallow depth of field, focusing sharply on her expression and the food while blurring the background, capturing a moment of simple daily happiness, high resolution, photorealistic style, 8k.",
+      "filename": "image_20260130_173724_881552.png",
+      "created_at": "2026-01-30T17:37:24.891029",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 2,
+        "use_google_search": false,
+        "session_id": "3341ddac-0e6a-4eae-854a-1b0f9ed272bf"
+      }
+    },
+    {
+      "id": "c1df192b-d034-411a-8edb-c18ee61a919d",
+      "type": "image",
+      "prompt": "A candid, close-up shot of a young woman enjoying a warm, home-cooked meal in a cozy, sunlit kitchen. She is holding a ceramic bowl filled with steaming rice and colorful stir-fried vegetables, lifting a spoonful to her mouth with a gentle smile. Soft, golden morning sunlight streams through a nearby window, illuminating the steam rising from the food and creating a warm, inviting atmosphere. The table is set with a rustic tablecloth and a glass of water. The image has a cinematic, shallow depth of field, focusing sharply on her expression and the food while blurring the background, capturing a moment of simple daily happiness, high resolution, photorealistic style, 8k.",
+      "filename": "image_20260130_173700_173558.png",
+      "created_at": "2026-01-30T17:37:24.884047",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 2,
+        "use_google_search": false,
+        "session_id": "3341ddac-0e6a-4eae-854a-1b0f9ed272bf"
+      }
+    },
+    {
+      "id": "c3253745-3f9b-4f7c-8bf6-bee9c13718a5",
+      "type": "video",
+      "prompt": "男人走在路上吃热干面\n",
+      "filename": "video_20260130_172714_134877.mp4",
+      "created_at": "2026-01-30T17:27:14.136838",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "f76bcf0a-982e-4f0e-8d26-77d6ecea6811"
+      }
+    },
+    {
+      "id": "7520db93-872b-4908-9fcf-7e2afe527e36",
+      "type": "video",
+      "prompt": "小猫玩玩具",
+      "filename": "video_20260130_172645_965448.mp4",
+      "created_at": "2026-01-30T17:26:45.967449",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "cbc1600f-3b34-42d3-a39a-0e2b18841d8b"
+      }
+    },
+    {
+      "id": "7bcf1b23-9c91-46f6-8e12-c175341a473f",
+      "type": "image",
+      "prompt": "小马",
+      "filename": "image_20260130_171318_558881.png",
+      "created_at": "2026-01-30T17:13:18.572406",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 3,
+        "use_google_search": false,
+        "session_id": "d83264a1-15f4-4e37-8748-f1826bd483f3"
+      }
+    },
+    {
+      "id": "0d4a5322-0f1e-4836-bd69-95c10767518c",
+      "type": "image",
+      "prompt": "小马",
+      "filename": "image_20260130_171217_059223.png",
+      "created_at": "2026-01-30T17:13:18.567406",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 3,
+        "use_google_search": false,
+        "session_id": "d83264a1-15f4-4e37-8748-f1826bd483f3"
+      }
+    },
+    {
+      "id": "17511033-4882-470d-8ac1-3b9585ca4b51",
+      "type": "image",
+      "prompt": "小马",
+      "filename": "image_20260130_171129_623241.png",
+      "created_at": "2026-01-30T17:13:18.561405",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 3,
+        "use_google_search": false,
+        "session_id": "d83264a1-15f4-4e37-8748-f1826bd483f3"
+      }
+    },
+    {
+      "id": "15b32d7c-e648-4a3e-accd-c166d1bfb9df",
+      "type": "image",
+      "prompt": "老虎和猫猫",
+      "filename": "image_20260130_171315_041825.png",
+      "created_at": "2026-01-30T17:13:15.048826",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 2,
+        "use_google_search": false,
+        "session_id": "0f304c39-b209-47ac-a5d2-c6e8be3a36c4"
+      }
+    },
+    {
+      "id": "3277281e-8b3b-44eb-baa0-47f864b0381d",
+      "type": "image",
+      "prompt": "老虎和猫猫",
+      "filename": "image_20260130_171224_164248.png",
+      "created_at": "2026-01-30T17:13:15.043825",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 2,
+        "use_google_search": false,
+        "session_id": "0f304c39-b209-47ac-a5d2-c6e8be3a36c4"
+      }
+    },
+    {
+      "id": "d461dd35-b9ce-4957-965d-2f3424ca118d",
+      "type": "video",
+      "prompt": "牛吃草",
+      "filename": "video_20260130_171232_277694.mp4",
+      "created_at": "2026-01-30T17:12:32.280696",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "ac81d2f7-80c8-4be7-aeaf-55e8a76ad20e"
+      }
+    },
+    {
+      "id": "718a8538-66c0-439f-a0d4-9bf95ac81efb",
+      "type": "image",
+      "prompt": "小马",
+      "filename": "image_20260130_165858_905412.png",
+      "created_at": "2026-01-30T16:58:58.911415",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 3,
+        "use_google_search": false,
+        "session_id": "794447c8-932c-4945-a151-a3bddf89e325"
+      }
+    },
+    {
+      "id": "51d6ef09-5b7a-4421-8cef-83ecf521aa74",
+      "type": "image",
+      "prompt": "小马",
+      "filename": "image_20260130_165803_373204.png",
+      "created_at": "2026-01-30T16:58:58.907448",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "2K",
+        "count": 3,
+        "use_google_search": false,
+        "session_id": "794447c8-932c-4945-a151-a3bddf89e325"
+      }
+    },
+    {
+      "id": "bad4c244-0bc5-49f8-838e-bf7bad0ef5bf",
+      "type": "image",
+      "prompt": "小猫和它的朋友们的自拍，每只猫都是不同的品种",
+      "filename": "image_20260130_162833_366820.png",
+      "created_at": "2026-01-30T16:28:33.368788",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "ed33024b-4e44-4156-8951-69014d5789e6"
+      }
+    },
+    {
+      "id": "4cee8ec0-64fc-47e5-b603-805ef82b31be",
+      "type": "video",
+      "prompt": "画面动起来",
+      "filename": "video_20260130_161345_510171.mp4",
+      "created_at": "2026-01-30T16:13:45.525041",
+      "params": {
+        "mode": "img2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "job_id": "c8355e7a-681b-469f-aff4-6facae440891"
+      }
+    },
+    {
+      "id": "893e4fd7-46c6-460f-9c64-c3faef255a8a",
+      "type": "image",
+      "prompt": "小猫和它的朋友们的自拍，每只猫都是不同的品种",
+      "filename": "image_20260130_161039_888968.png",
+      "created_at": "2026-01-30T16:10:39.895970",
+      "params": {
+        "aspect_ratio": "3:4",
+        "resolution": "4K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "a7fec2e5-7332-43c9-ae2c-63ce3fb6c03b"
+      }
+    },
+    {
+      "id": "299b6892-9365-40fc-a57d-37edf7e975fa",
+      "type": "video",
+      "prompt": "画面动起来",
+      "filename": "video_20260130_160219_815434.mp4",
+      "created_at": "2026-01-30T16:02:19.820423",
+      "params": {
+        "mode": "img2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "1080p",
+        "job_id": "e084b6ca-3c72-4dd1-956c-e608ad5b5265"
+      }
+    },
+    {
+      "id": "19b2b6da-1f18-4b16-92ac-a842f14527cd",
+      "type": "video",
+      "prompt": "小猫起飞",
+      "filename": "video_20260130_155837_469062.mp4",
+      "created_at": "2026-01-30T15:58:37.473057",
+      "params": {
+        "mode": "img2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "fb6b1fbd-aae5-4e40-a38f-31a920625ea1"
+      }
+    },
+    {
+      "id": "f1ef7d86-ba75-499c-8c23-776479d03ac2",
+      "type": "video",
+      "prompt": "小猫动起来",
+      "filename": "video_20260130_155509_201267.mp4",
+      "created_at": "2026-01-30T15:55:09.204228",
+      "params": {
+        "mode": "img2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "f7658c1d-1c79-446b-b7c1-dc354a4f3ffa"
+      }
+    },
+    {
+      "id": "6c4cc827-2a45-478d-8ffa-218c210cff93",
+      "type": "video",
+      "prompt": "太空猫",
+      "filename": "video_20260130_153743_351885.mp4",
+      "created_at": "2026-01-30T15:37:43.353883",
+      "params": {
+        "mode": "text2vid",
+        "aspect_ratio": "16:9",
+        "resolution": "720p",
+        "job_id": "5f503301-df55-4a2e-9e8e-1239e0c5f3ff"
+      }
+    },
+    {
+      "id": "c5023326-2442-4c0a-b420-c51343017733",
+      "type": "image",
+      "prompt": "小猫穿上了衣服",
+      "filename": "image_20260130_153222_330759.png",
+      "created_at": "2026-01-30T15:32:22.332351",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "f0ff0f66-8431-40d6-ada7-22280367e23a"
+      }
+    },
+    {
+      "id": "f1614202-01b8-41c6-b383-cf11080261fc",
+      "type": "image",
+      "prompt": "小猫",
+      "filename": "image_20260130_153127_798333.png",
+      "created_at": "2026-01-30T15:31:27.800332",
+      "params": {
+        "aspect_ratio": "3:2",
+        "resolution": "1K",
+        "count": 1,
+        "use_google_search": false,
+        "session_id": "99e49a0d-39cf-4924-af26-21cfb6404f0f"
+      }
+    },
+    {
       "id": "52cef2f5-bebb-4b3f-975e-2f0e4fa90964",
       "type": "video",
       "prompt": "",
