@@ -109,6 +109,30 @@ export async function getImageStatus(jobId) {
 }
 
 /**
+ * 获取图片图库（按天分组）
+ *
+ * @param {Object} params - 查询参数
+ * @param {number} [params.days=7] - 首次加载最近天数
+ * @param {string|null} [params.before=null] - 分页锚点（YYYY-MM-DD）
+ * @param {number} [params.limit_days=7] - 分页每次返回天数
+ * @returns {Promise<Object>} - 图库分组数据
+ */
+export async function getImageLibrary(params = {}) {
+  const query = new URLSearchParams();
+  const days = params.days ?? 7;
+  const limitDays = params.limit_days ?? 7;
+
+  query.append('days', String(days));
+  query.append('limit_days', String(limitDays));
+
+  if (params.before) {
+    query.append('before', params.before);
+  }
+
+  return request(`/image/library?${query.toString()}`);
+}
+
+/**
  * 关闭会话
  *
  * @param {string} sessionId - 会话 ID
@@ -178,6 +202,30 @@ export async function getVideoStatus(jobId) {
  */
 export function getVideoUrl(filename) {
   return `${API_BASE}/video/${filename}`;
+}
+
+/**
+ * 获取视频图库（按天分组）
+ *
+ * @param {Object} params - 查询参数
+ * @param {number} [params.days=7] - 首次加载最近天数
+ * @param {string|null} [params.before=null] - 分页锚点（YYYY-MM-DD）
+ * @param {number} [params.limit_days=7] - 分页每次返回天数
+ * @returns {Promise<Object>} - 视频图库分组数据
+ */
+export async function getVideoLibrary(params = {}) {
+  const query = new URLSearchParams();
+  const days = params.days ?? 7;
+  const limitDays = params.limit_days ?? 7;
+
+  query.append('days', String(days));
+  query.append('limit_days', String(limitDays));
+
+  if (params.before) {
+    query.append('before', params.before);
+  }
+
+  return request(`/video/library?${query.toString()}`);
 }
 
 // ==================== 历史记录 API ====================

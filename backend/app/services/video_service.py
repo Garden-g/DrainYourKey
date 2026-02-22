@@ -555,6 +555,7 @@ class VideoService:
                     filename=filename,
                     params={
                         "mode": "extend",
+                        "aspect_ratio": aspect_ratio,
                         "resolution": "720p",
                         "job_id": job_id,
                     }

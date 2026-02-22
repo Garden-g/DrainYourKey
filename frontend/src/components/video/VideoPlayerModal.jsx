@@ -2,13 +2,10 @@
  * VideoPlayerModal 组件
  *
  * 全屏播放视频
- * - 黑色半透明背景 + 背景模糊
- * - 视频播放器（自动播放 + 循环）
- * - 视频信息显示（分辨率、宽高比、延长次数、提示词）
- * - 延长功能（折叠输入框，仅 720p 且未达上限时显示）
- * - 下载按钮
- * - 关闭按钮
- * - 支持内容区域滚动
+ * - 左侧视频播放器
+ * - 右侧信息区（Prompt + 延长描述输入）
+ * - 底部操作区（延长/下载/关闭）
+ * - 布局风格与图片预览保持一致
  */
 
 import React, { useState, useRef, useEffect } from 'react';
@@ -39,11 +36,11 @@ const MAX_EXTENSIONS = 20;
  * @param {Function} props.onDownload - 下载回调
  */
 export function VideoPlayerModal({ video, onClose, onExtend, onDownload }) {
-  const [showExtendInput, setShowExtendInput] = useState(false);
+  // 延长描述输入值
   const [extendPrompt, setExtendPrompt] = useState('');
   const [duration, setDuration] = useState(null); // 视频时长
+  const [isPromptExpanded, setIsPromptExpanded] = useState(false);
   const videoRef = useRef(null);
-  const extendInputRef = useRef(null); // 延长输入框引用，用于滚动
 
   // 计算延长次数
   const extensionCount = calculateExtensionCount(duration);
@@ -62,15 +59,6 @@ export function VideoPlayerModal({ video, onClose, onExtend, onDownload }) {
   }, []);
 
   /**
-   * 当延长输入框展开时，滚动到可见区域
-   */
-  useEffect(() => {
-    if (showExtendInput && extendInputRef.current) {
-      extendInputRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-    }
-  }, [showExtendInput]);
-
-  /**
    * 处理视频元数据加载完成
    * 获取视频时长
    */
@@ -82,13 +70,17 @@ export function VideoPlayerModal({ video, onClose, onExtend, onDownload }) {
    * 处理延长
    */
   const handleExtend = () => {
+    if (!canStillExtend) {
+      return;
+    }
+
     if (!extendPrompt.trim()) {
       alert('请输入延长描述');
       return;
     }
+
     onExtend(video, extendPrompt);
     setExtendPrompt('');
-    setShowExtendInput(false);
     onClose(); // 关闭弹窗
   };
 
@@ -106,126 +98,189 @@ export function VideoPlayerModal({ video, onClose, onExtend, onDownload }) {
     e.stopPropagation();
   };
 
+  /**
+   * 获取延长按钮文案
+   *
+   * @returns {string} 按钮文案
+   */
+  const getExtendButtonLabel = () => {
+    if (!video.canExtend) return '仅 720p 视频支持延长';
+    if (extensionCount >= MAX_EXTENSIONS) return '已达最大延长次数';
+    return `开始延长 (${extensionCount + 1}/${MAX_EXTENSIONS})`;
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4"
       onClick={onClose}
     >
-      {/* 内容容器 - 添加 max-h 和 overflow-y-auto 支持滚动 */}
       <div
-        className="relative max-w-4xl w-full max-h-[90vh] overflow-y-auto bg-slate-100 dark:bg-zinc-900 rounded-lg shadow-2xl"
+        className="
+          relative w-full max-w-6xl h-[90vh]
+          bg-white dark:bg-white border border-slate-200
+          rounded-2xl shadow-2xl
+          flex flex-col
+        "
         onClick={handleContentClick}
       >
         {/* 关闭按钮 */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors"
+          className="
+            absolute top-4 right-4 z-10
+            p-2 rounded-full
+            bg-slate-100 hover:bg-slate-200
+            text-slate-700 transition-colors
+          "
           title="关闭"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5" />
         </button>
 
-        {/* 视频播放器 */}
-        <div className="relative bg-black">
-          <video
-            ref={videoRef}
-            src={video.url}
-            className="w-full max-h-[70vh] object-contain"
-            controls
-            loop
-            autoPlay
-            onLoadedMetadata={handleLoadedMetadata}
-          />
+        {/* 上半部分：左侧视频 + 右侧信息 */}
+        <div className="flex-1 min-h-0 p-4 lg:p-5">
+          <div className="h-full min-h-0 flex flex-col lg:flex-row gap-4">
+            {/* 左侧视频区 */}
+            <div className="flex-1 min-h-0 rounded-xl bg-black flex items-center justify-center p-3">
+              <video
+                ref={videoRef}
+                src={video.url}
+                className="max-w-full max-h-full object-contain rounded-lg"
+                controls
+                loop
+                autoPlay
+                onLoadedMetadata={handleLoadedMetadata}
+              />
+            </div>
+
+            {/* 右侧信息区 */}
+            <aside
+              className="
+                w-full lg:w-96 lg:max-w-96 shrink-0
+                rounded-xl border border-slate-700/80
+                bg-slate-900/80
+                p-4 text-slate-200
+                flex flex-col min-h-48 lg:min-h-0
+                gap-4
+              "
+            >
+              {/* 参数标签 */}
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="px-2.5 py-1 bg-blue-600 text-white text-xs rounded-full">
+                  {video.resolution}
+                </span>
+                <span className="px-2.5 py-1 bg-indigo-600 text-white text-xs rounded-full">
+                  {video.ratio}
+                </span>
+                {extensionCount > 0 && (
+                  <span className="px-2.5 py-1 bg-orange-500 text-white text-xs rounded-full">
+                    已延长 {extensionCount}/{MAX_EXTENSIONS}
+                  </span>
+                )}
+              </div>
+
+              {/* Prompt 信息 */}
+              <section className="min-h-0 flex-1 flex flex-col">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-semibold text-slate-100">Prompt</h3>
+                  {video.prompt && video.prompt.length > 120 && (
+                    <button
+                      onClick={() => setIsPromptExpanded(!isPromptExpanded)}
+                      className="text-slate-400 hover:text-slate-200 transition-colors"
+                      title={isPromptExpanded ? '收起' : '展开'}
+                    >
+                      {isPromptExpanded ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      )}
+                    </button>
+                  )}
+                </div>
+                <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+                  <p className={`text-sm leading-relaxed whitespace-pre-wrap ${
+                    video.prompt && !isPromptExpanded ? 'line-clamp-5' : ''
+                  }`}>
+                    {video.prompt || '暂无提示词记录'}
+                  </p>
+                </div>
+              </section>
+
+              {/* 延长输入 */}
+              <section className="space-y-2">
+                <label className="block text-sm font-medium text-slate-200">
+                  延长描述
+                </label>
+                <textarea
+                  value={extendPrompt}
+                  onChange={(e) => setExtendPrompt(e.target.value)}
+                  placeholder={canStillExtend ? '描述视频接下来的内容...' : '当前视频不可继续延长'}
+                  disabled={!canStillExtend}
+                  className="
+                    w-full px-3 py-2 rounded-lg resize-none
+                    bg-zinc-950 border border-zinc-700
+                    text-slate-100 placeholder:text-zinc-500
+                    focus:outline-none focus:ring-2 focus:ring-blue-500/60
+                    disabled:opacity-60 disabled:cursor-not-allowed
+                  "
+                  rows={4}
+                />
+                <p className="text-xs text-slate-400">
+                  {video.canExtend
+                    ? (extensionCount >= MAX_EXTENSIONS
+                      ? `已达最大延长次数（${MAX_EXTENSIONS}）`
+                      : `当前将执行第 ${extensionCount + 1} 次延长`)
+                    : '仅 720p 视频支持延长'}
+                </p>
+              </section>
+            </aside>
+          </div>
         </div>
 
-        {/* 视频信息 */}
-        <div className="p-6 space-y-4">
-          {/* 参数信息 */}
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="px-3 py-1 bg-blue-500 text-white text-sm rounded-full">
-              {video.resolution}
-            </span>
-            <span className="px-3 py-1 bg-purple-500 text-white text-sm rounded-full">
-              {video.ratio}
-            </span>
-            {/* 延长次数标签（如果已延长） */}
-            {extensionCount > 0 && (
-              <span className="px-3 py-1 bg-orange-500 text-white text-sm rounded-full">
-                已延长 {extensionCount}/{MAX_EXTENSIONS}
-              </span>
-            )}
-          </div>
+        {/* 底部操作区 */}
+        <div className="border-t border-slate-200 p-4">
+          <div className="flex flex-wrap items-center justify-end gap-3">
+            <button
+              onClick={handleExtend}
+              disabled={!canStillExtend || !extendPrompt.trim()}
+              className="
+                flex items-center gap-2
+                px-4 py-2 rounded-full
+                bg-blue-600 text-white
+                hover:bg-blue-700 transition-colors
+                disabled:bg-slate-700 disabled:text-slate-400 disabled:cursor-not-allowed
+              "
+            >
+              <ArrowRightCircle className="w-4 h-4" />
+              {getExtendButtonLabel()}
+            </button>
 
-          {/* 提示词 */}
-          {video.prompt && (
-            <div>
-              <p className="text-sm text-slate-500 dark:text-zinc-500 mb-1">提示词</p>
-              <p className="text-slate-900 dark:text-zinc-100">{video.prompt}</p>
-            </div>
-          )}
-
-          {/* 操作按钮 */}
-          <div className="flex gap-3">
-            {/* 延长按钮（仅 720p 且未达上限时显示） */}
-            {canStillExtend && (
-              <button
-                onClick={() => setShowExtendInput(!showExtendInput)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
-              >
-                <ArrowRightCircle className="w-5 h-5" />
-                <span>延长视频 ({extensionCount + 1}/{MAX_EXTENSIONS})</span>
-                {showExtendInput ? (
-                  <ChevronUp className="w-4 h-4" />
-                ) : (
-                  <ChevronDown className="w-4 h-4" />
-                )}
-              </button>
-            )}
-            {/* 已达上限时显示禁用按钮 */}
-            {video.canExtend && extensionCount >= MAX_EXTENSIONS && (
-              <button
-                disabled
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-400 text-white rounded-lg cursor-not-allowed"
-              >
-                <ArrowRightCircle className="w-5 h-5" />
-                <span>已达最大延长次数</span>
-              </button>
-            )}
-
-            {/* 下载按钮 */}
             <button
               onClick={handleDownload}
-              className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors"
+              className="
+                flex items-center gap-2
+                px-4 py-2 rounded-full
+                bg-slate-100 text-slate-800 border border-slate-300
+                hover:bg-slate-200 transition-colors
+              "
             >
-              <Download className="w-5 h-5" />
-              <span>下载视频</span>
+              <Download className="w-4 h-4" />
+              下载视频
+            </button>
+
+            <button
+              onClick={onClose}
+              className="
+                flex items-center gap-2
+                px-4 py-2 rounded-full
+                bg-slate-700/70 text-slate-100
+                hover:bg-slate-600/80 transition-colors
+              "
+            >
+              <X className="w-4 h-4" />
+              关闭
             </button>
           </div>
-
-          {/* 延长输入框（折叠） */}
-          {showExtendInput && canStillExtend && (
-            <div
-              ref={extendInputRef}
-              className="space-y-3 p-4 bg-slate-200 dark:bg-zinc-800 rounded-lg"
-            >
-              <label className="block text-sm font-medium text-slate-700 dark:text-zinc-300">
-                延长描述
-              </label>
-              <textarea
-                value={extendPrompt}
-                onChange={(e) => setExtendPrompt(e.target.value)}
-                placeholder="描述视频接下来的内容..."
-                className="w-full px-3 py-2 bg-white dark:bg-zinc-900 border border-slate-300 dark:border-zinc-700 rounded-lg text-slate-900 dark:text-zinc-100 placeholder-slate-400 dark:placeholder-zinc-600 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-                rows={3}
-              />
-              <button
-                onClick={handleExtend}
-                className="w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors"
-              >
-                开始延长
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>

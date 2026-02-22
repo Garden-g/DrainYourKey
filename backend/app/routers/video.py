@@ -4,7 +4,10 @@
 提供视频生成、状态查询和视频延长的 API 端点
 """
 
-from fastapi import APIRouter, HTTPException
+from datetime import date
+from typing import Optional
+
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
 
 from ..config import Config, logger
@@ -13,9 +16,10 @@ from ..models import (
     VideoExtendRequest,
     VideoStatusResponse,
     VideoResponse,
+    VideoLibraryResponse,
     ErrorResponse,
 )
-from ..services import video_service, JobStatus
+from ..services import video_service, JobStatus, history_service
 from ..utils import safe_resolve_path, raise_internal_error
 
 # 创建路由器
@@ -185,6 +189,50 @@ async def get_video_status(job_id: str) -> VideoStatusResponse:
         response.message = "等待处理"
 
     return response
+
+
+@router.get(
+    "/library",
+    response_model=VideoLibraryResponse,
+    summary="获取视频图库",
+    description="自动扫描 output/videos，按天返回视频并补全历史提示词与参数"
+)
+async def get_video_library(
+    days: int = Query(7, ge=1, le=30, description="首次加载最近天数"),
+    before: Optional[str] = Query(None, description="分页锚点（YYYY-MM-DD）"),
+    limit_days: int = Query(7, ge=1, le=30, description="分页每次返回天数")
+) -> VideoLibraryResponse:
+    """
+    获取按天分组的视频图库 API
+
+    Args:
+        days: 首次加载最近多少天
+        before: 分页锚点，只返回该日期之前（更早）的数据
+        limit_days: 分页每次最多返回多少天
+
+    Returns:
+        VideoLibraryResponse: 图库分组数据
+    """
+    try:
+        before_date: Optional[date] = None
+        if before:
+            try:
+                before_date = date.fromisoformat(before)
+            except ValueError:
+                raise HTTPException(status_code=400, detail="before 参数格式错误，应为 YYYY-MM-DD")
+
+        library_data = await history_service.get_video_library(
+            days=days,
+            before=before_date,
+            limit_days=limit_days
+        )
+
+        return VideoLibraryResponse(**library_data)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise_internal_error("获取视频图库失败", e)
 
 
 @router.get(

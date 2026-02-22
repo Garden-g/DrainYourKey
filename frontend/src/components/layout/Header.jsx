@@ -33,7 +33,7 @@ export function Header({ activeTab, isConnected = true }) {
           {title}
         </h1>
         <p className="text-xs text-slate-400 dark:text-zinc-500 font-medium">
-          Gemini 3.0 Pro API
+          AI 图像与视频生成服务
           <span className="mx-1">•</span>
           {isConnected ? '已连接' : '未连接'}
         </p>

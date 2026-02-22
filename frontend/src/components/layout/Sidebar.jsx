@@ -84,7 +84,7 @@ export function Sidebar({
         {isOpen ? (
           <span className="font-bold tracking-tight text-xl flex items-center gap-2 text-slate-900 dark:text-white">
             <div className="w-5 h-5 bg-blue-600 rounded-md"></div>
-            Gemini<span className="text-slate-400 dark:text-zinc-600">3</span>
+            AI<span className="text-slate-400 dark:text-zinc-600">Studio</span>
           </span>
         ) : (
           <div className="w-6 h-6 bg-blue-600 rounded-md"></div>

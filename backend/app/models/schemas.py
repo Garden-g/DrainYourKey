@@ -234,6 +234,106 @@ class HistoryResponse(BaseModel):
     total: int
 
 
+class ImageLibraryItem(BaseModel):
+    """
+    图库项模型
+
+    Attributes:
+        id: 图像唯一标识（当前使用文件名）
+        filename: 图像文件名
+        url: 图像访问 URL
+        created_at: 图像创建时间（使用文件修改时间）
+        prompt: 对应提示词（若历史中不存在则为空）
+        ratio: 图像宽高比（若未知则为默认值）
+    """
+    id: str
+    filename: str
+    url: str
+    created_at: datetime
+    prompt: str = ""
+    ratio: str = "3:2"
+
+
+class ImageLibraryDayGroup(BaseModel):
+    """
+    图库按天分组模型
+
+    Attributes:
+        date: 日期字符串，格式 YYYY-MM-DD
+        items: 当天的图像列表（按时间倒序）
+    """
+    date: str
+    items: List[ImageLibraryItem] = Field(default_factory=list)
+
+
+class ImageLibraryResponse(BaseModel):
+    """
+    图库响应模型
+
+    Attributes:
+        days: 按天分组后的图像数据
+        next_before: 下一页查询锚点（用于加载更早日期）
+        total_images: 当前筛选条件下匹配的图像总数
+    """
+    days: List[ImageLibraryDayGroup] = Field(default_factory=list)
+    next_before: Optional[str] = None
+    total_images: int = 0
+
+
+class VideoLibraryItem(BaseModel):
+    """
+    视频图库项模型
+
+    Attributes:
+        id: 视频唯一标识（当前使用文件名）
+        filename: 视频文件名
+        url: 视频访问 URL
+        created_at: 视频创建时间（使用文件修改时间）
+        prompt: 对应提示词（若历史中不存在则为空）
+        resolution: 分辨率（默认 720p）
+        ratio: 宽高比（默认 16:9）
+        mode: 生成模式（默认 text2vid）
+        can_extend: 是否可延长（当前规则：仅 720p 可延长）
+        video_id: 用于延长视频的任务 ID（可能为空）
+    """
+    id: str
+    filename: str
+    url: str
+    created_at: datetime
+    prompt: str = ""
+    resolution: str = "720p"
+    ratio: str = "16:9"
+    mode: str = "text2vid"
+    can_extend: bool = False
+    video_id: Optional[str] = None
+
+
+class VideoLibraryDayGroup(BaseModel):
+    """
+    视频图库按天分组模型
+
+    Attributes:
+        date: 日期字符串，格式 YYYY-MM-DD
+        items: 当天的视频列表（按时间倒序）
+    """
+    date: str
+    items: List[VideoLibraryItem] = Field(default_factory=list)
+
+
+class VideoLibraryResponse(BaseModel):
+    """
+    视频图库响应模型
+
+    Attributes:
+        days: 按天分组后的视频数据
+        next_before: 下一页查询锚点（用于加载更早日期）
+        total_videos: 当前筛选条件下匹配的视频总数
+    """
+    days: List[VideoLibraryDayGroup] = Field(default_factory=list)
+    next_before: Optional[str] = None
+    total_videos: int = 0
+
+
 # ==================== 通用响应模型 ====================
 
 class ErrorResponse(BaseModel):

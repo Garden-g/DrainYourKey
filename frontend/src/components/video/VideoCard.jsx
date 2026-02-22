@@ -140,7 +140,7 @@ export function VideoCard({ video, onPlay, onExtend, onDownload }) {
 
       {/* 悬停操作按钮 */}
       {isHovered && (
-        <div className="absolute bottom-2 right-2 flex gap-2 z-10">
+        <div className="absolute bottom-2 right-2 flex flex-row gap-2 z-10">
           {/* 延长按钮（仅 720p 且未达上限时显示） */}
           {canStillExtend && (
             <button

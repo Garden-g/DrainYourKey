@@ -93,7 +93,7 @@ export function PromptAssistModal({ isOpen, onClose, onApply, targetType = 'imag
 
         {/* 说明文字 */}
         <p className="text-sm text-slate-500 dark:text-zinc-400 mb-4">
-          输入一个简单的想法，Gemini 将为您扩写成适合生成的详细描述性提示词。
+          输入一个简单的想法，AI 引擎将为您扩写成适合生成的详细描述性提示词。
         </p>
 
         {/* 输入框 */}

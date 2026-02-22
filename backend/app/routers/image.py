@@ -4,9 +4,11 @@
 提供图像生成、编辑和提示词优化的 API 端点
 """
 
-from fastapi import APIRouter, HTTPException
+from datetime import date
+from typing import Optional
+
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
-from pathlib import Path
 
 from ..config import Config, logger
 from ..models import (
@@ -15,6 +17,7 @@ from ..models import (
     EnhancePromptRequest,
     ImageResponse,
     ImageStatusResponse,
+    ImageLibraryResponse,
     PromptResponse,
     ErrorResponse,
 )
@@ -208,6 +211,50 @@ async def enhance_prompt(request: EnhancePromptRequest) -> PromptResponse:
 
     except Exception as e:
         raise_internal_error("提示词优化失败", e)
+
+
+@router.get(
+    "/library",
+    response_model=ImageLibraryResponse,
+    summary="获取图片图库",
+    description="自动扫描 output/images，按天返回图片并补全历史提示词"
+)
+async def get_image_library(
+    days: int = Query(7, ge=1, le=30, description="首次加载最近天数"),
+    before: Optional[str] = Query(None, description="分页锚点（YYYY-MM-DD）"),
+    limit_days: int = Query(7, ge=1, le=30, description="分页每次返回天数")
+) -> ImageLibraryResponse:
+    """
+    获取按天分组的图片图库 API
+
+    Args:
+        days: 首次加载最近多少天
+        before: 分页锚点，只返回该日期之前（更早）的数据
+        limit_days: 分页每次最多返回多少天
+
+    Returns:
+        ImageLibraryResponse: 图库分组数据
+    """
+    try:
+        before_date: Optional[date] = None
+        if before:
+            try:
+                before_date = date.fromisoformat(before)
+            except ValueError:
+                raise HTTPException(status_code=400, detail="before 参数格式错误，应为 YYYY-MM-DD")
+
+        library_data = await history_service.get_image_library(
+            days=days,
+            before=before_date,
+            limit_days=limit_days
+        )
+
+        return ImageLibraryResponse(**library_data)
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise_internal_error("获取图片图库失败", e)
 
 
 @router.get(
