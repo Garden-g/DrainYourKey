@@ -1046,8 +1046,8 @@ export default function App() {
           <Header activeTab={activeTab} />
 
           {/* 内容区 - 移除整体滚动，让画廊独立滚动 */}
-          <div className="flex-1 overflow-hidden p-4 lg:p-8">
-            <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row gap-8 h-full">
+          <div className="flex-1 min-h-0 overflow-hidden p-4 lg:p-8">
+            <div className="max-w-[1600px] mx-auto flex flex-col lg:flex-row gap-8 h-full min-h-0">
               {/* 左侧控制面板 */}
               {activeTab === 'image' ? (
                 <ImagePanel

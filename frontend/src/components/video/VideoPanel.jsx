@@ -85,8 +85,9 @@ export function VideoPanel({
     : VID_DURATIONS_HIGH_RES;
 
   return (
-    <div className="w-full lg:w-[380px] shrink-0 flex flex-col gap-6">
-      <div className="flex flex-col gap-6">
+    <div className="w-full lg:w-[380px] lg:h-full min-h-0 shrink-0 flex flex-col">
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1">
+        <div className="flex flex-col gap-6">
         {/* 提示词输入 */}
         <div className="relative group">
           <div className="flex justify-between items-center mb-2">
@@ -207,16 +208,18 @@ export function VideoPanel({
           </div>
         )}
 
-        {/* 生成按钮 */}
-        <div className="pt-4 border-t border-slate-200 dark:border-zinc-900">
-          <Button
-            onClick={onGenerate}
-            disabled={isGenerating || (mode === 'text2vid' && !prompt)}
-            className="w-full h-12 text-base shadow-lg shadow-blue-500/20 dark:shadow-none"
-          >
-            {isGenerating ? '渲染中...' : '生成视频'}
-          </Button>
         </div>
+      </div>
+
+      {/* 生成按钮固定在面板底部，避免被可滚动内容挤出视区 */}
+      <div className="shrink-0 pt-4 border-t border-slate-200 dark:border-zinc-900 bg-slate-50/95 dark:bg-black/95 backdrop-blur supports-[backdrop-filter]:bg-slate-50/80">
+        <Button
+          onClick={onGenerate}
+          disabled={isGenerating || (mode === 'text2vid' && !prompt)}
+          className="w-full h-12 text-base shadow-lg shadow-blue-500/20 dark:shadow-none"
+        >
+          {isGenerating ? '渲染中...' : '生成视频'}
+        </Button>
       </div>
     </div>
   );
