@@ -869,6 +869,37 @@ export default function App() {
   }, []);
 
   /**
+   * 打开视频弹窗
+   *
+   * @param {Object} video - 视频对象
+   * @param {boolean} focusExtendInput - 是否默认聚焦到延长描述输入框
+   */
+  const openVideoModal = useCallback((video, focusExtendInput = false) => {
+    if (!video) {
+      return;
+    }
+
+    setPlayingVideo({
+      ...video,
+      __autoFocusExtend: focusExtendInput,
+    });
+  }, []);
+
+  /**
+   * 处理播放视频：打开弹窗但不默认聚焦延长输入框
+   */
+  const handlePlayVideo = useCallback((video) => {
+    openVideoModal(video, false);
+  }, [openVideoModal]);
+
+  /**
+   * 处理“延长视频”入口：打开弹窗并聚焦延长输入框
+   */
+  const handleOpenExtendVideoModal = useCallback((video) => {
+    openVideoModal(video, true);
+  }, [openVideoModal]);
+
+  /**
    * 将已生成图片直接添加到参考图列表
    *
    * @param {Object} img - 已生成图片对象
@@ -1026,6 +1057,7 @@ export default function App() {
           onClose={() => setPlayingVideo(null)}
           onExtend={handleExtendVideo}
           onDownload={handleDownloadVideo}
+          autoFocusExtend={Boolean(playingVideo?.__autoFocusExtend)}
         />
       )}
 
@@ -1106,8 +1138,8 @@ export default function App() {
                 <VideoGallery
                   dayGroups={videoDayGroups}
                   videoJobs={videoJobs}
-                  onPlay={setPlayingVideo}
-                  onExtend={handleExtendVideo}
+                  onPlay={handlePlayVideo}
+                  onExtend={handleOpenExtendVideoModal}
                   onDownload={handleDownloadVideo}
                   hasMoreDays={Boolean(videoLibraryBefore)}
                   onLoadMoreDays={handleLoadMoreVideoDays}

@@ -34,13 +34,15 @@ const MAX_EXTENSIONS = 20;
  * @param {Function} props.onClose - 关闭回调
  * @param {Function} props.onExtend - 延长回调
  * @param {Function} props.onDownload - 下载回调
+ * @param {boolean} [props.autoFocusExtend=false] - 打开时是否聚焦延长输入框
  */
-export function VideoPlayerModal({ video, onClose, onExtend, onDownload }) {
+export function VideoPlayerModal({ video, onClose, onExtend, onDownload, autoFocusExtend = false }) {
   // 延长描述输入值
   const [extendPrompt, setExtendPrompt] = useState('');
   const [duration, setDuration] = useState(null); // 视频时长
   const [isPromptExpanded, setIsPromptExpanded] = useState(false);
   const videoRef = useRef(null);
+  const extendPromptRef = useRef(null);
 
   // 计算延长次数
   const extensionCount = calculateExtensionCount(duration);
@@ -57,6 +59,19 @@ export function VideoPlayerModal({ video, onClose, onExtend, onDownload }) {
       });
     }
   }, []);
+
+  /**
+   * 从缩略图“延长”入口打开时，自动聚焦输入框，减少一次额外点击
+   */
+  useEffect(() => {
+    if (!autoFocusExtend || !canStillExtend) {
+      return;
+    }
+
+    if (extendPromptRef.current) {
+      extendPromptRef.current.focus();
+    }
+  }, [autoFocusExtend, canStillExtend]);
 
   /**
    * 处理视频元数据加载完成
@@ -212,6 +227,7 @@ export function VideoPlayerModal({ video, onClose, onExtend, onDownload }) {
                   延长描述
                 </label>
                 <textarea
+                  ref={extendPromptRef}
                   value={extendPrompt}
                   onChange={(e) => setExtendPrompt(e.target.value)}
                   placeholder={canStillExtend ? '描述视频接下来的内容...' : '当前视频不可继续延长'}
