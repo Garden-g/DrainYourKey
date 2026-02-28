@@ -163,7 +163,7 @@ class HistoryService:
 
         数据来源策略：
         1. 以 output/images 目录中的实际文件为准（保证刷新后不丢失）
-        2. 使用 history.json 为图片补全 prompt 与 aspect_ratio
+        2. 使用 history.json 为图片补全 prompt、aspect_ratio、resolution、image_model
 
         Args:
             days: 首次加载时返回最近多少天的数据
@@ -195,6 +195,8 @@ class HistoryService:
             image_meta_map[filename] = {
                 "prompt": item.get("prompt") or "",
                 "ratio": params.get("aspect_ratio") or "3:2",
+                "resolution": params.get("resolution") or "未知",
+                "image_model": params.get("image_model") or "unknown",
             }
 
         image_entries: List[Dict[str, Any]] = []
@@ -225,6 +227,8 @@ class HistoryService:
                 "created_at": created_at,
                 "prompt": meta.get("prompt", ""),
                 "ratio": meta.get("ratio", "3:2"),
+                "resolution": meta.get("resolution", "未知"),
+                "image_model": meta.get("image_model", "unknown"),
                 "date": created_day.isoformat(),
             })
 
@@ -252,6 +256,8 @@ class HistoryService:
                     "created_at": item["created_at"],
                     "prompt": item["prompt"],
                     "ratio": item["ratio"],
+                    "resolution": item["resolution"],
+                    "image_model": item["image_model"],
                 })
 
             day_groups.append({

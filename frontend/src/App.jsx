@@ -91,6 +91,22 @@ function getImageModelCapabilities(model) {
 }
 
 /**
+ * 将图片模型标识映射为可读名称
+ *
+ * @param {string} model - 业务模型标识
+ * @returns {string} 友好模型名
+ */
+function getImageModelLabel(model) {
+  if (model === 'nano_banana_pro') {
+    return 'Nano Banana Pro';
+  }
+  if (model === 'nano_banana_2') {
+    return 'Nano Banana 2';
+  }
+  return '未知';
+}
+
+/**
  * 计算最接近的预设宽高比
  *
  * @param {number} ratio - 实际宽高比 (width / height)
@@ -188,6 +204,9 @@ function normalizeDayItems(items = []) {
       url: item.url,
       filename,
       ratio: item.ratio || '3:2',
+      resolution: item.resolution || '未知',
+      imageModel: item.imageModel || item.image_model || 'unknown',
+      modelLabel: getImageModelLabel(item.imageModel || item.image_model || 'unknown'),
       prompt: item.prompt || '',
       createdAt: item.createdAt || item.created_at || new Date().toISOString(),
     });
@@ -710,6 +729,9 @@ export default function App() {
               url: getImageUrl(filename),
               filename,
               ratio: status.aspect_ratio || '3:2',
+              resolution: status.resolution || '未知',
+              imageModel: status.image_model || 'unknown',
+              modelLabel: getImageModelLabel(status.image_model || 'unknown'),
               prompt: status.prompt || '',
               createdAt,
             }));

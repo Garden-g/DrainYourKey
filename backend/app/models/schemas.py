@@ -112,6 +112,7 @@ class ImageStatusResponse(BaseModel):
         message: 消息 (错误消息或其他信息)
         prompt: 生成图像使用的提示词
         aspect_ratio: 生成图像使用的宽高比
+        resolution: 生成图像使用的分辨率
         image_model: 生成图像使用的模型标识
     """
     job_id: str
@@ -122,6 +123,7 @@ class ImageStatusResponse(BaseModel):
     message: Optional[str] = None
     prompt: str = ""
     aspect_ratio: str = "3:2"
+    resolution: str = "未知"
     image_model: str = "nano_banana_pro"
 
 
@@ -252,6 +254,8 @@ class ImageLibraryItem(BaseModel):
         created_at: 图像创建时间（使用文件修改时间）
         prompt: 对应提示词（若历史中不存在则为空）
         ratio: 图像宽高比（若未知则为默认值）
+        resolution: 图像分辨率（若未知则为“未知”）
+        image_model: 图像模型标识（若未知则为 "unknown"）
     """
     id: str
     filename: str
@@ -259,6 +263,8 @@ class ImageLibraryItem(BaseModel):
     created_at: datetime
     prompt: str = ""
     ratio: str = "3:2"
+    resolution: str = "未知"
+    image_model: str = "unknown"
 
 
 class ImageLibraryDayGroup(BaseModel):

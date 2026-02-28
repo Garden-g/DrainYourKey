@@ -15,6 +15,8 @@ import { Film, Download, ZoomIn, Plus } from 'lucide-react';
  * @param {string} props.img.url - 图像 URL
  * @param {string} props.img.prompt - 生成提示词
  * @param {string} props.img.ratio - 宽高比
+ * @param {string} [props.img.resolution] - 分辨率
+ * @param {string} [props.img.modelLabel] - 模型友好名
  * @param {Function} props.onMakeVideo - 生成视频回调
  * @param {Function} props.onAddReference - 添加为参考图回调
  * @param {Function} props.onPreview - 预览回调
@@ -147,20 +149,23 @@ export function ImageCard({ img, onMakeVideo, onAddReference, onPreview, onDownl
         </div>
       </div>
 
-      {/* 宽高比标签 */}
+      {/* 悬浮元信息标签：比例 / 分辨率 / 生图模型 */}
       <div
         className="
           absolute top-3 left-3
-          px-2 py-1
+          px-2 py-1.5
           bg-white/90 dark:bg-black/90
           text-slate-900 dark:text-white
-          text-[9px] font-bold uppercase tracking-wider
+          text-[9px] font-bold tracking-wider
           rounded-sm backdrop-blur-md
           opacity-0 group-hover:opacity-100
           transition-opacity duration-300 delay-100
+          flex flex-col gap-1
         "
       >
-        {img.ratio}
+        <span>{img.ratio || '3:2'}</span>
+        <span>{img.resolution || '未知'}</span>
+        <span>{img.modelLabel || '未知'}</span>
       </div>
     </div>
   );

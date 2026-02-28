@@ -85,6 +85,7 @@ class ImageJob:
         created_at: 创建时间戳
         prompt: 生成图像使用的提示词
         aspect_ratio: 生成图像使用的宽高比
+        resolution: 生成图像使用的分辨率
         image_model: 生成图像使用的模型标识
     """
     job_id: str
@@ -96,6 +97,7 @@ class ImageJob:
     created_at: float = 0
     prompt: str = ""
     aspect_ratio: str = "3:2"
+    resolution: str = "2K"
     image_model: str = "nano_banana_pro"
 
     def __post_init__(self):
@@ -376,6 +378,7 @@ class ImageService:
             created_at=time.time(),
             prompt=prompt,
             aspect_ratio=aspect_ratio,
+            resolution=resolution,
             image_model=image_model,
         )
         self._jobs[job_id] = job
