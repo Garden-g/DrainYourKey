@@ -67,15 +67,17 @@ export function ImageCard({ img, onMakeVideo, onAddReference, onPreview, onDownl
           backdrop-blur-[2px]
         "
       >
-        {/* 提示词 */}
+        {/* 中央提示词：位于卡片中间区域，且不拦截按钮点击 */}
         {img.prompt && (
-          <p className="text-xs text-center text-slate-600 dark:text-zinc-400 line-clamp-2 px-2 italic">
-            "{img.prompt}"
-          </p>
+          <div className="absolute inset-0 px-6 py-12 flex items-center justify-center pointer-events-none">
+            <p className="text-xs text-center text-slate-600 dark:text-zinc-400 line-clamp-2 italic">
+              "{img.prompt}"
+            </p>
+          </div>
         )}
 
         {/* 操作按钮 */}
-        <div className="absolute right-3 bottom-3 flex flex-row gap-2 scale-95 group-hover:scale-100 transition-transform duration-300 delay-75">
+        <div className="absolute right-3 bottom-3 z-20 flex flex-row gap-2 scale-95 group-hover:scale-100 transition-transform duration-300 delay-75">
           {/* 生成视频按钮 */}
           <button
             onClick={() => onMakeVideo && onMakeVideo(img)}
@@ -152,20 +154,26 @@ export function ImageCard({ img, onMakeVideo, onAddReference, onPreview, onDownl
       {/* 悬浮元信息标签：比例 / 分辨率 / 生图模型 */}
       <div
         className="
-          absolute top-3 left-3
-          px-2 py-1.5
+          absolute top-3 left-3 z-20
+          px-2 py-1
           bg-white/90 dark:bg-black/90
           text-slate-900 dark:text-white
           text-[9px] font-bold tracking-wider
           rounded-sm backdrop-blur-md
           opacity-0 group-hover:opacity-100
           transition-opacity duration-300 delay-100
-          flex flex-col gap-1
+          flex items-center gap-1.5 whitespace-nowrap
         "
       >
-        <span>{img.ratio || '3:2'}</span>
-        <span>{img.resolution || '未知'}</span>
-        <span>{img.modelLabel || '未知'}</span>
+        <span className="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10">
+          {img.ratio || '3:2'}
+        </span>
+        <span className="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10">
+          {img.resolution || '未知'}
+        </span>
+        <span className="px-1.5 py-0.5 rounded bg-black/5 dark:bg-white/10 truncate max-w-[120px]">
+          {img.modelLabel || '未知'}
+        </span>
       </div>
     </div>
   );
