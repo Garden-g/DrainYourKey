@@ -86,7 +86,7 @@ export function ImagePanel({
               描述词
             </label>
             <span className="text-[10px] text-slate-400 dark:text-zinc-600 font-mono">
-              {prompt.length}/2000
+              {prompt.length}
             </span>
           </div>
           <textarea
@@ -105,7 +105,6 @@ export function ImagePanel({
               transition-all font-normal leading-relaxed
               shadow-sm hover:border-slate-300 dark:hover:border-zinc-700
             "
-            maxLength={2000}
           />
           {/* AI 优化按钮 */}
           <div className="absolute bottom-3 right-3">

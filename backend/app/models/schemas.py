@@ -26,7 +26,7 @@ class ImageGenerateRequest(BaseModel):
         reference_images: 参考图像的 base64 编码列表 (可选，最多 14 张)
         reference_image: 兼容旧版的单张参考图 base64 编码 (可选)
     """
-    prompt: str = Field(..., min_length=1, max_length=2000, description="图像描述")
+    prompt: str = Field(..., min_length=1, description="图像描述")
     image_model: Literal["nano_banana_pro", "nano_banana_2"] = Field(
         default="nano_banana_pro",
         description="图片模型: nano_banana_pro 或 nano_banana_2"
