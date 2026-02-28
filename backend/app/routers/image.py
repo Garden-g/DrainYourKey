@@ -129,7 +129,11 @@ async def get_image_status(job_id: str) -> ImageStatusResponse:
         progress=job.progress,
         images=job.images,
         session_id=job.session_id,
-        message=job.error_message if job.status.value == "failed" else None,
+        message=(
+            job.error_message
+            if job.status.value in {"failed", "completed"}
+            else None
+        ),
         prompt=job.prompt,
         aspect_ratio=job.aspect_ratio,
         resolution=job.resolution,

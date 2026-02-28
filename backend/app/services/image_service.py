@@ -683,8 +683,9 @@ class ImageService:
             )
 
             generated_files: List[str] = []
-            session_id = str(uuid.uuid4())
+            session_id: Optional[str] = None
             output_extension, output_format = self._resolve_output_format(output_mime_type)
+            parallel_limit = 3
 
             # 如果使用谷歌搜索，优化提示词
             actual_prompt = prompt
@@ -723,66 +724,185 @@ class ImageService:
                 safety_filter_level=safety_filter_level,
             )
 
-            # 创建多轮对话会话
             client = self._ensure_client()
-            # 创建会话属于阻塞调用，使用线程池避免阻塞事件循环
-            try:
-                chat = await asyncio.wait_for(
-                    asyncio.to_thread(
-                        client.chats.create,
-                        model=provider_model,
-                        config=generation_config
-                    ),
-                    timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-                )
-            except asyncio.TimeoutError:
-                raise TimeoutError("图像生成初始化超时")
-
-            # 存储会话
-            self._sessions[session_id] = chat
-            job.session_id = session_id
-            self._session_timestamps[session_id] = time.time()
-
             job.progress = 20
             # 初始化 images 列表，用于实时更新（前端轮询时可以看到已生成的图片）
             job.images = []
 
-            # 生成指定数量的图像
-            # 注意：由于 Gemini API 使用同一个 chat 会话，不支持真正的并发
-            # 但我们确保每生成一张就立即更新 job.images，让前端可以实时显示
-            for i in range(count):
-                logger.debug(f"生成第 {i + 1}/{count} 张图像")
+            parallel_enabled = generation_mode == "standard" and count > 1
+            success_count = 0
+            failed_count = 0
 
-                # 发送请求
-                if i == 0:
-                    # 发送请求为阻塞调用，需放线程执行并设置超时
+            if parallel_enabled:
+                logger.info(
+                    f"普通模式启用多并发生图: job_id={job_id}, count={count}, parallel_limit={parallel_limit}"
+                )
+                semaphore = asyncio.Semaphore(parallel_limit)
+                state_lock = asyncio.Lock()
+                completed_requests = 0
+                success_sessions: List[Dict[str, Any]] = []
+                failed_details: List[str] = []
+
+                async def run_single_request(index: int) -> None:
+                    """
+                    执行单个并发生图请求（同 prompt、独立会话）
+
+                    Args:
+                        index: 当前分片序号（从 0 开始）
+                    """
+                    nonlocal completed_requests
+                    local_session_id = str(uuid.uuid4())
+                    local_chat = None
+                    local_files: List[str] = []
+                    local_error: Optional[str] = None
+
                     try:
-                        response = await asyncio.wait_for(
-                            asyncio.to_thread(chat.send_message, contents),
-                            timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-                        )
-                    except asyncio.TimeoutError:
-                        raise TimeoutError("图像生成超时")
+                        async with semaphore:
+                            logger.debug(f"并发生图分片开始: job_id={job_id}, shard={index + 1}/{count}")
+                            try:
+                                local_chat = await asyncio.wait_for(
+                                    asyncio.to_thread(
+                                        client.chats.create,
+                                        model=provider_model,
+                                        config=generation_config
+                                    ),
+                                    timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                                )
+                            except asyncio.TimeoutError:
+                                raise TimeoutError("图像生成初始化超时")
+
+                            try:
+                                response = await asyncio.wait_for(
+                                    asyncio.to_thread(local_chat.send_message, contents),
+                                    timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                                )
+                            except asyncio.TimeoutError:
+                                raise TimeoutError("图像生成超时")
+
+                            for part in (response.parts or []):
+                                if part.inline_data is None:
+                                    continue
+
+                                image = part.as_image()
+                                filename = generate_filename("image", output_extension)
+                                file_path = Config.IMAGES_DIR / filename
+                                await asyncio.to_thread(
+                                    self._save_generated_image,
+                                    image,
+                                    str(file_path),
+                                    output_format,
+                                    output_compression_quality
+                                )
+                                local_files.append(filename)
+
+                            if not local_files:
+                                local_error = "API 未返回任何图像数据"
+                    except Exception as exc:
+                        local_error = str(exc) or "图像生成失败"
+                    finally:
+                        async with state_lock:
+                            completed_requests += 1
+                            job.progress = 20 + int(completed_requests / count * 70)
+
+                            if local_files:
+                                generated_files.extend(local_files)
+                                job.images.extend(local_files)
+                                success_sessions.append(
+                                    {
+                                        "index": index,
+                                        "session_id": local_session_id,
+                                        "chat": local_chat,
+                                    }
+                                )
+                                logger.info(
+                                    f"并发分片成功: job_id={job_id}, shard={index + 1}/{count}, "
+                                    f"output={len(local_files)}"
+                                )
+                                if local_error:
+                                    failed_details.append(f"第{index + 1}张(部分成功): {local_error}")
+                                    logger.warning(
+                                        f"并发分片部分成功: job_id={job_id}, shard={index + 1}/{count}, "
+                                        f"error={local_error}"
+                                    )
+                            else:
+                                failed_details.append(f"第{index + 1}张: {local_error}")
+                                logger.warning(
+                                    f"并发分片失败: job_id={job_id}, shard={index + 1}/{count}, error={local_error}"
+                                )
+
+                await asyncio.gather(*(run_single_request(i) for i in range(count)))
+
+                success_count = len(success_sessions)
+                failed_count = count - success_count
+
+                if success_count == 0:
+                    error_msg = "图像生成失败: 所有并发分片均失败"
+                    if failed_details:
+                        error_msg += f"（首个错误: {failed_details[0]}）"
+                    if use_google_search:
+                        error_msg += "（可能是谷歌搜索工具导致 API 返回文本而非图像）"
+                    logger.error(error_msg)
+                    raise Exception(error_msg)
+
+                # 会话保留策略：优先保留第 1 张（索引 0）对应的会话；
+                # 若首张失败，则降级保留最先成功分片的会话。
+                selected_session = next(
+                    (item for item in success_sessions if item["index"] == 0),
+                    success_sessions[0]
+                )
+                session_id = selected_session["session_id"]
+                self._sessions[session_id] = selected_session["chat"]
+                self._session_timestamps[session_id] = time.time()
+                job.session_id = session_id
+
+                if failed_count > 0:
+                    job.error_message = (
+                        f"部分图像生成失败: 成功 {success_count}/{count}，失败 {failed_count}"
+                    )
                 else:
-                    # 后续图像使用相同提示词
+                    job.error_message = None
+            else:
+                # 非并发路径：保持现有行为（专业模式，或仅生成 1 张）
+                session_id = str(uuid.uuid4())
+                try:
+                    chat = await asyncio.wait_for(
+                        asyncio.to_thread(
+                            client.chats.create,
+                            model=provider_model,
+                            config=generation_config
+                        ),
+                        timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                    )
+                except asyncio.TimeoutError:
+                    raise TimeoutError("图像生成初始化超时")
+
+                self._sessions[session_id] = chat
+                job.session_id = session_id
+                self._session_timestamps[session_id] = time.time()
+
+                for i in range(count):
+                    logger.debug(f"生成第 {i + 1}/{count} 张图像")
+
                     try:
-                        response = await asyncio.wait_for(
-                            asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {actual_prompt}"),
-                            timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
-                        )
+                        if i == 0:
+                            response = await asyncio.wait_for(
+                                asyncio.to_thread(chat.send_message, contents),
+                                timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                            )
+                        else:
+                            response = await asyncio.wait_for(
+                                asyncio.to_thread(chat.send_message, f"再生成一张类似的图像: {actual_prompt}"),
+                                timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
+                            )
                     except asyncio.TimeoutError:
                         raise TimeoutError("图像生成超时")
 
-                # 处理响应
-                for part in response.parts:
-                    if part.inline_data is not None:
-                        # 获取图像数据
+                    for part in (response.parts or []):
+                        if part.inline_data is None:
+                            continue
                         image = part.as_image()
-
-                        # 生成文件名并保存
                         filename = generate_filename("image", output_extension)
                         file_path = Config.IMAGES_DIR / filename
-                        # 图像保存属于磁盘 IO，放线程执行避免阻塞
                         await asyncio.to_thread(
                             self._save_generated_image,
                             image,
@@ -790,27 +910,30 @@ class ImageService:
                             output_format,
                             output_compression_quality
                         )
-
-                        # 立即添加到 job.images，让前端可以实时显示
                         job.images.append(filename)
                         generated_files.append(filename)
                         logger.info(f"图像已保存: {filename} (已完成 {len(job.images)}/{count})")
 
-                # 更新进度（基于已生成的图片数量）
-                job.progress = 20 + int(len(job.images) / count * 70)
+                    job.progress = 20 + int((i + 1) / count * 70)
 
-            # 检查是否生成了图像
-            if not generated_files:
-                error_msg = "图像生成失败: API 未返回任何图像数据"
-                if use_google_search:
-                    error_msg += "（可能是谷歌搜索工具导致 API 返回文本而非图像）"
-                logger.error(error_msg)
-                raise Exception(error_msg)
+                if not generated_files:
+                    error_msg = "图像生成失败: API 未返回任何图像数据"
+                    if use_google_search:
+                        error_msg += "（可能是谷歌搜索工具导致 API 返回文本而非图像）"
+                    logger.error(error_msg)
+                    raise Exception(error_msg)
+
+                success_count = len(generated_files)
+                failed_count = count - success_count
+                job.error_message = None
 
             # 生成完成（job.images 已经在循环中实时更新了）
             job.status = JobStatus.COMPLETED
             job.progress = 100
-            logger.info(f"图像生成完成: job_id={job_id}, 共 {len(job.images)} 张")
+            logger.info(
+                f"图像生成完成: job_id={job_id}, mode={generation_mode}, total={count}, "
+                f"success={success_count}, failed={failed_count}"
+            )
 
             # 保存历史记录 (生成完成后一次性写入)
             try:
@@ -840,6 +963,11 @@ class ImageService:
                             "safety_filter_level": safety_filter_level,
                             "reference_image_count": len(reference_images),
                             "session_id": session_id,
+                            "parallel_mode": parallel_enabled,
+                            "parallel_limit": parallel_limit if parallel_enabled else 1,
+                            "request_count": count,
+                            "success_count": success_count,
+                            "failed_count": failed_count,
                         }
                     )
             except Exception as history_error:
