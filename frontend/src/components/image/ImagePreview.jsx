@@ -9,8 +9,8 @@ import { X, Download, Film, ChevronDown, ChevronUp } from 'lucide-react';
 
 // 缩放范围和步进
 const MIN_SCALE = 0.5;
-const MAX_SCALE = 6;
-const ZOOM_STEP = 0.1;
+const MAX_SCALE = 12;
+const ZOOM_STEP = 0.2;
 
 /**
  * ImagePreview 组件
