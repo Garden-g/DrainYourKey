@@ -5,7 +5,7 @@
 """
 
 from datetime import date
-from typing import Optional
+from typing import Optional, Literal
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import FileResponse
@@ -44,11 +44,17 @@ async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
     Args:
         request: 图像生成请求,包含:
             - prompt: 图像描述
+            - generation_mode: 生图模式 (standard/pro)
             - image_model: 图片模型 (nano_banana_pro / nano_banana_2)
             - aspect_ratio: 宽高比
             - resolution: 分辨率 (0.5K/1K/2K/4K)
             - count: 生成数量 (1-10)
             - use_google_search: 是否使用 Google 搜索
+            - temperature/top_p/top_k/presence_penalty/frequency_penalty/max_output_tokens: 采样参数（可选）
+            - seed: 随机种子（可选）
+            - output_mime_type: 输出格式（可选，PNG/JPEG）
+            - output_compression_quality: 压缩质量（可选）
+            - safety_filter_level: 安全过滤等级（可选）
             - reference_images: 多张参考图 base64 (可选, 最多 14 张)
             - reference_image: 参考图 base64 (可选)
 
@@ -61,11 +67,22 @@ async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
         # 调用图像服务启动后台任务
         job_id = await image_service.generate_images(
             prompt=request.prompt,
+            generation_mode=request.generation_mode,
             image_model=request.image_model,
             aspect_ratio=request.aspect_ratio,
             resolution=request.resolution,
             count=request.count,
             use_google_search=request.use_google_search,
+            temperature=request.temperature,
+            top_p=request.top_p,
+            top_k=request.top_k,
+            presence_penalty=request.presence_penalty,
+            frequency_penalty=request.frequency_penalty,
+            max_output_tokens=request.max_output_tokens,
+            seed=request.seed,
+            output_mime_type=request.output_mime_type,
+            output_compression_quality=request.output_compression_quality,
+            safety_filter_level=request.safety_filter_level,
             reference_images=request.reference_images,
             reference_image=request.reference_image,
         )
@@ -226,7 +243,11 @@ async def enhance_prompt(request: EnhancePromptRequest) -> PromptResponse:
 async def get_image_library(
     days: int = Query(7, ge=1, le=30, description="首次加载最近天数"),
     before: Optional[str] = Query(None, description="分页锚点（YYYY-MM-DD）"),
-    limit_days: int = Query(7, ge=1, le=30, description="分页每次返回天数")
+    limit_days: int = Query(7, ge=1, le=30, description="分页每次返回天数"),
+    generation_mode: Literal["standard", "pro"] = Query(
+        "standard",
+        description='图库筛选模式："standard" 普通图，"pro" 专业图'
+    )
 ) -> ImageLibraryResponse:
     """
     获取按天分组的图片图库 API
@@ -250,7 +271,8 @@ async def get_image_library(
         library_data = await history_service.get_image_library(
             days=days,
             before=before_date,
-            limit_days=limit_days
+            limit_days=limit_days,
+            generation_mode=generation_mode
         )
 
         return ImageLibraryResponse(**library_data)
@@ -281,7 +303,7 @@ async def get_image(filename: str) -> FileResponse:
         file_path = safe_resolve_path(
             base_dir=Config.IMAGES_DIR,
             filename=filename,
-            allowed_extensions={".png"}
+            allowed_extensions={".png", ".jpg", ".jpeg"}
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -289,9 +311,14 @@ async def get_image(filename: str) -> FileResponse:
     if not file_path.exists():
         raise HTTPException(status_code=404, detail="图像不存在")
 
+    suffix = file_path.suffix.lower()
+    media_type = "image/png"
+    if suffix in {".jpg", ".jpeg"}:
+        media_type = "image/jpeg"
+
     return FileResponse(
         path=file_path,
-        media_type="image/png",
+        media_type=media_type,
         filename=filename
     )
 

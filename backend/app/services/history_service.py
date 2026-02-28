@@ -156,7 +156,8 @@ class HistoryService:
         self,
         days: int = 7,
         before: Optional[date] = None,
-        limit_days: int = 7
+        limit_days: int = 7,
+        generation_mode: str = "standard"
     ) -> Dict[str, Any]:
         """
         获取按天分组的图像图库数据
@@ -169,6 +170,7 @@ class HistoryService:
             days: 首次加载时返回最近多少天的数据
             before: 分页锚点，只返回该日期之前（更早）的数据
             limit_days: 分页时每次最多返回多少天
+            generation_mode: 图像筛选模式（standard/pro）
 
         Returns:
             Dict[str, Any]: 图库响应数据，包含:
@@ -197,12 +199,20 @@ class HistoryService:
                 "ratio": params.get("aspect_ratio") or "3:2",
                 "resolution": params.get("resolution") or "未知",
                 "image_model": params.get("image_model") or "unknown",
+                # 兼容旧数据：无标记时默认归类到 standard
+                "generation_mode": params.get("generation_mode") or "standard",
             }
 
         image_entries: List[Dict[str, Any]] = []
 
         # 以输出目录中的文件为准扫描图片，保证页面刷新后仍可回显。
-        for image_path in Config.IMAGES_DIR.glob("*.png"):
+        # 同时支持 PNG/JPEG，避免专业模式选择 JPEG 时图库不可见。
+        image_patterns = ("*.png", "*.jpg", "*.jpeg")
+        image_paths = []
+        for pattern in image_patterns:
+            image_paths.extend(Config.IMAGES_DIR.glob(pattern))
+
+        for image_path in image_paths:
             if not image_path.is_file():
                 continue
 
@@ -220,6 +230,16 @@ class HistoryService:
                 continue
 
             meta = image_meta_map.get(image_path.name, {})
+            entry_generation_mode = meta.get("generation_mode", "standard")
+
+            # 图库逻辑隔离：
+            # - pro 页只看专业模式生成的图片
+            # - standard 页显示普通模式 + 历史遗留未标记图片
+            if generation_mode == "pro" and entry_generation_mode != "pro":
+                continue
+            if generation_mode == "standard" and entry_generation_mode == "pro":
+                continue
+
             image_entries.append({
                 "id": image_path.name,
                 "filename": image_path.name,
@@ -229,6 +249,7 @@ class HistoryService:
                 "ratio": meta.get("ratio", "3:2"),
                 "resolution": meta.get("resolution", "未知"),
                 "image_model": meta.get("image_model", "unknown"),
+                "generation_mode": entry_generation_mode,
                 "date": created_day.isoformat(),
             })
 

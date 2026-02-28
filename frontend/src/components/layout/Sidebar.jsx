@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Image as ImageIcon, Video, Moon, Sun, ArrowRight } from 'lucide-react';
+import { Image as ImageIcon, Video, Settings2, Moon, Sun, ArrowRight } from 'lucide-react';
 
 /**
  * 导航按钮组件
@@ -53,7 +53,7 @@ function NavButton({ active, onClick, icon: Icon, label, expanded }) {
  * Sidebar 组件
  *
  * @param {Object} props - 组件属性
- * @param {string} props.activeTab - 当前激活的标签页 (image/video)
+ * @param {string} props.activeTab - 当前激活的标签页 (image/video/pro-image)
  * @param {Function} props.onTabChange - 标签页切换回调
  * @param {boolean} props.isDark - 是否为深色模式
  * @param {Function} props.onThemeToggle - 主题切换回调
@@ -105,6 +105,13 @@ export function Sidebar({
           onClick={() => onTabChange('video')}
           icon={Video}
           label="视频生成"
+          expanded={isOpen}
+        />
+        <NavButton
+          active={activeTab === 'pro-image'}
+          onClick={() => onTabChange('pro-image')}
+          icon={Settings2}
+          label="专业生图"
           expanded={isOpen}
         />
       </nav>

@@ -18,15 +18,30 @@ class ImageGenerateRequest(BaseModel):
 
     Attributes:
         prompt: 生成图像的文本描述
+        generation_mode: 生图模式（standard 普通模式 / pro 专业模式）
         image_model: 图片模型类型 (nano_banana_pro 或 nano_banana_2)
         aspect_ratio: 图像宽高比，如 "16:9", "1:1" 等
         resolution: 图像分辨率，必须大写: "0.5K", "1K", "2K", "4K"
         count: 生成图像数量，1-10 张
         use_google_search: 是否使用 Google 搜索增强生成
+        temperature: 温度参数，控制随机性（可选）
+        top_p: nucleus 采样参数（可选）
+        top_k: top-k 采样参数（可选）
+        presence_penalty: 主题存在惩罚（可选）
+        frequency_penalty: 频次惩罚（可选）
+        max_output_tokens: 输出 token 上限（可选）
+        seed: 随机种子（可选，-1 表示随机）
+        output_mime_type: 输出格式（可选，image/png 或 image/jpeg）
+        output_compression_quality: 输出压缩质量（可选，仅 JPEG 生效）
+        safety_filter_level: 安全过滤等级（可选）
         reference_images: 参考图像的 base64 编码列表 (可选，最多 14 张)
         reference_image: 兼容旧版的单张参考图 base64 编码 (可选)
     """
     prompt: str = Field(..., min_length=1, description="图像描述")
+    generation_mode: Literal["standard", "pro"] = Field(
+        default="standard",
+        description='生图模式："standard" 普通模式，"pro" 专业模式'
+    )
     image_model: Literal["nano_banana_pro", "nano_banana_2"] = Field(
         default="nano_banana_pro",
         description="图片模型: nano_banana_pro 或 nano_banana_2"
@@ -42,6 +57,33 @@ class ImageGenerateRequest(BaseModel):
     )
     count: int = Field(default=1, ge=1, le=10, description="生成数量")
     use_google_search: bool = Field(default=False, description="使用 Google 搜索")
+    temperature: Optional[float] = Field(default=None, ge=0.0, le=2.0, description="温度参数")
+    top_p: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Top P 参数")
+    top_k: Optional[int] = Field(default=None, ge=1, le=100, description="Top K 参数")
+    presence_penalty: Optional[float] = Field(default=None, ge=-2.0, le=2.0, description="存在惩罚")
+    frequency_penalty: Optional[float] = Field(default=None, ge=-2.0, le=2.0, description="频率惩罚")
+    max_output_tokens: Optional[int] = Field(
+        default=None,
+        ge=1,
+        le=8192,
+        description="输出 token 上限"
+    )
+    seed: Optional[int] = Field(default=None, ge=-1, le=2147483647, description="随机种子，-1 表示随机")
+    output_mime_type: Optional[Literal["image/png", "image/jpeg"]] = Field(
+        default=None,
+        description="输出图片 MIME 类型"
+    )
+    output_compression_quality: Optional[int] = Field(
+        default=None,
+        ge=0,
+        le=100,
+        description="输出压缩质量（0-100，仅 JPEG 生效）"
+    )
+    safety_filter_level: Optional[Literal[
+        "block_low_and_above",
+        "block_medium_and_above",
+        "block_only_high"
+    ]] = Field(default=None, description="安全过滤等级")
     reference_images: Optional[List[str]] = Field(
         default=None,
         max_length=14,

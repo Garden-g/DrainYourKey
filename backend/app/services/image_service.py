@@ -11,12 +11,14 @@
 import uuid
 import time
 import asyncio
+import io
 from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
 from enum import Enum
 
 from google import genai
 from google.genai import types
+from PIL import Image as PILImage
 
 from ..config import Config, logger
 from ..utils import (
@@ -68,6 +70,24 @@ IMAGE_MODEL_CAPABILITIES: Dict[str, Dict[str, Any]] = {
         "aspect_ratios": COMMON_IMAGE_ASPECT_RATIOS + NANO_BANANA_2_EXTRA_ASPECT_RATIOS,
     },
 }
+
+# 专业模式安全过滤等级映射：将前端可读配置映射为 SDK 阈值枚举
+SAFETY_FILTER_LEVEL_MAP: Dict[str, types.HarmBlockThreshold] = {
+    "block_low_and_above": types.HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    "block_medium_and_above": types.HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE,
+    "block_only_high": types.HarmBlockThreshold.BLOCK_ONLY_HIGH,
+}
+
+# Gemini generate_content/chats 当前仅接受通用 HarmCategory。
+# 说明：
+# - 之前使用 HARM_CATEGORY_IMAGE_* 会触发 400 INVALID_ARGUMENT；
+# - 这里统一降级为兼容类别，确保专业模式安全过滤可稳定生效。
+IMAGE_SAFETY_CATEGORIES: List[types.HarmCategory] = [
+    types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    types.HarmCategory.HARM_CATEGORY_HARASSMENT,
+    types.HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
+    types.HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
+]
 
 
 @dataclass
@@ -295,6 +315,181 @@ class ImageService:
 
         return deduplicated
 
+    def _normalize_seed(self, seed: Optional[int]) -> Optional[int]:
+        """
+        规范化随机种子
+
+        约定：
+        - None: 不显式传入，由模型随机
+        - -1: 视为随机（与前端保持一致）
+        - >=0: 传入固定种子，便于复现
+
+        Args:
+            seed: 原始种子值
+
+        Returns:
+            Optional[int]: 可下发给 SDK 的种子
+        """
+        if seed is None or seed < 0:
+            return None
+        return seed
+
+    def _build_safety_settings(
+        self,
+        safety_filter_level: Optional[str]
+    ) -> Optional[List[types.SafetySetting]]:
+        """
+        构建图片安全过滤配置
+
+        Args:
+            safety_filter_level: 前端安全过滤等级
+
+        Returns:
+            Optional[List[types.SafetySetting]]: 可直接用于 GenerateContentConfig 的安全设置
+        """
+        if not safety_filter_level:
+            return None
+
+        threshold = SAFETY_FILTER_LEVEL_MAP.get(safety_filter_level)
+        if threshold is None:
+            raise ValueError(f"不支持的安全过滤等级: {safety_filter_level}")
+
+        safety_settings = [
+            types.SafetySetting(category=category, threshold=threshold)
+            for category in IMAGE_SAFETY_CATEGORIES
+        ]
+        logger.debug(
+            "专业生图安全过滤已启用兼容分类: level=%s, categories=%s",
+            safety_filter_level,
+            [setting.category for setting in safety_settings]
+        )
+        return safety_settings
+
+    def _build_generation_config(
+        self,
+        *,
+        aspect_ratio: str,
+        provider_image_size: str,
+        use_google_search: bool = False,
+        temperature: Optional[float] = None,
+        top_p: Optional[float] = None,
+        top_k: Optional[int] = None,
+        presence_penalty: Optional[float] = None,
+        frequency_penalty: Optional[float] = None,
+        max_output_tokens: Optional[int] = None,
+        seed: Optional[int] = None,
+        output_mime_type: Optional[str] = None,
+        output_compression_quality: Optional[int] = None,
+        safety_filter_level: Optional[str] = None,
+        ) -> types.GenerateContentConfig:
+        """
+        构建图像生成配置（普通 + 专业参数统一入口）
+
+        Args:
+            aspect_ratio: 宽高比
+            provider_image_size: provider 层图像尺寸
+            use_google_search: 是否开启 Google 搜索工具
+            temperature/top_p/top_k/presence_penalty/frequency_penalty/max_output_tokens: 采样参数
+            seed: 随机种子
+            output_mime_type: 输出格式（Gemini generate_content 当前不支持，保留用于本地落盘）
+            output_compression_quality: 输出压缩质量（Gemini generate_content 当前不支持，保留用于本地落盘）
+            safety_filter_level: 安全过滤等级
+
+        Returns:
+            types.GenerateContentConfig: SDK 配置对象
+        """
+        image_config_kwargs: Dict[str, Any] = {
+            "aspect_ratio": aspect_ratio,
+            "image_size": provider_image_size,
+        }
+        # 注意：
+        # 1) Gemini `generate_content/chats` 链路当前不支持 `output_mime_type` 参数，
+        #    传入会触发 "output_mime_type parameter is not supported in Gemini API"。
+        # 2) 输出格式与压缩质量改为本地落盘阶段处理（PNG/JPEG 转码）。
+
+        config_kwargs: Dict[str, Any] = {
+            "response_modalities": ["TEXT", "IMAGE"],
+            "image_config": types.ImageConfig(**image_config_kwargs),
+        }
+
+        if use_google_search:
+            config_kwargs["tools"] = [{"google_search": {}}]
+
+        if temperature is not None:
+            config_kwargs["temperature"] = temperature
+        if top_p is not None:
+            config_kwargs["top_p"] = top_p
+        if top_k is not None:
+            config_kwargs["top_k"] = top_k
+        if presence_penalty is not None:
+            config_kwargs["presence_penalty"] = presence_penalty
+        if frequency_penalty is not None:
+            config_kwargs["frequency_penalty"] = frequency_penalty
+        if max_output_tokens is not None:
+            config_kwargs["max_output_tokens"] = max_output_tokens
+
+        normalized_seed = self._normalize_seed(seed)
+        if normalized_seed is not None:
+            config_kwargs["seed"] = normalized_seed
+
+        safety_settings = self._build_safety_settings(safety_filter_level)
+        if safety_settings:
+            config_kwargs["safety_settings"] = safety_settings
+
+        return types.GenerateContentConfig(**config_kwargs)
+
+    def _resolve_output_format(self, output_mime_type: Optional[str]) -> tuple[str, str]:
+        """
+        将输出 MIME 类型映射为文件扩展名和 PIL 保存格式
+
+        Args:
+            output_mime_type: 输出 MIME 类型
+
+        Returns:
+            tuple[str, str]: (文件扩展名, PIL 格式)
+        """
+        if output_mime_type == "image/jpeg":
+            return "jpg", "JPEG"
+        return "png", "PNG"
+
+    def _save_generated_image(
+        self,
+        image: Any,
+        file_path: str,
+        output_format: str,
+        output_compression_quality: Optional[int] = None,
+    ) -> None:
+        """
+        按指定格式保存图像
+
+        Args:
+            image: SDK 返回的 `google.genai.types.Image` 对象
+            file_path: 目标文件路径
+            output_format: PIL 保存格式（PNG/JPEG）
+            output_compression_quality: JPEG 压缩质量（0-100）
+        """
+        image_bytes = getattr(image, "image_bytes", None)
+        if not image_bytes:
+            # 兜底：若 SDK 对象不含 image_bytes，则尝试使用原生 save(location) 逻辑
+            # （注意 types.Image.save 仅支持位置参数，不支持 format/quality）
+            image.save(file_path)
+            return
+
+        try:
+            with PILImage.open(io.BytesIO(image_bytes)) as loaded_image:
+                save_image = loaded_image.copy()
+        except Exception as exc:
+            raise ValueError(f"解析生成图像失败: {exc}") from exc
+
+        # JPEG 不支持透明通道，先做模式转换避免保存失败
+        if output_format == "JPEG" and save_image.mode not in {"RGB", "L"}:
+            save_image = save_image.convert("RGB")
+
+        save_kwargs: Dict[str, Any] = {"format": output_format}
+        if output_format == "JPEG" and output_compression_quality is not None:
+            save_kwargs["quality"] = output_compression_quality
+        save_image.save(file_path, **save_kwargs)
+
     def _cleanup_expired(self) -> None:
         """
         清理过期任务和会话，避免内存膨胀
@@ -327,11 +522,22 @@ class ImageService:
     async def generate_images(
         self,
         prompt: str,
+        generation_mode: str = "standard",
         image_model: str = "nano_banana_pro",
         aspect_ratio: str = "3:2",
         resolution: str = "2K",
         count: int = 1,
         use_google_search: bool = False,
+        temperature: Optional[float] = None,
+        top_p: Optional[float] = None,
+        top_k: Optional[int] = None,
+        presence_penalty: Optional[float] = None,
+        frequency_penalty: Optional[float] = None,
+        max_output_tokens: Optional[int] = None,
+        seed: Optional[int] = None,
+        output_mime_type: Optional[str] = None,
+        output_compression_quality: Optional[int] = None,
+        safety_filter_level: Optional[str] = None,
         reference_images: Optional[List[str]] = None,
         reference_image: Optional[str] = None
     ) -> str:
@@ -340,11 +546,17 @@ class ImageService:
 
         Args:
             prompt: 图像描述文本
+            generation_mode: 生图模式（standard/pro）
             image_model: 图片模型 (nano_banana_pro / nano_banana_2)
             aspect_ratio: 宽高比 (如 "16:9", "1:1")
             resolution: 分辨率 (必须大写: "0.5K", "1K", "2K", "4K")
             count: 生成数量 (1-10)
             use_google_search: 是否使用 Google 搜索增强
+            temperature/top_p/top_k/presence_penalty/frequency_penalty/max_output_tokens: 专业采样参数
+            seed: 随机种子（-1 或 None 表示随机）
+            output_mime_type: 输出 MIME 类型
+            output_compression_quality: 输出压缩质量（仅 JPEG 生效）
+            safety_filter_level: 安全过滤等级
             reference_images: 参考图像 base64 列表 (可选, 最多 14 张)
             reference_image: 参考图像 base64（兼容旧字段，可选）
 
@@ -365,7 +577,7 @@ class ImageService:
 
         job_id = str(uuid.uuid4())
         logger.info(
-            f"创建图像生成任务: job_id={job_id}, model={image_model}, "
+            f"创建图像生成任务: job_id={job_id}, mode={generation_mode}, model={image_model}, "
             f"provider_model={provider_model}, resolution={resolution}, "
             f"provider_image_size={provider_image_size}, count={count}, "
             f"reference_count={len(normalized_reference_images)}"
@@ -395,6 +607,17 @@ class ImageService:
                 provider_image_size=provider_image_size,
                 count=count,
                 use_google_search=use_google_search,
+                generation_mode=generation_mode,
+                temperature=temperature,
+                top_p=top_p,
+                top_k=top_k,
+                presence_penalty=presence_penalty,
+                frequency_penalty=frequency_penalty,
+                max_output_tokens=max_output_tokens,
+                seed=seed,
+                output_mime_type=output_mime_type,
+                output_compression_quality=output_compression_quality,
+                safety_filter_level=safety_filter_level,
                 reference_images=normalized_reference_images
             )
         )
@@ -413,6 +636,17 @@ class ImageService:
         provider_image_size: str,
         count: int,
         use_google_search: bool,
+        generation_mode: str,
+        temperature: Optional[float],
+        top_p: Optional[float],
+        top_k: Optional[int],
+        presence_penalty: Optional[float],
+        frequency_penalty: Optional[float],
+        max_output_tokens: Optional[int],
+        seed: Optional[int],
+        output_mime_type: Optional[str],
+        output_compression_quality: Optional[int],
+        safety_filter_level: Optional[str],
         reference_images: List[str]
     ) -> None:
         """
@@ -428,6 +662,12 @@ class ImageService:
             provider_image_size: Gemini image_size 实参
             count: 生成数量
             use_google_search: 是否使用Google搜索
+            generation_mode: 生图模式（standard/pro）
+            temperature/top_p/top_k/presence_penalty/frequency_penalty/max_output_tokens: 专业采样参数
+            seed: 随机种子
+            output_mime_type: 输出 MIME 类型
+            output_compression_quality: 输出压缩质量（仅 JPEG 生效）
+            safety_filter_level: 安全过滤等级
             reference_images: 参考图像列表
         """
         job = self._jobs[job_id]
@@ -437,13 +677,14 @@ class ImageService:
         try:
             logger.info(
                 f"开始处理图像生成: job_id={job_id}, prompt={prompt[:50]}..., "
-                f"model={image_model}, provider_model={provider_model}, "
+                f"mode={generation_mode}, model={image_model}, provider_model={provider_model}, "
                 f"resolution={resolution}, provider_image_size={provider_image_size}, "
                 f"count={count}, reference_count={len(reference_images)}"
             )
 
             generated_files: List[str] = []
             session_id = str(uuid.uuid4())
+            output_extension, output_format = self._resolve_output_format(output_mime_type)
 
             # 如果使用谷歌搜索，优化提示词
             actual_prompt = prompt
@@ -465,19 +706,22 @@ class ImageService:
                 ref_image = await asyncio.to_thread(decode_base64_image, reference_data)
                 contents.append(ref_image)
 
-            # 构建配置
-            config_dict: Dict[str, Any] = {
-                "response_modalities": ["TEXT", "IMAGE"],
-                "image_config": types.ImageConfig(
-                    aspect_ratio=aspect_ratio,
-                    image_size=provider_image_size
-                )
-            }
-
-            # 如果使用 Google 搜索
-            if use_google_search:
-                logger.debug("启用 Google 搜索增强")
-                config_dict["tools"] = [{"google_search": {}}]
+            # 构建配置（普通参数 + 专业参数统一映射）
+            generation_config = self._build_generation_config(
+                aspect_ratio=aspect_ratio,
+                provider_image_size=provider_image_size,
+                use_google_search=use_google_search,
+                temperature=temperature,
+                top_p=top_p,
+                top_k=top_k,
+                presence_penalty=presence_penalty,
+                frequency_penalty=frequency_penalty,
+                max_output_tokens=max_output_tokens,
+                seed=seed,
+                output_mime_type=output_mime_type,
+                output_compression_quality=output_compression_quality,
+                safety_filter_level=safety_filter_level,
+            )
 
             # 创建多轮对话会话
             client = self._ensure_client()
@@ -487,7 +731,7 @@ class ImageService:
                     asyncio.to_thread(
                         client.chats.create,
                         model=provider_model,
-                        config=types.GenerateContentConfig(**config_dict)
+                        config=generation_config
                     ),
                     timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
                 )
@@ -536,10 +780,16 @@ class ImageService:
                         image = part.as_image()
 
                         # 生成文件名并保存
-                        filename = generate_filename("image", "png")
+                        filename = generate_filename("image", output_extension)
                         file_path = Config.IMAGES_DIR / filename
                         # 图像保存属于磁盘 IO，放线程执行避免阻塞
-                        await asyncio.to_thread(image.save, str(file_path))
+                        await asyncio.to_thread(
+                            self._save_generated_image,
+                            image,
+                            str(file_path),
+                            output_format,
+                            output_compression_quality
+                        )
 
                         # 立即添加到 job.images，让前端可以实时显示
                         job.images.append(filename)
@@ -576,7 +826,18 @@ class ImageService:
                             "resolution": resolution,
                             "provider_image_size": provider_image_size,
                             "count": count,
+                            "generation_mode": generation_mode,
                             "use_google_search": use_google_search,
+                            "temperature": temperature,
+                            "top_p": top_p,
+                            "top_k": top_k,
+                            "presence_penalty": presence_penalty,
+                            "frequency_penalty": frequency_penalty,
+                            "max_output_tokens": max_output_tokens,
+                            "seed": self._normalize_seed(seed),
+                            "output_mime_type": output_mime_type or "image/png",
+                            "output_compression_quality": output_compression_quality,
+                            "safety_filter_level": safety_filter_level,
                             "reference_image_count": len(reference_images),
                             "session_id": session_id,
                         }
@@ -609,11 +870,22 @@ class ImageService:
     async def generate_images_sync(
         self,
         prompt: str,
+        generation_mode: str = "standard",
         image_model: str = "nano_banana_pro",
         aspect_ratio: str = "3:2",
         resolution: str = "2K",
         count: int = 1,
         use_google_search: bool = False,
+        temperature: Optional[float] = None,
+        top_p: Optional[float] = None,
+        top_k: Optional[int] = None,
+        presence_penalty: Optional[float] = None,
+        frequency_penalty: Optional[float] = None,
+        max_output_tokens: Optional[int] = None,
+        seed: Optional[int] = None,
+        output_mime_type: Optional[str] = None,
+        output_compression_quality: Optional[int] = None,
+        safety_filter_level: Optional[str] = None,
         reference_images: Optional[List[str]] = None,
         reference_image: Optional[str] = None
     ) -> tuple[List[str], Optional[str]]:
@@ -622,11 +894,17 @@ class ImageService:
 
         Args:
             prompt: 图像描述文本
+            generation_mode: 生图模式（standard/pro）
             image_model: 图片模型 (nano_banana_pro / nano_banana_2)
             aspect_ratio: 宽高比 (如 "16:9", "1:1")
             resolution: 分辨率 (必须大写: "0.5K", "1K", "2K", "4K")
             count: 生成数量 (1-10)
             use_google_search: 是否使用 Google 搜索增强
+            temperature/top_p/top_k/presence_penalty/frequency_penalty/max_output_tokens: 专业采样参数
+            seed: 随机种子（-1 或 None 表示随机）
+            output_mime_type: 输出 MIME 类型
+            output_compression_quality: 输出压缩质量（仅 JPEG 生效）
+            safety_filter_level: 安全过滤等级
             reference_images: 参考图像 base64 列表 (可选, 最多 14 张)
             reference_image: 参考图像 base64（兼容旧字段，可选）
 
@@ -648,13 +926,14 @@ class ImageService:
             reference_image=reference_image,
         )
         logger.info(
-            f"开始生成图像: prompt={prompt[:50]}..., model={image_model}, "
+            f"开始生成图像: prompt={prompt[:50]}..., mode={generation_mode}, model={image_model}, "
             f"provider_model={provider_model}, resolution={resolution}, "
             f"provider_image_size={provider_image_size}, count={count}"
         )
 
         generated_files: List[str] = []
         session_id = str(uuid.uuid4())
+        output_extension, output_format = self._resolve_output_format(output_mime_type)
 
         # 如果使用谷歌搜索，优化提示词
         actual_prompt = prompt
@@ -675,19 +954,22 @@ class ImageService:
             ref_image = await asyncio.to_thread(decode_base64_image, reference_data)
             contents.append(ref_image)
 
-        # 构建配置
-        config_dict: Dict[str, Any] = {
-            "response_modalities": ["TEXT", "IMAGE"],
-            "image_config": types.ImageConfig(
-                aspect_ratio=aspect_ratio,
-                image_size=provider_image_size
-            )
-        }
-
-        # 如果使用 Google 搜索
-        if use_google_search:
-            logger.debug("启用 Google 搜索增强")
-            config_dict["tools"] = [{"google_search": {}}]
+        # 构建配置（普通参数 + 专业参数统一映射）
+        generation_config = self._build_generation_config(
+            aspect_ratio=aspect_ratio,
+            provider_image_size=provider_image_size,
+            use_google_search=use_google_search,
+            temperature=temperature,
+            top_p=top_p,
+            top_k=top_k,
+            presence_penalty=presence_penalty,
+            frequency_penalty=frequency_penalty,
+            max_output_tokens=max_output_tokens,
+            seed=seed,
+            output_mime_type=output_mime_type,
+            output_compression_quality=output_compression_quality,
+            safety_filter_level=safety_filter_level,
+        )
 
         # 创建多轮对话会话
         client = self._ensure_client()
@@ -696,7 +978,7 @@ class ImageService:
                 asyncio.to_thread(
                     client.chats.create,
                     model=provider_model,
-                    config=types.GenerateContentConfig(**config_dict)
+                    config=generation_config
                 ),
                 timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
             )
@@ -737,9 +1019,15 @@ class ImageService:
                     image = part.as_image()
 
                     # 生成文件名并保存
-                    filename = generate_filename("image", "png")
+                    filename = generate_filename("image", output_extension)
                     file_path = Config.IMAGES_DIR / filename
-                    await asyncio.to_thread(image.save, str(file_path))
+                    await asyncio.to_thread(
+                        self._save_generated_image,
+                        image,
+                        str(file_path),
+                        output_format,
+                        output_compression_quality
+                    )
 
                     generated_files.append(filename)
                     logger.info(f"图像已保存: {filename}")
@@ -759,7 +1047,18 @@ class ImageService:
                         "resolution": resolution,
                         "provider_image_size": provider_image_size,
                         "count": count,
+                        "generation_mode": generation_mode,
                         "use_google_search": use_google_search,
+                        "temperature": temperature,
+                        "top_p": top_p,
+                        "top_k": top_k,
+                        "presence_penalty": presence_penalty,
+                        "frequency_penalty": frequency_penalty,
+                        "max_output_tokens": max_output_tokens,
+                        "seed": self._normalize_seed(seed),
+                        "output_mime_type": output_mime_type or "image/png",
+                        "output_compression_quality": output_compression_quality,
+                        "safety_filter_level": safety_filter_level,
                         "reference_image_count": len(normalized_reference_images),
                         "session_id": session_id,
                     }

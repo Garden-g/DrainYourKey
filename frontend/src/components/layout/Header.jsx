@@ -11,12 +11,17 @@ import { Monitor } from 'lucide-react';
  * Header 组件
  *
  * @param {Object} props - 组件属性
- * @param {string} props.activeTab - 当前激活的标签页
+ * @param {string} props.activeTab - 当前激活的标签页 (image/video/pro-image)
  * @param {boolean} props.isConnected - API 是否已连接
  */
 export function Header({ activeTab, isConnected = true }) {
   // 根据标签页显示不同标题
-  const title = activeTab === 'image' ? '图像工作室' : '视频工作室';
+  const titleMap = {
+    image: '图像工作室',
+    video: '视频工作室',
+    'pro-image': '专业生图探索',
+  };
+  const title = titleMap[activeTab] || '图像工作室';
 
   return (
     <header

@@ -14,6 +14,8 @@ import { Header } from './components/layout/Header';
 import { ImagePanel } from './components/image/ImagePanel';
 import { ImageGallery } from './components/image/ImageGallery';
 import { ImagePreview } from './components/image/ImagePreview';
+import { ProImagePanel } from './components/proImage/ProImagePanel';
+import { ProImageGallery } from './components/proImage/ProImageGallery';
 
 // 视频组件
 import { VideoPanel } from './components/video/VideoPanel';
@@ -57,6 +59,9 @@ function formatLocalDateKey(source = new Date()) {
 const DEFAULT_IMAGE_MODEL = 'nano_banana_pro';
 const DEFAULT_IMAGE_RATIO = '3:2';
 const DEFAULT_IMAGE_RESOLUTION = '2K';
+const DEFAULT_PRO_IMAGE_RATIO = '1:1';
+const DEFAULT_PRO_OUTPUT_MIME = 'image/png';
+const DEFAULT_PRO_SAFETY_LEVEL = 'block_medium_and_above';
 
 // 公共宽高比（Pro 与 Nano Banana 2 均支持）
 const COMMON_IMAGE_ASPECT_RATIOS = ['1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'];
@@ -373,12 +378,26 @@ function prependVideosToToday(currentGroups, videos) {
 }
 
 /**
+ * 将数值格式化为固定小数位字符串
+ *
+ * @param {number} value - 数值
+ * @param {number} digits - 小数位数
+ * @returns {string} 格式化文本
+ */
+function formatFixed(value, digits = 2) {
+  if (!Number.isFinite(value)) {
+    return '0.00';
+  }
+  return value.toFixed(digits);
+}
+
+/**
  * App 主组件
  */
 export default function App() {
   // ==================== 全局状态 ====================
 
-  // 当前标签页 (image/video)
+  // 当前标签页 (image/video/pro-image)
   const [activeTab, setActiveTab] = useState('image');
   // 侧边栏是否展开
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -406,6 +425,31 @@ export default function App() {
   // 图像生成任务列表
   const [imageJobs, setImageJobs] = useState([]);
   // 格式: [{jobId, status, progress, prompt, params}]
+
+  // ==================== 专业生图状态 ====================
+
+  const [proImgPrompt, setProImgPrompt] = useState('');
+  const [proNegativePrompt, setProNegativePrompt] = useState('');
+  const [proImgModel, setProImgModel] = useState(DEFAULT_IMAGE_MODEL);
+  const [proImgRatio, setProImgRatio] = useState(DEFAULT_PRO_IMAGE_RATIO);
+  const [proImgRes, setProImgRes] = useState(DEFAULT_IMAGE_RESOLUTION);
+  const [proImgCount, setProImgCount] = useState(1);
+  const [proOutputMimeType, setProOutputMimeType] = useState(DEFAULT_PRO_OUTPUT_MIME);
+  const [proOutputCompressionQuality, setProOutputCompressionQuality] = useState(90);
+  const [proSafetyFilterLevel, setProSafetyFilterLevel] = useState(DEFAULT_PRO_SAFETY_LEVEL);
+  const [proTemperature, setProTemperature] = useState(0.7);
+  const [proTopP, setProTopP] = useState(0.9);
+  const [proTopK, setProTopK] = useState(40);
+  const [proPresencePenalty, setProPresencePenalty] = useState(0.0);
+  const [proFrequencyPenalty, setProFrequencyPenalty] = useState(0.0);
+  const [proMaxOutputTokens, setProMaxOutputTokens] = useState(2048);
+  const [proSeed, setProSeed] = useState(-1);
+  const [isGeneratingProImg, setIsGeneratingProImg] = useState(false);
+  const [proImageJobs, setProImageJobs] = useState([]);
+  const [proImageDayGroups, setProImageDayGroups] = useState([]);
+  const [proImageLibraryBefore, setProImageLibraryBefore] = useState(null);
+  const [isLoadingProImageLibrary, setIsLoadingProImageLibrary] = useState(false);
+  const [isLoadingMoreProImageDays, setIsLoadingMoreProImageDays] = useState(false);
 
   // ==================== 视频生成状态 ====================
 
@@ -519,6 +563,7 @@ export default function App() {
         days: 7,
         before,
         limit_days: 7,
+        generation_mode: 'standard',
       });
 
       const normalizedGroups = normalizeLibraryDayGroups(result.days || []);
@@ -555,6 +600,83 @@ export default function App() {
     if (!imageLibraryBefore || isLoadingMoreImageDays) return;
     loadImageLibrary({ before: imageLibraryBefore, append: true });
   }, [imageLibraryBefore, isLoadingMoreImageDays, loadImageLibrary]);
+
+  /**
+   * 当专业生图模型切换时，自动回退不兼容参数
+   *
+   * 专业页不支持 auto 宽高比，因此直接校验静态比例列表。
+   */
+  useEffect(() => {
+    const capabilities = getImageModelCapabilities(proImgModel);
+    const fallbackMessages = [];
+
+    if (!capabilities.resolutions.includes(proImgRes)) {
+      setProImgRes(capabilities.defaultResolution);
+      fallbackMessages.push(`分辨率已改为 ${capabilities.defaultResolution}`);
+    }
+
+    if (!capabilities.aspectRatios.includes(proImgRatio)) {
+      setProImgRatio(DEFAULT_PRO_IMAGE_RATIO);
+      fallbackMessages.push(`宽高比已改为 ${DEFAULT_PRO_IMAGE_RATIO}`);
+    }
+
+    if (fallbackMessages.length > 0) {
+      alert(`专业模式已切换到 ${capabilities.label}，${fallbackMessages.join('，')}`);
+    }
+  }, [proImgModel, proImgRes, proImgRatio]);
+
+  /**
+   * 加载专业生图图库（按天分组）
+   */
+  const loadProImageLibrary = useCallback(async ({ before = null, append = false } = {}) => {
+    if (append) {
+      setIsLoadingMoreProImageDays(true);
+    } else {
+      setIsLoadingProImageLibrary(true);
+    }
+
+    try {
+      const result = await getImageLibrary({
+        days: 7,
+        before,
+        limit_days: 7,
+        generation_mode: 'pro',
+      });
+
+      const normalizedGroups = normalizeLibraryDayGroups(result.days || []);
+
+      setProImageDayGroups((prev) => (
+        append ? mergeImageDayGroups(prev, normalizedGroups) : normalizedGroups
+      ));
+      setProImageLibraryBefore(result.next_before || null);
+    } catch (error) {
+      console.error('加载专业图库失败:', error);
+      if (!append) {
+        setProImageDayGroups([]);
+      }
+    } finally {
+      if (append) {
+        setIsLoadingMoreProImageDays(false);
+      } else {
+        setIsLoadingProImageLibrary(false);
+      }
+    }
+  }, []);
+
+  /**
+   * 首次进入页面时自动加载最近 7 天专业图
+   */
+  useEffect(() => {
+    loadProImageLibrary();
+  }, [loadProImageLibrary]);
+
+  /**
+   * 加载更早日期的专业图
+   */
+  const handleLoadMoreProImageDays = useCallback(() => {
+    if (!proImageLibraryBefore || isLoadingMoreProImageDays) return;
+    loadProImageLibrary({ before: proImageLibraryBefore, append: true });
+  }, [proImageLibraryBefore, isLoadingMoreProImageDays, loadProImageLibrary]);
 
   /**
    * 加载视频图库（按天分组）
@@ -644,6 +766,7 @@ export default function App() {
 
       const result = await generateImages({
         prompt: imgPrompt,
+        generation_mode: 'standard',
         image_model: imgModel,
         aspect_ratio: finalRatio,
         resolution: finalResolution,
@@ -770,6 +893,175 @@ export default function App() {
       } catch (error) {
         console.error('查询图像状态失败:', error);
         // 继续尝试
+        const timeoutId = window.setTimeout(poll, 3000);
+        imagePollTimeouts.current.set(jobId, timeoutId);
+      }
+    };
+
+    poll();
+  }, []);
+
+  /**
+   * 处理专业生图生成
+   */
+  const handleGenerateProImage = useCallback(async () => {
+    if (!proImgPrompt.trim()) return;
+
+    setIsGeneratingProImg(true);
+
+    try {
+      const capabilities = getImageModelCapabilities(proImgModel);
+      let finalRatio = proImgRatio;
+      let finalResolution = proImgRes;
+
+      // 二次兜底：避免非法参数组合直接打到后端
+      if (!capabilities.resolutions.includes(finalResolution)) {
+        finalResolution = capabilities.defaultResolution;
+        setProImgRes(finalResolution);
+        alert(`当前模型不支持分辨率 ${proImgRes}，已自动切换为 ${finalResolution}`);
+      }
+
+      if (!capabilities.aspectRatios.includes(finalRatio)) {
+        finalRatio = DEFAULT_PRO_IMAGE_RATIO;
+        setProImgRatio(finalRatio);
+        alert(`当前模型不支持宽高比，已自动切换为 ${finalRatio}`);
+      }
+
+      // 负面提示词采用“拼接约束”的方式实现，避免伪参数导致误导
+      const normalizedPrompt = proNegativePrompt.trim()
+        ? `${proImgPrompt}\n\n请尽量避免以下元素：${proNegativePrompt.trim()}`
+        : proImgPrompt;
+
+      const result = await generateImages({
+        prompt: normalizedPrompt,
+        generation_mode: 'pro',
+        image_model: proImgModel,
+        aspect_ratio: finalRatio,
+        resolution: finalResolution,
+        count: proImgCount,
+        use_google_search: false,
+        temperature: proTemperature,
+        top_p: proTopP,
+        top_k: proTopK,
+        presence_penalty: proPresencePenalty,
+        frequency_penalty: proFrequencyPenalty,
+        max_output_tokens: proMaxOutputTokens,
+        seed: proSeed,
+        output_mime_type: proOutputMimeType,
+        output_compression_quality:
+          proOutputMimeType === 'image/jpeg' ? proOutputCompressionQuality : undefined,
+        safety_filter_level: proSafetyFilterLevel,
+      });
+
+      if (result.success && result.job_id) {
+        const newJob = {
+          jobId: result.job_id,
+          status: 'pending',
+          progress: 0,
+          prompt: proImgPrompt,
+          params: {
+            model: proImgModel,
+            modelLabel: capabilities.label,
+            ratio: finalRatio,
+            resolution: finalResolution,
+            count: proImgCount,
+          }
+        };
+        setProImageJobs(prev => [...prev, newJob]);
+        pollProImageStatus(result.job_id);
+      }
+    } catch (error) {
+      console.error('启动专业生图失败:', error);
+      alert(`启动失败: ${error.message}`);
+    } finally {
+      setIsGeneratingProImg(false);
+    }
+  }, [
+    proImgPrompt,
+    proNegativePrompt,
+    proImgModel,
+    proImgRatio,
+    proImgRes,
+    proImgCount,
+    proTemperature,
+    proTopP,
+    proTopK,
+    proPresencePenalty,
+    proFrequencyPenalty,
+    proMaxOutputTokens,
+    proSeed,
+    proOutputMimeType,
+    proOutputCompressionQuality,
+    proSafetyFilterLevel,
+  ]);
+
+  /**
+   * 轮询专业生图任务状态
+   */
+  const pollProImageStatus = useCallback(async (jobId) => {
+    const maxDurationMs = 10 * 60 * 1000;
+    const startTime = Date.now();
+    let lastImageCount = 0;
+
+    const poll = async () => {
+      if (Date.now() - startTime > maxDurationMs) {
+        alert('专业生图超时，请稍后查看');
+        setProImageJobs(prev => prev.filter(job => job.jobId !== jobId));
+        if (imagePollTimeouts.current.has(jobId)) {
+          clearTimeout(imagePollTimeouts.current.get(jobId));
+          imagePollTimeouts.current.delete(jobId);
+        }
+        return;
+      }
+
+      try {
+        const status = await getImageStatus(jobId);
+
+        setProImageJobs(prev => prev.map(job =>
+          job.jobId === jobId
+            ? { ...job, status: status.status, progress: status.progress }
+            : job
+        ));
+
+        if (status.images && status.images.length > lastImageCount) {
+          const createdAt = new Date().toISOString();
+          const newImages = status.images
+            .slice(lastImageCount)
+            .map((filename, index) => ({
+              id: `${jobId}-${lastImageCount + index}-${filename}`,
+              url: getImageUrl(filename),
+              filename,
+              ratio: status.aspect_ratio || '3:2',
+              resolution: status.resolution || '未知',
+              imageModel: status.image_model || 'unknown',
+              modelLabel: getImageModelLabel(status.image_model || 'unknown'),
+              prompt: status.prompt || '',
+              createdAt,
+            }));
+
+          setProImageDayGroups(prev => prependImagesToToday(prev, newImages));
+          lastImageCount = status.images.length;
+        }
+
+        if (status.status === 'completed') {
+          setProImageJobs(prev => prev.filter(job => job.jobId !== jobId));
+          if (imagePollTimeouts.current.has(jobId)) {
+            clearTimeout(imagePollTimeouts.current.get(jobId));
+            imagePollTimeouts.current.delete(jobId);
+          }
+        } else if (status.status === 'failed') {
+          alert(`专业生图失败: ${status.message}`);
+          setProImageJobs(prev => prev.filter(job => job.jobId !== jobId));
+          if (imagePollTimeouts.current.has(jobId)) {
+            clearTimeout(imagePollTimeouts.current.get(jobId));
+            imagePollTimeouts.current.delete(jobId);
+          }
+        } else {
+          const timeoutId = window.setTimeout(poll, 3000);
+          imagePollTimeouts.current.set(jobId, timeoutId);
+        }
+      } catch (error) {
+        console.error('查询专业生图状态失败:', error);
         const timeoutId = window.setTimeout(poll, 3000);
         imagePollTimeouts.current.set(jobId, timeoutId);
       }
@@ -1139,10 +1431,24 @@ export default function App() {
   const handleAssistApply = useCallback((enhancedPrompt) => {
     if (activeTab === 'image') {
       setImgPrompt(enhancedPrompt);
+    } else if (activeTab === 'pro-image') {
+      setProImgPrompt(enhancedPrompt);
     } else {
       setVidPrompt(enhancedPrompt);
     }
   }, [activeTab]);
+
+  // Prompt 优化接口仅支持 image/video，专业生图页复用 image 类型
+  const assistTargetType = activeTab === 'video' ? 'video' : 'image';
+
+  // 专业生图右侧空态参数摘要
+  const proPreviewSummary = [
+    `T:${formatFixed(proTemperature, 2)}`,
+    `P:${formatFixed(proTopP, 2)}`,
+    `K:${proTopK}`,
+    `S:${proSeed}`,
+    `AR:${proImgRatio}`,
+  ];
 
   // ==================== 渲染 ====================
 
@@ -1153,7 +1459,7 @@ export default function App() {
         isOpen={isAssistOpen}
         onClose={() => setIsAssistOpen(false)}
         onApply={handleAssistApply}
-        targetType={activeTab}
+        targetType={assistTargetType}
       />
 
       {/* 图像预览弹窗 */}
@@ -1216,7 +1522,7 @@ export default function App() {
                   onGenerate={handleGenerateImage}
                   onOpenAssist={() => setIsAssistOpen(true)}
                 />
-              ) : (
+              ) : activeTab === 'video' ? (
                 <VideoPanel
                   prompt={vidPrompt}
                   onPromptChange={setVidPrompt}
@@ -1236,6 +1542,44 @@ export default function App() {
                   onGenerate={handleGenerateVideo}
                   onOpenAssist={() => setIsAssistOpen(true)}
                 />
+              ) : (
+                <ProImagePanel
+                  prompt={proImgPrompt}
+                  onPromptChange={setProImgPrompt}
+                  negativePrompt={proNegativePrompt}
+                  onNegativePromptChange={setProNegativePrompt}
+                  imageModel={proImgModel}
+                  onImageModelChange={setProImgModel}
+                  aspectRatio={proImgRatio}
+                  onAspectRatioChange={setProImgRatio}
+                  resolution={proImgRes}
+                  onResolutionChange={setProImgRes}
+                  count={proImgCount}
+                  onCountChange={setProImgCount}
+                  outputMimeType={proOutputMimeType}
+                  onOutputMimeTypeChange={setProOutputMimeType}
+                  outputCompressionQuality={proOutputCompressionQuality}
+                  onOutputCompressionQualityChange={setProOutputCompressionQuality}
+                  safetyFilterLevel={proSafetyFilterLevel}
+                  onSafetyFilterLevelChange={setProSafetyFilterLevel}
+                  temperature={proTemperature}
+                  onTemperatureChange={setProTemperature}
+                  topP={proTopP}
+                  onTopPChange={setProTopP}
+                  topK={proTopK}
+                  onTopKChange={setProTopK}
+                  presencePenalty={proPresencePenalty}
+                  onPresencePenaltyChange={setProPresencePenalty}
+                  frequencyPenalty={proFrequencyPenalty}
+                  onFrequencyPenaltyChange={setProFrequencyPenalty}
+                  maxOutputTokens={proMaxOutputTokens}
+                  onMaxOutputTokensChange={setProMaxOutputTokens}
+                  seed={proSeed}
+                  onSeedChange={setProSeed}
+                  isGenerating={isGeneratingProImg}
+                  onGenerate={handleGenerateProImage}
+                  onOpenAssist={() => setIsAssistOpen(true)}
+                />
               )}
 
               {/* 右侧展示区 */}
@@ -1251,7 +1595,7 @@ export default function App() {
                   onLoadMoreDays={handleLoadMoreImageDays}
                   isLoadingMore={isLoadingMoreImageDays}
                 />
-              ) : (
+              ) : activeTab === 'video' ? (
                 <VideoGallery
                   dayGroups={videoDayGroups}
                   videoJobs={videoJobs}
@@ -1262,6 +1606,19 @@ export default function App() {
                   onLoadMoreDays={handleLoadMoreVideoDays}
                   isLoading={isLoadingVideoLibrary && videoDayGroups.length === 0}
                   isLoadingMore={isLoadingMoreVideoDays}
+                />
+              ) : (
+                <ProImageGallery
+                  dayGroups={proImageDayGroups}
+                  isLoading={isLoadingProImageLibrary && proImageDayGroups.length === 0}
+                  imageJobs={proImageJobs}
+                  onMakeVideo={transferToVideo}
+                  onAddReference={handleAddImageAsReference}
+                  onPreview={setPreviewImage}
+                  hasMoreDays={Boolean(proImageLibraryBefore)}
+                  onLoadMoreDays={handleLoadMoreProImageDays}
+                  isLoadingMore={isLoadingMoreProImageDays}
+                  previewSummary={proPreviewSummary}
                 />
               )}
             </div>

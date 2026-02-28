@@ -5,6 +5,7 @@
 ## 功能概览
 
 - 图像生成：文生图、参考图生成、Google 搜索增强、模型切换（Nano Banana Pro / Nano Banana 2）
+- 专业生图：独立专业页面（位于“视频生成”下方），支持高级采样参数与安全过滤
 - 多参考图上传：图像板块支持拖拽上传、追加上传、单张移除、最多 14 张参考图
 - 图像编辑：基于会话的多轮编辑
 - 视频生成：文生视频、图生视频、首尾帧插值
@@ -98,11 +99,20 @@ npm run dev
 - `GET /api/image/{filename}`
 
 `POST /api/image/generate` 关键参数：
+- `generation_mode`：生成模式（`standard` / `pro`，默认 `standard`）
 - `image_model`：图片模型（`nano_banana_pro` / `nano_banana_2`，默认 `nano_banana_pro`）
 - `resolution`：分辨率（`0.5K`/`1K`/`2K`/`4K`，其中 `0.5K` 仅 `nano_banana_2` 支持，后端会映射为 `512px`）
 - `aspect_ratio`：宽高比；`nano_banana_2` 额外支持 `1:4`、`4:1`、`1:8`、`8:1`
+- `temperature` / `top_p` / `top_k` / `presence_penalty` / `frequency_penalty` / `max_output_tokens` / `seed`：专业采样参数（可选）
+- `output_mime_type`：输出类型（`image/png` 或 `image/jpeg`）
+- `output_compression_quality`：输出压缩质量（0-100，仅 JPEG 生效）
+- `safety_filter_level`：安全过滤等级（`block_low_and_above` / `block_medium_and_above` / `block_only_high`）
+- 安全过滤实现说明：后端会自动映射到 Gemini `generate_content/chats` 兼容的通用 HarmCategory（避免 `HARM_CATEGORY_IMAGE_*` 触发 400）
 - `reference_images`：多张参考图 base64 数组（推荐，最多 14 张）
 - `reference_image`：单张参考图 base64（兼容旧调用）
+
+`GET /api/image/library` 补充参数：
+- `generation_mode`：图库筛选模式（`standard` 仅普通图；`pro` 仅专业图）
 
 视频：
 - `POST /api/video/generate`
@@ -120,6 +130,7 @@ npm run dev
 - 生成失败先看 `logs/app.log`
 - 任务一直 pending/processing 时，优先检查 API Key、网络、模型可用性、超时配置
 - 图片/视频访问失败时，检查 `output/images` 与 `output/videos` 是否已落盘
+- 若专业生图选择 JPEG，请确认文件后缀为 `.jpg/.jpeg` 且接口可正常访问
 
 ## 说明
 

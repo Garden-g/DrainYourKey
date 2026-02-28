@@ -116,15 +116,18 @@ export async function getImageStatus(jobId) {
  * @param {number} [params.days=7] - 首次加载最近天数
  * @param {string|null} [params.before=null] - 分页锚点（YYYY-MM-DD）
  * @param {number} [params.limit_days=7] - 分页每次返回天数
+ * @param {string} [params.generation_mode='standard'] - 图库筛选模式（standard/pro）
  * @returns {Promise<Object>} - 图库分组数据
  */
 export async function getImageLibrary(params = {}) {
   const query = new URLSearchParams();
   const days = params.days ?? 7;
   const limitDays = params.limit_days ?? 7;
+  const generationMode = params.generation_mode ?? 'standard';
 
   query.append('days', String(days));
   query.append('limit_days', String(limitDays));
+  query.append('generation_mode', generationMode);
 
   if (params.before) {
     query.append('before', params.before);
