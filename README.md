@@ -4,7 +4,7 @@
 
 ## 功能概览
 
-- 图像生成：文生图、参考图生成、Google 搜索增强
+- 图像生成：文生图、参考图生成、Google 搜索增强、模型切换（Nano Banana Pro / Nano Banana 2）
 - 多参考图上传：图像板块支持拖拽上传、追加上传、单张移除、最多 14 张参考图
 - 图像编辑：基于会话的多轮编辑
 - 视频生成：文生视频、图生视频、首尾帧插值
@@ -98,6 +98,9 @@ npm run dev
 - `GET /api/image/{filename}`
 
 `POST /api/image/generate` 关键参数：
+- `image_model`：图片模型（`nano_banana_pro` / `nano_banana_2`，默认 `nano_banana_pro`）
+- `resolution`：分辨率（`0.5K`/`1K`/`2K`/`4K`，其中 `0.5K` 仅 `nano_banana_2` 支持，后端会映射为 `512px`）
+- `aspect_ratio`：宽高比；`nano_banana_2` 额外支持 `1:4`、`4:1`、`1:8`、`8:1`
 - `reference_images`：多张参考图 base64 数组（推荐，最多 14 张）
 - `reference_image`：单张参考图 base64（兼容旧调用）
 

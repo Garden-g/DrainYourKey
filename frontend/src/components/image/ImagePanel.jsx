@@ -11,9 +11,23 @@ import { NumberInput } from '../common/NumberInput';
 import { ReferenceImagesUpload } from './ReferenceImagesUpload';
 import { Button } from '../common/Button';
 
-// 常量定义
-const IMG_ASPECT_RATIOS = ['1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'];
-const IMG_RESOLUTIONS = ['1K', '2K', '4K'];
+// 常量定义：图片模型选项
+const IMAGE_MODELS = [
+  { label: 'Nano Banana Pro', value: 'nano_banana_pro' },
+  { label: 'Nano Banana 2', value: 'nano_banana_2' },
+];
+
+// 模型能力表：用于前端动态渲染可选分辨率与宽高比
+const IMAGE_MODEL_CAPABILITIES = {
+  nano_banana_pro: {
+    aspectRatios: ['1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'],
+    resolutions: ['1K', '2K', '4K'],
+  },
+  nano_banana_2: {
+    aspectRatios: ['1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9', '1:4', '4:1', '1:8', '8:1'],
+    resolutions: ['0.5K', '1K', '2K', '4K'],
+  },
+};
 
 /**
  * ImagePanel 组件
@@ -21,6 +35,8 @@ const IMG_RESOLUTIONS = ['1K', '2K', '4K'];
  * @param {Object} props - 组件属性
  * @param {string} props.prompt - 提示词
  * @param {Function} props.onPromptChange - 提示词变化回调
+ * @param {string} props.imageModel - 图片模型
+ * @param {Function} props.onImageModelChange - 图片模型变化回调
  * @param {string} props.aspectRatio - 宽高比
  * @param {Function} props.onAspectRatioChange - 宽高比变化回调
  * @param {string} props.resolution - 分辨率
@@ -38,6 +54,8 @@ const IMG_RESOLUTIONS = ['1K', '2K', '4K'];
 export function ImagePanel({
   prompt,
   onPromptChange,
+  imageModel,
+  onImageModelChange,
   aspectRatio,
   onAspectRatioChange,
   resolution,
@@ -54,6 +72,8 @@ export function ImagePanel({
 }) {
   // 多图模式下，auto 宽高比默认以第一张参考图为准
   const firstReferenceImage = referenceImages?.[0] || null;
+  const modelCapabilities =
+    IMAGE_MODEL_CAPABILITIES[imageModel] || IMAGE_MODEL_CAPABILITIES.nano_banana_pro;
 
   return (
     <div className="w-full lg:w-[380px] lg:h-full min-h-0 shrink-0 flex flex-col">
@@ -105,6 +125,14 @@ export function ImagePanel({
           </div>
         </div>
 
+        {/* 模型选择 */}
+        <Select
+          label="图片模型"
+          value={imageModel}
+          onChange={onImageModelChange}
+          options={IMAGE_MODELS}
+        />
+
         {/* 宽高比和分辨率 */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -134,7 +162,7 @@ export function ImagePanel({
               {firstReferenceImage?.aspectRatio && (
                 <option value="auto">自动 ({firstReferenceImage.aspectRatio})</option>
               )}
-              {IMG_ASPECT_RATIOS.map(ratio => (
+              {modelCapabilities.aspectRatios.map((ratio) => (
                 <option key={ratio} value={ratio}>{ratio}</option>
               ))}
             </select>
@@ -143,7 +171,7 @@ export function ImagePanel({
             label="分辨率"
             value={resolution}
             onChange={onResolutionChange}
-            options={IMG_RESOLUTIONS}
+            options={modelCapabilities.resolutions}
           />
         </div>
 

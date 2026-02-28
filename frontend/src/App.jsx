@@ -52,6 +52,44 @@ function formatLocalDateKey(source = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
+// ==================== 图片模型能力定义 ====================
+
+const DEFAULT_IMAGE_MODEL = 'nano_banana_pro';
+const DEFAULT_IMAGE_RATIO = '3:2';
+const DEFAULT_IMAGE_RESOLUTION = '2K';
+
+// 公共宽高比（Pro 与 Nano Banana 2 均支持）
+const COMMON_IMAGE_ASPECT_RATIOS = ['1:1', '2:3', '3:2', '3:4', '4:3', '4:5', '5:4', '9:16', '16:9', '21:9'];
+// Nano Banana 2 额外支持的宽高比
+const NANO_BANANA_2_EXTRA_ASPECT_RATIOS = ['1:4', '4:1', '1:8', '8:1'];
+
+const IMAGE_MODEL_CAPABILITIES = {
+  nano_banana_pro: {
+    label: 'Nano Banana Pro',
+    resolutions: ['1K', '2K', '4K'],
+    aspectRatios: COMMON_IMAGE_ASPECT_RATIOS,
+    defaultResolution: DEFAULT_IMAGE_RESOLUTION,
+    defaultAspectRatio: DEFAULT_IMAGE_RATIO,
+  },
+  nano_banana_2: {
+    label: 'Nano Banana 2',
+    resolutions: ['0.5K', '1K', '2K', '4K'],
+    aspectRatios: [...COMMON_IMAGE_ASPECT_RATIOS, ...NANO_BANANA_2_EXTRA_ASPECT_RATIOS],
+    defaultResolution: DEFAULT_IMAGE_RESOLUTION,
+    defaultAspectRatio: DEFAULT_IMAGE_RATIO,
+  },
+};
+
+/**
+ * 获取指定模型的能力定义
+ *
+ * @param {string} model - 业务模型标识
+ * @returns {{label:string,resolutions:string[],aspectRatios:string[],defaultResolution:string,defaultAspectRatio:string}} 模型能力对象
+ */
+function getImageModelCapabilities(model) {
+  return IMAGE_MODEL_CAPABILITIES[model] || IMAGE_MODEL_CAPABILITIES[DEFAULT_IMAGE_MODEL];
+}
+
 /**
  * 计算最接近的预设宽高比
  *
@@ -71,6 +109,10 @@ function calculateAspectRatio(ratio) {
     '4:3': 1.333,
     '4:5': 0.8,
     '5:4': 1.25,
+    '1:4': 0.25,
+    '4:1': 4.0,
+    '1:8': 0.125,
+    '8:1': 8.0,
     '9:16': 0.5625,
     '16:9': 1.778,
     '21:9': 2.333,
@@ -327,9 +369,10 @@ export default function App() {
   // ==================== 图像生成状态 ====================
 
   const [imgPrompt, setImgPrompt] = useState('');
+  const [imgModel, setImgModel] = useState(DEFAULT_IMAGE_MODEL);
   const [imgCount, setImgCount] = useState(1);
-  const [imgRatio, setImgRatio] = useState('3:2');
-  const [imgRes, setImgRes] = useState('2K');
+  const [imgRatio, setImgRatio] = useState(DEFAULT_IMAGE_RATIO);
+  const [imgRes, setImgRes] = useState(DEFAULT_IMAGE_RESOLUTION);
   const [useGoogleSearch, setUseGoogleSearch] = useState(false);
   // 图像参考图（多图）
   // 每项格式: { file, url, base64, aspectRatio, width, height, signature }
@@ -404,6 +447,33 @@ export default function App() {
       setImgRatio('auto');
     }
   }, [imgReferences]);
+
+  /**
+   * 当图片模型切换时，自动回退不兼容参数
+   *
+   * 说明：
+   * 1. 分辨率与宽高比能力由模型决定；
+   * 2. 若当前值不被新模型支持，自动切换到该模型默认值；
+   * 3. 宽高比为 auto 时跳过静态校验，最终在提交前再按解析值兜底。
+   */
+  useEffect(() => {
+    const capabilities = getImageModelCapabilities(imgModel);
+    const fallbackMessages = [];
+
+    if (!capabilities.resolutions.includes(imgRes)) {
+      setImgRes(capabilities.defaultResolution);
+      fallbackMessages.push(`分辨率已改为 ${capabilities.defaultResolution}`);
+    }
+
+    if (imgRatio !== 'auto' && !capabilities.aspectRatios.includes(imgRatio)) {
+      setImgRatio(capabilities.defaultAspectRatio);
+      fallbackMessages.push(`宽高比已改为 ${capabilities.defaultAspectRatio}`);
+    }
+
+    if (fallbackMessages.length > 0) {
+      alert(`已切换到 ${capabilities.label}，${fallbackMessages.join('，')}`);
+    }
+  }, [imgModel, imgRes, imgRatio]);
 
   /**
    * 当视频分辨率变化时，自动调整秒数
@@ -530,17 +600,34 @@ export default function App() {
     setIsGeneratingImg(true);
 
     try {
+      const capabilities = getImageModelCapabilities(imgModel);
+
       // 处理宽高比:如果选择了"auto"且有参考图,使用参考图的宽高比
       let finalRatio = imgRatio;
+      let finalResolution = imgRes;
       const firstReference = imgReferences?.[0];
       if (imgRatio === 'auto' && firstReference?.aspectRatio) {
         finalRatio = firstReference.aspectRatio;
       }
 
+      // 二次兜底：避免 auto 宽高比或外部状态导致的非法组合直接触发后端报错
+      if (!capabilities.resolutions.includes(finalResolution)) {
+        finalResolution = capabilities.defaultResolution;
+        setImgRes(finalResolution);
+        alert(`当前模型不支持分辨率 ${imgRes}，已自动切换为 ${finalResolution}`);
+      }
+
+      if (!capabilities.aspectRatios.includes(finalRatio)) {
+        finalRatio = capabilities.defaultAspectRatio;
+        setImgRatio(finalRatio);
+        alert(`当前模型不支持宽高比，已自动切换为 ${finalRatio}`);
+      }
+
       const result = await generateImages({
         prompt: imgPrompt,
+        image_model: imgModel,
         aspect_ratio: finalRatio,
-        resolution: imgRes,
+        resolution: finalResolution,
         count: imgCount,
         use_google_search: useGoogleSearch,
         // 新字段：支持多参考图（最多 14 张）
@@ -558,7 +645,13 @@ export default function App() {
           status: 'pending',
           progress: 0,
           prompt: imgPrompt,
-          params: { ratio: finalRatio, resolution: imgRes, count: imgCount }
+          params: {
+            model: imgModel,
+            modelLabel: capabilities.label,
+            ratio: finalRatio,
+            resolution: finalResolution,
+            count: imgCount,
+          }
         };
         setImageJobs(prev => [...prev, newJob]);
 
@@ -573,7 +666,7 @@ export default function App() {
       alert(`启动失败: ${error.message}`);
       setIsGeneratingImg(false);
     }
-  }, [imgPrompt, imgRatio, imgRes, imgCount, useGoogleSearch, imgReferences]);
+  }, [imgPrompt, imgModel, imgRatio, imgRes, imgCount, useGoogleSearch, imgReferences]);
 
   /**
    * 轮询图像生成状态
@@ -1085,6 +1178,8 @@ export default function App() {
                 <ImagePanel
                   prompt={imgPrompt}
                   onPromptChange={setImgPrompt}
+                  imageModel={imgModel}
+                  onImageModelChange={setImgModel}
                   aspectRatio={imgRatio}
                   onAspectRatioChange={setImgRatio}
                   resolution={imgRes}

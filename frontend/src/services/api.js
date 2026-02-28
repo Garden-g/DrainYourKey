@@ -42,8 +42,9 @@ async function request(endpoint, options = {}) {
  *
  * @param {Object} params - 生成参数
  * @param {string} params.prompt - 图像描述
+ * @param {string} params.image_model - 图片模型 (nano_banana_pro/nano_banana_2)
  * @param {string} params.aspect_ratio - 宽高比
- * @param {string} params.resolution - 分辨率 (1K/2K/4K)
+ * @param {string} params.resolution - 分辨率 (0.5K/1K/2K/4K，0.5K 仅 nano_banana_2 支持，后端映射为 512px)
  * @param {number} params.count - 生成数量
  * @param {boolean} params.use_google_search - 是否使用 Google 搜索
  * @param {string[]} [params.reference_images] - 参考图 base64 数组（最多 14 张）

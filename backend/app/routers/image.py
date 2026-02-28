@@ -44,8 +44,9 @@ async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
     Args:
         request: 图像生成请求,包含:
             - prompt: 图像描述
+            - image_model: 图片模型 (nano_banana_pro / nano_banana_2)
             - aspect_ratio: 宽高比
-            - resolution: 分辨率 (1K/2K/4K)
+            - resolution: 分辨率 (0.5K/1K/2K/4K)
             - count: 生成数量 (1-10)
             - use_google_search: 是否使用 Google 搜索
             - reference_images: 多张参考图 base64 (可选, 最多 14 张)
@@ -60,6 +61,7 @@ async def generate_image(request: ImageGenerateRequest) -> ImageResponse:
         # 调用图像服务启动后台任务
         job_id = await image_service.generate_images(
             prompt=request.prompt,
+            image_model=request.image_model,
             aspect_ratio=request.aspect_ratio,
             resolution=request.resolution,
             count=request.count,
@@ -112,7 +114,8 @@ async def get_image_status(job_id: str) -> ImageStatusResponse:
         session_id=job.session_id,
         message=job.error_message if job.status.value == "failed" else None,
         prompt=job.prompt,
-        aspect_ratio=job.aspect_ratio
+        aspect_ratio=job.aspect_ratio,
+        image_model=job.image_model,
     )
 
 

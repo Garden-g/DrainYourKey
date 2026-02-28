@@ -9,14 +9,11 @@
 """
 
 import uuid
-import base64
 import time
 import asyncio
 from typing import List, Optional, Dict, Any
 from dataclasses import dataclass
 from enum import Enum
-from PIL import Image
-import io
 
 from google import genai
 from google.genai import types
@@ -24,7 +21,6 @@ from google.genai import types
 from ..config import Config, logger
 from ..utils import (
     generate_filename,
-    save_image_from_base64,
     decode_base64_image,
     retry_async,
 )
@@ -37,6 +33,41 @@ class JobStatus(str, Enum):
     PROCESSING = "processing"
     COMPLETED = "completed"
     FAILED = "failed"
+
+
+# ==================== 图片模型能力定义 ====================
+
+# Nano Banana Pro 和 Nano Banana 2 的公共宽高比
+COMMON_IMAGE_ASPECT_RATIOS: List[str] = [
+    "1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9", "21:9"
+]
+
+# Nano Banana 2 新增的极端宽高比
+NANO_BANANA_2_EXTRA_ASPECT_RATIOS: List[str] = [
+    "1:4", "4:1", "1:8", "8:1"
+]
+
+# 图片模型能力表：
+# - provider_model: Gemini API 的真实模型名
+# - resolutions: 前端/请求层可见的分辨率值
+# - resolution_mapping: 请求值到 Gemini image_size 的映射（仅 0.5K 需要映射到 512px）
+# - aspect_ratios: 当前模型支持的宽高比集合
+IMAGE_MODEL_CAPABILITIES: Dict[str, Dict[str, Any]] = {
+    "nano_banana_pro": {
+        "provider_model": "gemini-3-pro-image-preview",
+        "resolutions": ["1K", "2K", "4K"],
+        "resolution_mapping": {},
+        "aspect_ratios": COMMON_IMAGE_ASPECT_RATIOS,
+    },
+    "nano_banana_2": {
+        "provider_model": "gemini-3.1-flash-image-preview",
+        "resolutions": ["0.5K", "1K", "2K", "4K"],
+        "resolution_mapping": {
+            "0.5K": "512px",
+        },
+        "aspect_ratios": COMMON_IMAGE_ASPECT_RATIOS + NANO_BANANA_2_EXTRA_ASPECT_RATIOS,
+    },
+}
 
 
 @dataclass
@@ -54,6 +85,7 @@ class ImageJob:
         created_at: 创建时间戳
         prompt: 生成图像使用的提示词
         aspect_ratio: 生成图像使用的宽高比
+        image_model: 生成图像使用的模型标识
     """
     job_id: str
     status: JobStatus
@@ -64,6 +96,7 @@ class ImageJob:
     created_at: float = 0
     prompt: str = ""
     aspect_ratio: str = "3:2"
+    image_model: str = "nano_banana_pro"
 
     def __post_init__(self):
         """初始化后处理"""
@@ -157,6 +190,59 @@ class ImageService:
 
         return optimized, True
 
+    def _resolve_image_generation_settings(
+        self,
+        image_model: str,
+        resolution: str,
+        aspect_ratio: str
+    ) -> tuple[str, str]:
+        """
+        解析并校验图像生成参数
+
+        该方法用于在真正调用 Gemini API 前做“模型能力约束”校验，避免：
+        1. 前端绕过校验直接提交非法组合；
+        2. 某些调用方仍按旧参数传值导致 API 报错不清晰；
+        3. 0.5K 这类展示值与 provider 真实参数不一致。
+
+        Args:
+            image_model: 业务层模型标识（nano_banana_pro 或 nano_banana_2）
+            resolution: 业务层分辨率（0.5K / 1K / 2K / 4K）
+            aspect_ratio: 图像宽高比字符串
+
+        Returns:
+            tuple[str, str]:
+                - provider_model: Gemini API 真实模型名
+                - provider_image_size: Gemini image_size 实参
+
+        Raises:
+            ValueError: 当模型、分辨率或宽高比不支持时抛出
+        """
+        model_config = IMAGE_MODEL_CAPABILITIES.get(image_model)
+        if model_config is None:
+            supported_models = ", ".join(IMAGE_MODEL_CAPABILITIES.keys())
+            raise ValueError(
+                f"不支持的图片模型: {image_model}，支持值: {supported_models}"
+            )
+
+        supported_resolutions: List[str] = model_config["resolutions"]
+        if resolution not in supported_resolutions:
+            raise ValueError(
+                f"模型 {image_model} 不支持分辨率 {resolution}，"
+                f"支持值: {', '.join(supported_resolutions)}"
+            )
+
+        supported_aspect_ratios: List[str] = model_config["aspect_ratios"]
+        if aspect_ratio not in supported_aspect_ratios:
+            raise ValueError(
+                f"模型 {image_model} 不支持宽高比 {aspect_ratio}，"
+                f"支持值: {', '.join(supported_aspect_ratios)}"
+            )
+
+        resolution_mapping: Dict[str, str] = model_config["resolution_mapping"]
+        provider_image_size = resolution_mapping.get(resolution, resolution)
+        provider_model = model_config["provider_model"]
+        return provider_model, provider_image_size
+
     def _normalize_reference_images(
         self,
         reference_images: Optional[List[str]] = None,
@@ -239,6 +325,7 @@ class ImageService:
     async def generate_images(
         self,
         prompt: str,
+        image_model: str = "nano_banana_pro",
         aspect_ratio: str = "3:2",
         resolution: str = "2K",
         count: int = 1,
@@ -251,8 +338,9 @@ class ImageService:
 
         Args:
             prompt: 图像描述文本
+            image_model: 图片模型 (nano_banana_pro / nano_banana_2)
             aspect_ratio: 宽高比 (如 "16:9", "1:1")
-            resolution: 分辨率 (必须大写: "1K", "2K", "4K")
+            resolution: 分辨率 (必须大写: "0.5K", "1K", "2K", "4K")
             count: 生成数量 (1-10)
             use_google_search: 是否使用 Google 搜索增强
             reference_images: 参考图像 base64 列表 (可选, 最多 14 张)
@@ -263,6 +351,11 @@ class ImageService:
         """
         # 先清理过期任务，避免长期运行导致内存膨胀
         self._cleanup_expired()
+        provider_model, provider_image_size = self._resolve_image_generation_settings(
+            image_model=image_model,
+            resolution=resolution,
+            aspect_ratio=aspect_ratio,
+        )
         normalized_reference_images = self._normalize_reference_images(
             reference_images=reference_images,
             reference_image=reference_image,
@@ -270,7 +363,9 @@ class ImageService:
 
         job_id = str(uuid.uuid4())
         logger.info(
-            f"创建图像生成任务: job_id={job_id}, count={count}, "
+            f"创建图像生成任务: job_id={job_id}, model={image_model}, "
+            f"provider_model={provider_model}, resolution={resolution}, "
+            f"provider_image_size={provider_image_size}, count={count}, "
             f"reference_count={len(normalized_reference_images)}"
         )
 
@@ -280,7 +375,8 @@ class ImageService:
             status=JobStatus.PENDING,
             created_at=time.time(),
             prompt=prompt,
-            aspect_ratio=aspect_ratio
+            aspect_ratio=aspect_ratio,
+            image_model=image_model,
         )
         self._jobs[job_id] = job
 
@@ -289,8 +385,11 @@ class ImageService:
             self._process_image_generation(
                 job_id=job_id,
                 prompt=prompt,
+                image_model=image_model,
+                provider_model=provider_model,
                 aspect_ratio=aspect_ratio,
                 resolution=resolution,
+                provider_image_size=provider_image_size,
                 count=count,
                 use_google_search=use_google_search,
                 reference_images=normalized_reference_images
@@ -304,8 +403,11 @@ class ImageService:
         self,
         job_id: str,
         prompt: str,
+        image_model: str,
+        provider_model: str,
         aspect_ratio: str,
         resolution: str,
+        provider_image_size: str,
         count: int,
         use_google_search: bool,
         reference_images: List[str]
@@ -316,8 +418,11 @@ class ImageService:
         Args:
             job_id: 任务ID
             prompt: 图像描述文本
+            image_model: 业务模型标识
+            provider_model: Gemini API 真实模型名
             aspect_ratio: 宽高比
-            resolution: 分辨率
+            resolution: 业务层分辨率
+            provider_image_size: Gemini image_size 实参
             count: 生成数量
             use_google_search: 是否使用Google搜索
             reference_images: 参考图像列表
@@ -329,6 +434,8 @@ class ImageService:
         try:
             logger.info(
                 f"开始处理图像生成: job_id={job_id}, prompt={prompt[:50]}..., "
+                f"model={image_model}, provider_model={provider_model}, "
+                f"resolution={resolution}, provider_image_size={provider_image_size}, "
                 f"count={count}, reference_count={len(reference_images)}"
             )
 
@@ -360,7 +467,7 @@ class ImageService:
                 "response_modalities": ["TEXT", "IMAGE"],
                 "image_config": types.ImageConfig(
                     aspect_ratio=aspect_ratio,
-                    image_size=resolution
+                    image_size=provider_image_size
                 )
             }
 
@@ -376,7 +483,7 @@ class ImageService:
                 chat = await asyncio.wait_for(
                     asyncio.to_thread(
                         client.chats.create,
-                        model=Config.IMAGE_MODEL,
+                        model=provider_model,
                         config=types.GenerateContentConfig(**config_dict)
                     ),
                     timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
@@ -460,8 +567,11 @@ class ImageService:
                         prompt=prompt,
                         filename=filename,
                         params={
+                            "image_model": image_model,
+                            "provider_model": provider_model,
                             "aspect_ratio": aspect_ratio,
                             "resolution": resolution,
+                            "provider_image_size": provider_image_size,
                             "count": count,
                             "use_google_search": use_google_search,
                             "reference_image_count": len(reference_images),
@@ -496,6 +606,7 @@ class ImageService:
     async def generate_images_sync(
         self,
         prompt: str,
+        image_model: str = "nano_banana_pro",
         aspect_ratio: str = "3:2",
         resolution: str = "2K",
         count: int = 1,
@@ -508,8 +619,9 @@ class ImageService:
 
         Args:
             prompt: 图像描述文本
+            image_model: 图片模型 (nano_banana_pro / nano_banana_2)
             aspect_ratio: 宽高比 (如 "16:9", "1:1")
-            resolution: 分辨率 (必须大写: "1K", "2K", "4K")
+            resolution: 分辨率 (必须大写: "0.5K", "1K", "2K", "4K")
             count: 生成数量 (1-10)
             use_google_search: 是否使用 Google 搜索增强
             reference_images: 参考图像 base64 列表 (可选, 最多 14 张)
@@ -523,11 +635,20 @@ class ImageService:
         """
         # 同步生成前清理过期任务
         self._cleanup_expired()
+        provider_model, provider_image_size = self._resolve_image_generation_settings(
+            image_model=image_model,
+            resolution=resolution,
+            aspect_ratio=aspect_ratio,
+        )
         normalized_reference_images = self._normalize_reference_images(
             reference_images=reference_images,
             reference_image=reference_image,
         )
-        logger.info(f"开始生成图像: prompt={prompt[:50]}..., count={count}")
+        logger.info(
+            f"开始生成图像: prompt={prompt[:50]}..., model={image_model}, "
+            f"provider_model={provider_model}, resolution={resolution}, "
+            f"provider_image_size={provider_image_size}, count={count}"
+        )
 
         generated_files: List[str] = []
         session_id = str(uuid.uuid4())
@@ -556,7 +677,7 @@ class ImageService:
             "response_modalities": ["TEXT", "IMAGE"],
             "image_config": types.ImageConfig(
                 aspect_ratio=aspect_ratio,
-                image_size=resolution
+                image_size=provider_image_size
             )
         }
 
@@ -571,7 +692,7 @@ class ImageService:
             chat = await asyncio.wait_for(
                 asyncio.to_thread(
                     client.chats.create,
-                    model=Config.IMAGE_MODEL,
+                    model=provider_model,
                     config=types.GenerateContentConfig(**config_dict)
                 ),
                 timeout=Config.GENAI_IMAGE_TIMEOUT_SECONDS
@@ -629,8 +750,11 @@ class ImageService:
                     prompt=prompt,
                     filename=filename,
                     params={
+                        "image_model": image_model,
+                        "provider_model": provider_model,
                         "aspect_ratio": aspect_ratio,
                         "resolution": resolution,
+                        "provider_image_size": provider_image_size,
                         "count": count,
                         "use_google_search": use_google_search,
                         "reference_image_count": len(normalized_reference_images),

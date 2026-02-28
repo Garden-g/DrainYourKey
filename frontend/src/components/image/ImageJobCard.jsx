@@ -20,6 +20,7 @@ import { Loader2 } from 'lucide-react';
  * @param {number} props.job.progress - 任务进度 (0-100)
  * @param {string} props.job.prompt - 提示词
  * @param {Object} props.job.params - 生成参数
+ * @param {string} [props.job.params.modelLabel] - 模型展示名
  */
 export function ImageJobCard({ job }) {
   const { progress = 0, prompt, params } = job;
@@ -57,6 +58,11 @@ export function ImageJobCard({ job }) {
           <span className="px-2 py-0.5 bg-black/50 text-white text-xs rounded">
             {params.ratio}
           </span>
+          {params.modelLabel && (
+            <span className="px-2 py-0.5 bg-black/50 text-white text-xs rounded">
+              {params.modelLabel}
+            </span>
+          )}
           <span className="px-2 py-0.5 bg-black/50 text-white text-xs rounded">
             x{params.count}
           </span>

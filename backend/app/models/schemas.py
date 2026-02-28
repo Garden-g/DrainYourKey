@@ -18,22 +18,27 @@ class ImageGenerateRequest(BaseModel):
 
     Attributes:
         prompt: 生成图像的文本描述
+        image_model: 图片模型类型 (nano_banana_pro 或 nano_banana_2)
         aspect_ratio: 图像宽高比，如 "16:9", "1:1" 等
-        resolution: 图像分辨率，必须大写: "1K", "2K", "4K"
+        resolution: 图像分辨率，必须大写: "0.5K", "1K", "2K", "4K"
         count: 生成图像数量，1-10 张
         use_google_search: 是否使用 Google 搜索增强生成
         reference_images: 参考图像的 base64 编码列表 (可选，最多 14 张)
         reference_image: 兼容旧版的单张参考图 base64 编码 (可选)
     """
     prompt: str = Field(..., min_length=1, max_length=2000, description="图像描述")
+    image_model: Literal["nano_banana_pro", "nano_banana_2"] = Field(
+        default="nano_banana_pro",
+        description="图片模型: nano_banana_pro 或 nano_banana_2"
+    )
     aspect_ratio: str = Field(
         default="3:2",
         pattern=r"^\d+:\d+$",
         description="宽高比"
     )
-    resolution: Literal["1K", "2K", "4K"] = Field(
+    resolution: Literal["0.5K", "1K", "2K", "4K"] = Field(
         default="2K",
-        description="分辨率 (必须大写)"
+        description='分辨率 (必须大写，0.5K 仅 nano_banana_2 支持)'
     )
     count: int = Field(default=1, ge=1, le=10, description="生成数量")
     use_google_search: bool = Field(default=False, description="使用 Google 搜索")
@@ -107,6 +112,7 @@ class ImageStatusResponse(BaseModel):
         message: 消息 (错误消息或其他信息)
         prompt: 生成图像使用的提示词
         aspect_ratio: 生成图像使用的宽高比
+        image_model: 生成图像使用的模型标识
     """
     job_id: str
     status: str
@@ -116,6 +122,7 @@ class ImageStatusResponse(BaseModel):
     message: Optional[str] = None
     prompt: str = ""
     aspect_ratio: str = "3:2"
+    image_model: str = "nano_banana_pro"
 
 
 # ==================== 视频相关模型 ====================
